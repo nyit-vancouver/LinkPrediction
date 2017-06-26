@@ -1,4 +1,4 @@
-package aminer;
+package regression;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
