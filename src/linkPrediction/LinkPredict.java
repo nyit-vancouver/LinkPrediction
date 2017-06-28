@@ -51,12 +51,18 @@ public class LinkPredict {
 
 	public static void main(String[] args) 
 	{	
+		// inputs
+		int numberOfNodes = 1752443, numOfDimensions = 20, sourceNodeID = 100, destNodeID = 100;
+
+		double[][] z = new double[numberOfNodes][numOfDimensions];
+
 		ArrayList <ArrayList<LinkPredict>> latentSpace = new ArrayList <ArrayList<LinkPredict>>(); 
-		String currentLineString, nodeIndex = null, numOfNonZero=null, weight=null;
-		int latentPosIndex=0;
-		
+		String currentLineString, numOfNonZero=null;
+		int latentPosIndex=0, nodeIndex = 0;
+		double weight=0.0;
+
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("Zmatrix.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("Zmatrix3.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -69,27 +75,74 @@ public class LinkPredict {
 				currentLineString = br.readLine();
 				from = 0;
 				to = currentLineString.indexOf(",", from);
-				System.out.println("nodeIndex:" + currentLineString.substring(from,to));
+				nodeIndex = Integer.parseInt(currentLineString.substring(from,to));
+				//System.out.println("nodeIndex:" + nodeIndex);
 				from = to+1;
 				to = currentLineString.indexOf(":", from);
 				numOfNonZero = currentLineString.substring(from,to);
-				System.out.println("numOfNonZero:" + numOfNonZero);
+				//System.out.println("numOfNonZero:" + numOfNonZero);
 				for (int j=0; j < Integer.parseInt(numOfNonZero) ; j++){
 					from = to+1;
 					to = currentLineString.indexOf(",", from);
 					latentPosIndex = Integer.parseInt(currentLineString.substring(from,to));
-					
+
 					from = to+1;
 					to = from+10;
-					weight = currentLineString.substring(from, to);
-					System.out.println("latentPosIndex:" + latentPosIndex + ", weight:" + weight);
-					LatentPosWeigh LPW = new LatentPosWeigh(latentPosIndex, Double.parseDouble(weight));
-					System.out.println(LPW);
+					weight = Double.parseDouble(currentLineString.substring(from, to));
+					//System.out.println("latentPosIndex:" + latentPosIndex + ", weight:" + weight);
+					//LatentPosWeigh LPW = new LatentPosWeigh(latentPosIndex, weight);
+					//System.out.println(LPW);
+					z[nodeIndex][latentPosIndex] = weight;
 
 				}
 			}
 
 			br.close();
+
+			/*for (int i = 0; i < numberOfNodes; i++){
+				for (int j = 0; j < numOfDimensions; j++)
+					System.out.print(z[i][j] + "\t");
+				System.out.println();
+			}*/
+
+			/*
+			 * 1,49:
+			 * 110266,1:
+			 * 1134213,1:
+			 * 114430,1:
+			 * 114431,1:
+			 * 1167353,1:
+			 * 11785,1:
+			 * 1216405,1:
+			 * 133423,1:
+			 * 133462,1:
+			 */
+			
+			Double predictionProbability = 0.0;
+			for (int k=0; k<numOfDimensions; k++){
+				//predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
+				predictionProbability += z[1][k]*z[110266][k];
+			}
+			
+			System.out.println(predictionProbability);
+			
+			predictionProbability = 0.0;
+			for (int k=0; k<numOfDimensions; k++){
+				//predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
+				predictionProbability += z[1][k]*z[100][k];
+			}
+			
+			System.out.println(predictionProbability);
+			
+
+			predictionProbability = 0.0;
+			for (int k=0; k<numOfDimensions; k++){
+				//predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
+				predictionProbability += z[1][k]*z[114430][k];
+			}
+			
+			System.out.println(predictionProbability);
+
 
 		}catch (IOException e) 
 		{

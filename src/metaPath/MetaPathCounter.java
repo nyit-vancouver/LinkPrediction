@@ -33,13 +33,16 @@ public class MetaPathCounter {
 	private static class PaperVenue implements Serializable {
 		@Override
 		public String toString() {
-			return "PaperVenue [paper=" + paper + ", venue=" + venue + "]";
+			return "PaperVenue [paper=" + paper + ", venue=" + venue + ", year=" + year + "]";
 		}
 		private String paper;
 		private String venue;
-		public PaperVenue(String paper, String venue) {
+		private int year;
+		
+		public PaperVenue(String paper, String venue, int year) {
 			this.paper = paper;
 			this.venue = venue;
+			this.year = year;
 		}
 		public String getPaper(){
 			return paper;
@@ -47,18 +50,23 @@ public class MetaPathCounter {
 		public String getVenue(){
 			return venue;
 		}
+		public int getYear(){
+			return year;
+		}
 	}
 
 	private static class PaperAuthors implements Serializable {
 		@Override
 		public String toString() {
-			return "PaperAuthors [paper=" + paper + ", authors=" + authors + "]";
+			return "PaperAuthors [paper=" + paper + ", authors=" + authors + ", year=" + year + "]";
 		}
 		private String paper;
 		private ArrayList<String> authors;
-		public PaperAuthors(String paper, ArrayList<String> authors) {
+		private int year;
+		public PaperAuthors(String paper, ArrayList<String> authors, int year) {
 			this.paper = paper;
 			this.authors = authors;
+			this.year = year;
 		}
 		public String getPaper(){
 			return paper;
@@ -69,12 +77,16 @@ public class MetaPathCounter {
 		public void setAuthors(ArrayList<String> authors){
 			this.authors = authors;
 		}
+		public int getYear(){
+			return year;
+		}
 
 	}
 
 
 	private static BufferedReader brPaperAuthor;
 	private static BufferedReader brPaperVenue;
+	private static BufferedReader brPaperYear;
 	private static BufferedWriter bwHashMap;
 
 	/**
@@ -123,13 +135,14 @@ public class MetaPathCounter {
 	{	 
 		// -Xms1024m -Xmx6000m
 
-		boolean readFromSavedGeneratedHashmaps = true;
+		boolean readFromSavedGeneratedHashmaps = false;
 		
 		long startTime = System.currentTimeMillis();
 
 		try{
 			brPaperAuthor = new BufferedReader(new FileReader("paper_newindex_author.txt"));
 			brPaperVenue = new BufferedReader(new FileReader("paper_newindex_venue.txt"));
+			brPaperYear = new BufferedReader(new FileReader("paper_newindex_year.txt"));
 
 			if (readFromSavedGeneratedHashmaps==true){
 				

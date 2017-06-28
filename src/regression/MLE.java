@@ -31,17 +31,17 @@ public class MLE {
 				System.out.print(f + " ");
 			}
 		}System.out.println();
-		
-		
+
+
 		MLE mlobj = new MLE(F,4,.00001f);
 
-		printmat(normalize(F));
-		printmat(mlobj.wt);printmat(mlobj.td);
-		printmat( multiply(mlobj.wt,mlobj.td));
+		//printmat(normalize(F));
+		//printmat(mlobj.wt);printmat(mlobj.td);
+		//printmat( multiply(mlobj.wt,mlobj.td));
 
 	}
-	
-	
+
+
 	int W;//words, rows
 	int D;//documents, columns
 	int T;// topics or latent classes
@@ -49,7 +49,7 @@ public class MLE {
 	public float[][] td;
 	public float[][] wt;
 	float[][] counts;
-	
+
 	public MLE(float[][] counts, int T,float epsilon)
 	{
 		this.counts = counts;
@@ -58,51 +58,51 @@ public class MLE {
 		this.T = T;
 		mle(epsilon);
 	}
-	
+
 	// use if you want wt initialized to some specific value
 	public void mle( float epsilon)
 	{
 		float tot = sum(counts);
 		td = normalize(ones(T,D));
 		wt = normalize(rand(W,T));
-		
-		
+
+
 		float[] E = sum1D(logDotProduct(counts,multiply(wt,td)));
 		float F = sum(E)/tot;
 		float F_new ;
 		float rel_ch;
-		
+
 
 		do
 		{
 			// Expectation Step
 			// td = norm(td .* ( wt' * ( counts ./ (wt * td) ) ));
 			td = normalize(dotProduct(td,(multiply(transpose(wt),dotDivide(counts,multiply(wt,td))))));
-			
+
 			//maximization step
 			//wt = normalize( wt .* ( ( counts ./ ( wt * td + eps ) ) * td' ))
 			wt = normalize(dotProduct(wt,multiply(dotDivide(counts,multiply(wt,td)),transpose(td))));
-			
+
 			//calculate log-likelihood
-		/* 
-		 *   ___       ___
-		 *   \		     \
-		 *   /__	     /__     n(d,w) log P(d,w)
-		 *  d c D   w c W
-		*/
+			/* 
+			 *   ___       ___
+			 *   \		     \
+			 *   /__	     /__     n(d,w) log P(d,w)
+			 *  d c D   w c W
+			 */
 			E = sum1D(logDotProduct(counts,multiply(wt,td)));
 			F_new = sum(E)/tot;
-			
+
 			//calculate iteration's relative change to determine convergence
 			rel_ch = Math.abs((F_new - F))/ Math.abs(F);
 			F= F_new;
-			
+
 			System.out.println(rel_ch);
-			
+
 		}while(rel_ch>epsilon);
-		
+
 	}
-	
+
 
 	//testing status - works
 	//gets the pairwise products of two matrices
@@ -110,41 +110,41 @@ public class MLE {
 	private static float[][] dotProduct(float[][] mat1, float[][] mat2)
 	{
 		float[][] rtrn = new float [mat1.length ][mat1[0].length];
-		
+
 		for(int i = 0;i<mat1.length;i++){
 			for(int j = 0;j<mat1[0].length;j++)rtrn[i][j] = mat1[i][j]*mat2[i][j];
 		}
 		return rtrn;
 	}
-	
+
 	//testing status - works
 	//gets the pairwise division of two matrices
 	//no dimension checking
 	private static float[][] dotDivide(float[][] mat1, float[][] mat2)
 	{
 		float[][] rtrn = new float [mat1.length ][mat1[0].length];
-		
+
 		for(int i = 0;i<mat1.length;i++){
 			for(int j = 0;j<mat1[0].length;j++)rtrn[i][j] = mat1[i][j]/(mat2[i][j]+Float.MIN_VALUE);
 		}
 		return rtrn;
 	}
-	
-	
+
+
 	//testing status - works
 	//find the pairwise product of mat1 and log(mat2)
 	//no dimension checking
 	private static float[][] logDotProduct(float[][] mat1, float[][] mat2)
 	{
 		float[][] rtrn = new float [mat1.length ][mat1[0].length];
-		
+
 		for(int i = 0;i<mat1.length;i++){
 			for(int j = 0;j<mat1[0].length;j++)
 				rtrn[i][j] = mat1[i][j]*(float)Math.log(mat2[i][j] + Float.MIN_VALUE);
 		}
 		return rtrn;
 	}
-	
+
 	//testing status - works
 	//create a random matrix to with which we will initialize mle
 	//ding, he, zha, simon suggest using in svd reduced matrices to initialize this matrix
@@ -159,7 +159,7 @@ public class MLE {
 		}
 		return rand;
 	}
-	
+
 	//testing status - works
 	//create a matrix of all ones of the specified dimension
 	//future improvements will provide a normalized matrix of ones function
@@ -171,8 +171,8 @@ public class MLE {
 		}
 		return ones;
 	}
-	
-	
+
+
 	//testing status - works
 	//give the sum of all the elements of a matrix
 	public static float sum(float[][] A)
@@ -183,16 +183,16 @@ public class MLE {
 		}
 		return sum;
 	}
-	
+
 	//testing status - works
 	//give the sum of all the elements of a vector
 	public static float sum(float[]A)
 	{
 		float sum =0;
-			for(float f:A) sum+=f;
+		for(float f:A) sum+=f;
 		return sum;
 	}
-	
+
 	//testing status - works
 	//give the column vector sum of all the elements of a matrix
 	public static float[] sum1D(float[][] A)
@@ -206,10 +206,10 @@ public class MLE {
 		}
 		return sum;
 	}
-	
-	
-//	testing status - works
-	//beware of caching problems, this is a classic bad array access loop
+
+
+	// testing status - works
+	// beware of caching problems, this is a classic bad array access loop
 	// lee carraher will fix it when it becomes a problem
 	public static float[][] normalize(float[][] A)
 	{
@@ -230,7 +230,7 @@ public class MLE {
 		}
 		return A;
 	}
-	
+
 	//testing status - works
 	//naive multiply for testing, to be replaced with straussen or winograd's
 	// this will be a dense multiply (rand(T,K) * ones(K,D))
@@ -256,7 +256,7 @@ public class MLE {
 	public static float[][] transpose(float[][] in)
 	{
 		float[][] rtrn = new float[in[0].length][in.length];
-		
+
 		for(int i = 0; i<in.length;i++)
 		{
 			for(int j=0; j<rtrn.length;j++)
@@ -264,10 +264,10 @@ public class MLE {
 				rtrn[j][i]=in[i][j];
 			}
 		}
-		
+
 		return rtrn;
 	}
-	
+
 	public static void printmat(float[][] D){
 		for(float[] dd: D){
 			System.out.println();
@@ -277,5 +277,5 @@ public class MLE {
 		}
 		System.out.println();
 	}
-	
+
 }
