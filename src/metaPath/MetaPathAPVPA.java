@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -23,12 +24,13 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
-public class MetaPathCounter {
+public class MetaPathAPVPA {
 
 	private static String currentLineString, paperIndex = null, authorIndex=null, venueIndex=null;
 
 	private static Map<String, List<PaperVenue>> author_papervenuelist_map = new HashMap<String, List<PaperVenue>>();    
 	private static Map<String, List<PaperAuthors>> venue_paperauthorslist_map = new HashMap<String, List<PaperAuthors>>();    
+	private static TreeMap<String, Integer> paper_year_map = new TreeMap<String, Integer>();    
 
 	private static class PaperVenue implements Serializable {
 		@Override
@@ -38,7 +40,7 @@ public class MetaPathCounter {
 		private String paper;
 		private String venue;
 		private int year;
-		
+
 		public PaperVenue(String paper, String venue, int year) {
 			this.paper = paper;
 			this.venue = venue;
@@ -91,52 +93,96 @@ public class MetaPathCounter {
 
 	/**
 	 * Given index of two authors, calculate number of different paths of type A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
-	 * @param paperIndex of author 1: a
-	 * @param paperIndex of author 2: b
+	 * @param authorIndex a
+	 * @param authorIndex b
 	 * @return pathCount between them
-	 * @throws IOException 
 	 */
-	public static int pathCount(String a, String b) throws IOException{
+	public static int pathCount(String a, String b){
 		int PathCount = 0;
 		String v, i, j;
+		//long startTime = System.currentTimeMillis();
 
-		long startTime = System.currentTimeMillis();
-
-		// for author with index a1 for each paper index i 
+		// for author with index a for each paper index i 
 		//   find venue v where i is published at
 		//   for each paper index j that is published at v (j and i can be equal for instance for PC(i,i)
-		//		if j has author index a2, then PathCount++
-
+		//		if j has author index b, then PathCount++
 		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
 		for (PaperVenue pv : papervenuelist){
 			i = pv.getPaper();
 			v = pv.getVenue();
-			System.out.println("v: " + v);
+			//System.out.println("v: " + v);
 			List<PaperAuthors> paperauthorslist = venue_paperauthorslist_map.get(v);
 			for (PaperAuthors pa: paperauthorslist){
 				j = pa.getPaper();
 				for (String author: pa.getAuthors())
 					if (author.equals(b)){
-						System.out.println("There is a path from " + a + " to " + b + ": " + i + "-" + v + "-" + j);
+						//System.out.println("There is a path from " + a + " to " + b + ": " + i + "-" + v + "-" + j);
 						PathCount++;
 					}
 			}
 		}
-
-		long endTime = System.currentTimeMillis();
-		long duration = (endTime - startTime);
-
-		System.out.println("Done with calculating path count in " + duration/1000 + " seconds!");
-
+		//long endTime = System.currentTimeMillis();
+		//long duration = (endTime - startTime);
+		//System.out.println("Done with calculating path count in " + duration/1000 + " seconds!");
 		return PathCount;
 	}
+
+	/**
+	 * Given index of two authors, calculate their pathSim [VLDB'11] of considering meta-path A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
+	 * @param authorIndex a
+	 * @param authorIndex b
+	 * @return pathSim between them
+	 */
+	public static float pathSim(String a, String b){
+		float ps = (float) 0.0;
+		ps = (float)2*pathCount(a,b) / (float)(pathCount(a,a)+pathCount(b,b));
+		return ps;
+	}
+
+
+
+	/**
+	 * Given index of an authors, return authors that are connected via A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
+	 * @param paperIndex of author: a
+	 * @return list of neighbor nodes
+	 */
+	public static TreeSet<Integer> getNeighbors(String a){
+		TreeSet<Integer> n = new TreeSet<Integer>();  
+		String v, i, j;
+
+		// for author with index a for each paper index i 
+		//   find venue v where i is published at
+		//   for each paper index j that is published at v (j and i can be equal for instance for PC(i,i)
+		//		add authors of j as neighbors of a
+
+		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
+		for (PaperVenue pv : papervenuelist){
+			// ignore papers before 2000
+			//if (pv.getYear() < 2010)
+			//	continue;
+			
+			i = pv.getPaper();
+			v = pv.getVenue();
+			List<PaperAuthors> paperauthorslist = venue_paperauthorslist_map.get(v);
+			for (PaperAuthors pa: paperauthorslist){
+				j = pa.getPaper();
+				for (String author: pa.getAuthors())
+					n.add(Integer.parseInt(author));
+			}
+		}
+
+		n.remove(Integer.parseInt(a)); // remove the node from its neighbor
+		return n;
+	}
+
+
 
 	public static void main(String[] args) throws ClassNotFoundException 
 	{	 
 		// -Xms1024m -Xmx6000m
 
-		boolean readFromSavedGeneratedHashmaps = false;
-		
+		boolean readFromSavedGeneratedHashmaps = true;
+
 		long startTime = System.currentTimeMillis();
 
 		try{
@@ -145,7 +191,7 @@ public class MetaPathCounter {
 			brPaperYear = new BufferedReader(new FileReader("paper_newindex_year.txt"));
 
 			if (readFromSavedGeneratedHashmaps==true){
-				
+
 				// <author, list of [paper, venue]>
 				FileInputStream fileIn = new FileInputStream("author_papervenuelist_map.ser");
 				ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -164,7 +210,7 @@ public class MetaPathCounter {
 				long duration = (endTime - startTime);
 
 				System.out.println("Done with reading maps in " + duration/1000 + " seconds!");
-				
+
 			}else{
 
 				int[] paperVenue = new int[3177887]; // the index of this array correspond to the paper index and the value corresonf to venue index
@@ -176,6 +222,15 @@ public class MetaPathCounter {
 					paperVenue[Integer.parseInt(paperIndex)] = Integer.parseInt(venueIndex);
 				}
 
+				int year;
+				while ((currentLineString = brPaperYear.readLine()) != null) {
+					StringTokenizer st = new StringTokenizer(currentLineString,"\t");  
+					paperIndex = st.nextToken();
+					year = Integer.parseInt(st.nextToken());
+					paper_year_map.put(paperIndex, year);
+				}
+
+
 				while ((currentLineString = brPaperAuthor.readLine()) != null) {
 					List<PaperVenue> paperVenueList = new ArrayList<PaperVenue>();
 					List<PaperAuthors> paperAuthorsList = new ArrayList<PaperAuthors>();
@@ -184,9 +239,10 @@ public class MetaPathCounter {
 					paperIndex = st.nextToken();
 					authorIndex = st.nextToken();
 					venueIndex = Integer.toString(paperVenue[Integer.parseInt(paperIndex)]);	
+					year = paper_year_map.get(paperIndex);
 
 					// add to author_papervenuelist_map
-					PaperVenue new_pv = new PaperVenue(paperIndex, venueIndex); 
+					PaperVenue new_pv = new PaperVenue(paperIndex, venueIndex, year); 
 					if (author_papervenuelist_map.containsKey(authorIndex)){
 						paperVenueList = author_papervenuelist_map.get(authorIndex);
 					}
@@ -196,7 +252,7 @@ public class MetaPathCounter {
 					// add to venue_paperauthorslist_map
 					ArrayList<String> authorsList = new ArrayList<String>();
 					authorsList.add(authorIndex);
-					PaperAuthors new_pa = new PaperAuthors(paperIndex, authorsList); 				
+					PaperAuthors new_pa = new PaperAuthors(paperIndex, authorsList, year); 				
 					boolean paperFoundInVenue = false;
 					if (venue_paperauthorslist_map.containsKey(venueIndex)){
 						paperAuthorsList = venue_paperauthorslist_map.get(venueIndex);
@@ -252,9 +308,41 @@ public class MetaPathCounter {
 				System.out.println("Done with saving maps in " + duration/1000 + " seconds!");
 			}
 
+			//for (int i=0; i<3177887;i++){
+			for (int i=0; i<1;i++){
+				authorIndex = Integer.toString(i);
+				TreeSet<Integer> n = getNeighbors(authorIndex);
+				System.out.println("Author " + authorIndex + " has " + n.size() + " neighbors");
+				//System.out.println(n.size() + " neighbors of " + authorIndex + " are " + n);
+				int c = 0;
+				for (int neighborIndex: n){
+					System.out.println(++c + "-pathSim(" + authorIndex + "," + neighborIndex+ ") = " + pathSim(authorIndex, Integer.toString(neighborIndex)) );
+				}
+				/*
+				for (int neighborIndex: n){
+					// check if they are actually co-authors
+					//System.out.println("neighborIndex: " + neighborIndex);
+				
+					List<PaperVenue> papervenuelist = author_papervenuelist_map.get(authorIndex);
+					for (PaperVenue pv : papervenuelist){
+						List<PaperAuthors> paperauthorslist = venue_paperauthorslist_map.get(pv.getVenue());
+						for (PaperAuthors pa: paperauthorslist){
+							if (pv.getPaper().equals(pa.getPaper())){ // find the same paper
+								for (String author: pa.getAuthors())
+									if (Integer.parseInt(author) == neighborIndex){
+										System.out.println("authorIndex: " + authorIndex +" - neighborIndex: " + neighborIndex + " are co-authors");
+									}
+							}
+						}
+					}
 
+					//pathSim(authorIndex, neighborIndex);
+				}*/
+				
+				
+			}
 
-			pathCount("41527","29176");
+			//pathCount("41527","29176");
 
 			brPaperAuthor.close();
 			brPaperVenue.close();

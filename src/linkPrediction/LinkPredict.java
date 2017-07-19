@@ -52,17 +52,18 @@ public class LinkPredict {
 	public static void main(String[] args) 
 	{	
 		// inputs
-		int numberOfNodes = 1752443, numOfDimensions = 20, sourceNodeID = 100, destNodeID = 100;
+		int numberOfNodes = 1752443, numOfDimensions = 20;
 
 		double[][] z = new double[numberOfNodes][numOfDimensions];
+		ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
 
 		ArrayList <ArrayList<LinkPredict>> latentSpace = new ArrayList <ArrayList<LinkPredict>>(); 
 		String currentLineString, numOfNonZero=null;
-		int latentPosIndex=0, nodeIndex = 0;
+		int latentPosIndex=0, nodeIndex = 0, neighborIndex = 0;
 		double weight=0.0;
 
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("Zmatrix3.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("Zmatrix.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -97,6 +98,7 @@ public class LinkPredict {
 				}
 			}
 
+			System.out.println("Loaded matrix z in memory.");
 			br.close();
 
 			/*for (int i = 0; i < numberOfNodes; i++){
@@ -105,43 +107,80 @@ public class LinkPredict {
 				System.out.println();
 			}*/
 
-			/*
-			 * 1,49:
-			 * 110266,1:
-			 * 1134213,1:
-			 * 114430,1:
-			 * 114431,1:
-			 * 1167353,1:
-			 * 11785,1:
-			 * 1216405,1:
-			 * 133423,1:
-			 * 133462,1:
-			 */
-			
-			Double predictionProbability = 0.0;
-			for (int k=0; k<numOfDimensions; k++){
-				//predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
-				predictionProbability += z[1][k]*z[110266][k];
-			}
-			
-			System.out.println(predictionProbability);
-			
-			predictionProbability = 0.0;
-			for (int k=0; k<numOfDimensions; k++){
-				//predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
-				predictionProbability += z[1][k]*z[100][k];
-			}
-			
-			System.out.println(predictionProbability);
-			
 
-			predictionProbability = 0.0;
-			for (int k=0; k<numOfDimensions; k++){
-				//predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
-				predictionProbability += z[1][k]*z[114430][k];
+		}catch (IOException e) 
+		{
+			e.printStackTrace();
+		} 
+
+
+		// reading original coauthorship file
+		try{
+			BufferedReader br2 = new BufferedReader(new FileReader("2intervals/coauthorship_2of2_2009_2016.txt"));
+			// file format example (3 nodes)
+			//3
+			//0,0
+			//1,3:2,1:3,1:4,1
+			//...
+			int total_size = 0;
+
+			currentLineString = br2.readLine();
+			int numOfNodes = Integer.parseInt(currentLineString);
+			int from = 0;
+			int to = 0;
+			for (int i=0; i < numOfNodes; i++){
+
+				currentLineString = br2.readLine();
+				from = 0;
+				to = currentLineString.indexOf(",", from);
+				nodeIndex = Integer.parseInt(currentLineString.substring(from,to));
+				//System.out.println("nodeIndex:" + nodeIndex);
+				from = to+1;
+				to = currentLineString.indexOf(":", from);
+				if (to<=0) to = currentLineString.length();
+				numOfNonZero = currentLineString.substring(from,to);
+				//System.out.println("numOfNonZero:" + numOfNonZero);
+
+				ArrayList<Integer> n = new ArrayList<Integer>();
+
+				for (int j=0; j < Integer.parseInt(numOfNonZero) ; j++){
+					from = to+1;
+					to = currentLineString.indexOf(",", from);
+					neighborIndex = Integer.parseInt(currentLineString.substring(from,to));
+					// ignoring weight
+					from = to+1;  to = from+1;
+					//System.out.println("neighborIndex:" + neighborIndex);
+					n.add(neighborIndex);
+				}
+				neighbors.add(n);
+				total_size += n.size();
 			}
-			
-			System.out.println(predictionProbability);
+
+			System.out.println("Loaded coauthorship matrix in memory.");
+			System.out.println("Total links: " + total_size);
+			//System.out.println(neighbors);
+			br2.close();
+
+
+			Double totalError = 0.0;
+			Double predictionProbability = 0.0;
+			//int sourceNodeID = 11785;
+
+			for(int sourceNodeID = 0; sourceNodeID <1752443; sourceNodeID++){ 
+				for (int destNodeID: neighbors.get(sourceNodeID)){
+					//System.out.println(destNodeID);
+
+					predictionProbability = 0.0;
+					for (int k=0; k<numOfDimensions; k++){
+						predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
+					}
+					//predictionProbability = (predictionProbability>=0.5) ? 1.0 : 0.0;
+					predictionProbability*=predictionProbability;
+					totalError+=predictionProbability;
+					//System.out.println(predictionProbability);
+				}
+			}
+			System.out.println("totalError: " + Math.sqrt(totalError));
 
 
 		}catch (IOException e) 

@@ -31,39 +31,43 @@ import java.util.TreeSet;
  */
 public class CoAuthorship2 {
 
-	private static TreeMap<String, ArrayList<String>> author_papers_map = new TreeMap<String, ArrayList<String>>();    
-	private static TreeMap<String, ArrayList<String>> paper_authors_map = new TreeMap<String, ArrayList<String>>();    
-	private static TreeMap<String, Integer> paper_year_map = new TreeMap<String, Integer>();    
+	private static TreeMap<Integer, ArrayList<Integer>> author_papers_map = new TreeMap<Integer, ArrayList<Integer>>();    
+	private static TreeMap<Integer, ArrayList<Integer>> paper_authors_map = new TreeMap<Integer, ArrayList<Integer>>();    
+
+	private static TreeMap<Integer, Integer> paper_year_map = new TreeMap<Integer, Integer>();    
+	private static TreeMap<Integer, TreeSet<Integer>> coauthors = new TreeMap<Integer, TreeSet<Integer>>();    
 
 	public static void main(String[] args) 
 	{	 
-		String currentLineString, paperIndex = null, authorIndex=null;
+		String currentLineString;
+		int paperIndex, authorIndex;
 		int year;
+		int fromYear = 2010, toYear = 2016;
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader("paper_newindex_author.txt"));
 			BufferedReader br_year = new BufferedReader(new FileReader("paper_newindex_year.txt"));
 			//BufferedWriter bw = new BufferedWriter(new FileWriter(new File("coauthorship_int1_1936_2009.txt")));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("coauthorship_int10_2015_2016")));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("coauthorship_2of3_2010_2016.txt")));
 
 			while ((currentLineString = br_year.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(currentLineString,"\t");  
-				paperIndex = st.nextToken();
+				paperIndex = Integer.parseInt(st.nextToken());
 				year = Integer.parseInt(st.nextToken());
 				paper_year_map.put(paperIndex, year);
 			}
 
 
 			while ((currentLineString = br.readLine()) != null) {
-				ArrayList<String> papersList = new ArrayList<String>();
-				ArrayList<String> authorsList = new ArrayList<String>();
+				ArrayList<Integer> papersList = new ArrayList<Integer>();
+				ArrayList<Integer> authorsList = new ArrayList<Integer>();
 
 				StringTokenizer st = new StringTokenizer(currentLineString,"\t");  
-				paperIndex = st.nextToken();
-				authorIndex = st.nextToken();
+				paperIndex = Integer.parseInt(st.nextToken());
+				authorIndex = Integer.parseInt(st.nextToken());
 
 				year = paper_year_map.get(paperIndex);
-				if (year >= 2015 && year <= 2016){
+				if (year >= fromYear && year <= toYear){
 
 					if (author_papers_map.containsKey(authorIndex)){
 						papersList = author_papers_map.get(authorIndex);
@@ -86,32 +90,63 @@ public class CoAuthorship2 {
 			//1,8:0,1:5,1:38,1:39,1:49,1:69,1:71,1:107,1
 
 			// add number of authors in the first line
-			
+
 			//bw.write(author_papers_map.size() + "\n");
 			bw.write("1752443\n");
 
 			for (int i=0; i<1752443; i++){
-				TreeSet<String> coauthorsList = new TreeSet<String>();
+				TreeSet<Integer> coauthorsList = new TreeSet<Integer>();
 
-				if (author_papers_map.containsKey(Integer.toString(i))){
-					
-					for (String p: author_papers_map.get(Integer.toString(i))){
-						for (String a: paper_authors_map.get(p)){
-							if (!a.equals(Integer.toString(i))) 
+				if (author_papers_map.containsKey(i)){
+
+					for (Integer p: author_papers_map.get(i)){
+						for (Integer a: paper_authors_map.get(p)){
+							if (a != i) 
 								coauthorsList.add(a);
 						}
 					}
+
+					coauthors.put(i, coauthorsList);
+
 					bw.write(i + "," + coauthorsList.size());
-					for (String c: coauthorsList){
+					for (Integer c: coauthorsList){
 						bw.write(":" + c + ",1");
 					}
 					bw.write("\n");
-					coauthorsList.clear();
-					
+
 				}else{
 					bw.write(i + ",0\n");
 				}
 			}
+
+			
+			/*TreeSet<Integer> twoHopCoauthors = new TreeSet<Integer>();
+			TreeSet<Integer> threeHopCoauthors = new TreeSet<Integer>();
+			for (int i=0; i<100; i++){  // 1752443
+				TreeSet<Integer> coauthorsList = coauthors.get(i);
+				for (Integer j:coauthorsList){
+					TreeSet<Integer> cocoauthorsList = coauthors.get(j);
+					for (Integer k:cocoauthorsList){
+						threeHopCoauthors.addAll(coauthors.get(k));
+					}					
+					twoHopCoauthors.addAll(coauthors.get(j));
+				}
+				threeHopCoauthors.removeAll(twoHopCoauthors); // remove two hop coauthors
+
+				twoHopCoauthors.removeAll(coauthorsList); // remove first hop coauthors
+				twoHopCoauthors.remove(i); // remove author himself
+				
+				//System.out.println("1Hop(" + i + ")=" + coauthorsList);
+				//System.out.println("2Hop(" + i + ")=" + twoHopCoauthors);
+				//System.out.println("Size of 1Hop(" + i + ")=" + coauthorsList.size());
+				System.out.println("Size of 2Hop(" + i + ")=" + twoHopCoauthors.size() + "\tSize of 3Hop(" + i + ")=" + threeHopCoauthors.size());
+				
+				twoHopCoauthors.clear();
+				threeHopCoauthors.clear();
+				
+			}*/
+
+
 
 			br.close();
 			bw.close();

@@ -1,10 +1,12 @@
 package extractfromfile;
 
-import java.util.*;
-
-import org.apache.lucene.analysis.TokenStream;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 public class WordCount {
 	

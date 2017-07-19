@@ -29,24 +29,25 @@ import java.util.TreeSet;
  */
 public class CoAuthorship {
 
-	private static TreeMap<String, ArrayList<String>> author_papers_map = new TreeMap<String, ArrayList<String>>();    
-	private static TreeMap<String, ArrayList<String>> paper_authors_map = new TreeMap<String, ArrayList<String>>();    
+	private static TreeMap<Integer, ArrayList<Integer>> author_papers_map = new TreeMap<Integer, ArrayList<Integer>>();    
+	private static TreeMap<Integer, ArrayList<Integer>> paper_authors_map = new TreeMap<Integer, ArrayList<Integer>>();    
 
 	public static void main(String[] args) 
 	{	 
-		String currentLineString, paperIndex = null, authorIndex=null;
+		String currentLineString;
+		int paperIndex, authorIndex;
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader("paper_newindex_author.txt"));
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("coauthorship.txt")));
 
 			while ((currentLineString = br.readLine()) != null) {
-				ArrayList<String> papersList = new ArrayList<String>();
-				ArrayList<String> authorsList = new ArrayList<String>();
+				ArrayList<Integer> papersList = new ArrayList<Integer>();
+				ArrayList<Integer> authorsList = new ArrayList<Integer>();
 
 				StringTokenizer st = new StringTokenizer(currentLineString,"\t");  
-				paperIndex = st.nextToken();
-				authorIndex = st.nextToken();
+				paperIndex = Integer.parseInt(st.nextToken());
+				authorIndex = Integer.parseInt(st.nextToken());
 
 				if (author_papers_map.containsKey(authorIndex)){
 					papersList = author_papers_map.get(authorIndex);
@@ -71,15 +72,15 @@ public class CoAuthorship {
 			bw.write("1752443\n");
 
 			for (int i=0; i<1752443; i++){
-				TreeSet<String> coauthorsList = new TreeSet<String>();
-				for (String p: author_papers_map.get(Integer.toString(i))){
-					for (String a: paper_authors_map.get(p)){
-						if (!a.equals(Integer.toString(i))) 
+				TreeSet<Integer> coauthorsList = new TreeSet<Integer>();
+				for (Integer p: author_papers_map.get(i)){
+					for (Integer a: paper_authors_map.get(p)){
+						if (a != i) 
 							coauthorsList.add(a);
 					}
 				}
 				bw.write(i + "," + coauthorsList.size());
-				for (String c: coauthorsList){
+				for (Integer c: coauthorsList){
 					bw.write(":" + c + ",1");
 				}
 				bw.write("\n");
