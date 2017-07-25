@@ -85,10 +85,13 @@ public class MetaPathAPVPA {
 
 	}
 
+	private static int fromYear;
+	private static int toYear;
 
 	private static BufferedReader brPaperAuthor;
 	private static BufferedReader brPaperVenue;
 	private static BufferedReader brPaperYear;
+	private static BufferedReader labels;
 	private static BufferedWriter bwHashMap;
 
 	/**
@@ -106,13 +109,20 @@ public class MetaPathAPVPA {
 		//   find venue v where i is published at
 		//   for each paper index j that is published at v (j and i can be equal for instance for PC(i,i)
 		//		if j has author index b, then PathCount++
+		
 		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
 		for (PaperVenue pv : papervenuelist){
+			// ignore papers out of target interval
+			if (pv.getYear() < fromYear || pv.getYear() > toYear)
+				continue;
+			
 			i = pv.getPaper();
 			v = pv.getVenue();
 			//System.out.println("v: " + v);
 			List<PaperAuthors> paperauthorslist = venue_paperauthorslist_map.get(v);
 			for (PaperAuthors pa: paperauthorslist){
+				if (pa.getYear() < fromYear || pa.getYear() > toYear)
+					continue;
 				j = pa.getPaper();
 				for (String author: pa.getAuthors())
 					if (author.equals(b)){
@@ -135,7 +145,13 @@ public class MetaPathAPVPA {
 	 */
 	public static float pathSim(String a, String b){
 		float ps = (float) 0.0;
+		// check if the source or destination author actually published in that interval to avoid NaN for 0.0/0.0
+		if ((float)(pathCount(a,a)+pathCount(b,b)) < 0.000000001)
+			return -1;
+		
 		ps = (float)2*pathCount(a,b) / (float)(pathCount(a,a)+pathCount(b,b));
+		if (ps > 1)
+			System.out.println(pathCount(a,b) + " " + pathCount(a,a) + " " + pathCount(b,b));
 		return ps;
 	}
 
@@ -182,6 +198,8 @@ public class MetaPathAPVPA {
 		// -Xms1024m -Xmx6000m
 
 		boolean readFromSavedGeneratedHashmaps = true;
+		fromYear = 1996;
+		toYear = 2002;
 
 		long startTime = System.currentTimeMillis();
 
@@ -308,8 +326,40 @@ public class MetaPathAPVPA {
 				System.out.println("Done with saving maps in " + duration/1000 + " seconds!");
 			}
 
+		
+			
+			try{
+				BufferedWriter bw = new BufferedWriter(new FileWriter(new File("APVPA.txt")));
+
+				labels = new BufferedReader(new FileReader("labels.txt"));
+				// file format example
+				//0,1:1
+				//...
+				//2,3:0
+				int from = 0, to = 0, sourceNode, destNode;
+				while ((currentLineString = labels.readLine()) != null){
+					from = 0;
+					to = currentLineString.indexOf(",", from);
+					sourceNode = Integer.parseInt(currentLineString.substring(from,to));
+					//if (sourceNode>20)
+					//	continue;
+					from = to+1;
+					to = currentLineString.indexOf(":", from);
+					destNode = Integer.parseInt(currentLineString.substring(from,to));
+					bw.write(pathSim(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
+					//System.out.println("-pathSim(" + sourceNode + "," + destNode+ ") = " + pathSim(Integer.toString(sourceNode), Integer.toString(destNode)) );
+				}
+
+				bw.close();
+
+			}catch (IOException e) 
+			{
+				e.printStackTrace();
+			} 
+			
+			
 			//for (int i=0; i<3177887;i++){
-			for (int i=0; i<1;i++){
+			for (int i=0; i<0;i++){
 				authorIndex = Integer.toString(i);
 				TreeSet<Integer> n = getNeighbors(authorIndex);
 				System.out.println("Author " + authorIndex + " has " + n.size() + " neighbors");
@@ -338,14 +388,14 @@ public class MetaPathAPVPA {
 
 					//pathSim(authorIndex, neighborIndex);
 				}*/
-				
-				
+								
 			}
 
 			//pathCount("41527","29176");
 
 			brPaperAuthor.close();
 			brPaperVenue.close();
+			labels.close();
 
 		}catch (IOException e) 
 		{

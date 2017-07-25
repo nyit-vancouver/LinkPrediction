@@ -63,7 +63,7 @@ public class LinkPredict {
 		double weight=0.0;
 
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("Zmatrix.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("Zmatrix_3of3.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -116,7 +116,7 @@ public class LinkPredict {
 
 		// reading original coauthorship file
 		try{
-			BufferedReader br2 = new BufferedReader(new FileReader("2intervals/coauthorship_2of2_2009_2016.txt"));
+			BufferedReader br2 = new BufferedReader(new FileReader("3intervals/coauthorship_3of3_2010_2016.txt"));
 			// file format example (3 nodes)
 			//3
 			//0,0
