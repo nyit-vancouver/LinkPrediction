@@ -30,6 +30,7 @@ public class MetaPathAPVPA {
 
 	private static Map<String, List<PaperVenue>> author_papervenuelist_map = new HashMap<String, List<PaperVenue>>();    
 	private static Map<String, List<PaperAuthors>> venue_paperauthorslist_map = new HashMap<String, List<PaperAuthors>>();    
+	private static Map<String, List<String>> paper_authorslist_map = new HashMap<String, List<String>>();    
 	private static TreeMap<String, Integer> paper_year_map = new TreeMap<String, Integer>();    
 
 	private static class PaperVenue implements Serializable {
@@ -137,6 +138,58 @@ public class MetaPathAPVPA {
 		return PathCount;
 	}
 
+
+	
+	
+	/**
+	 * Given index of two authors, calculate number of different paths of type A-P-A-P-A (e.g. Jim-P1-Sam-P4-Tom)
+	 * @param authorIndex a
+	 * @param authorIndex b
+	 * @return pathCount between them
+	 */
+	public static int pathCount2(String a, String b){
+		int PathCount = 0;
+		String i, j;
+
+		// for author with index a for each paper index i 
+		//   for each author c who wrote i and c!=a
+		//   for each paper index j that is written by c (j and i can be equal for instance for PC(i,i)
+		//		if j has author index b, then PathCount++
+		
+		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
+		for (PaperVenue pv : papervenuelist){
+			// ignore papers out of target interval
+			if (pv.getYear() < fromYear || pv.getYear() > toYear)
+				continue;
+			
+			i = pv.getPaper();
+			for (String c: paper_authorslist_map.get(i)){
+				if (c.equals(a))
+					continue;
+				for (PaperVenue pv2 : author_papervenuelist_map.get(c)){
+					// ignore papers out of target interval
+					if (pv2.getYear() < fromYear || pv2.getYear() > toYear)
+						continue;
+					j = pv2.getPaper();
+					for (String author: paper_authorslist_map.get(j)){
+						if (author.equals(b)){
+							System.out.println("There is a path from " + a + " to " + b + ": " + i + "-" + c + "-" + j);
+							PathCount++;
+						}
+					}
+					
+				}
+			}
+		}
+
+		return PathCount;
+	}
+
+	
+	
+	
+	
+	
 	/**
 	 * Given index of two authors, calculate their pathSim [VLDB'11] of considering meta-path A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
 	 * @param authorIndex a
@@ -224,6 +277,17 @@ public class MetaPathAPVPA {
 				in1.close();
 				fileIn1.close();
 
+				
+				// build paper_authorslist_map
+				for (List<PaperAuthors> paperauthorslist : venue_paperauthorslist_map.values()) {
+					for (PaperAuthors pa: paperauthorslist){
+						if (pa.getYear() < fromYear || pa.getYear() > toYear)
+							continue;
+						paper_authorslist_map.put(pa.getPaper(), pa.getAuthors());
+					}
+				}
+				
+				
 				long endTime = System.currentTimeMillis();
 				long duration = (endTime - startTime);
 
