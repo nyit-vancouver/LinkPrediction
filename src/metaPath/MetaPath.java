@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
-public class MetaPathAPVPA {
+public class MetaPath {
 
 	private static String currentLineString, paperIndex = null, authorIndex=null, venueIndex=null;
 
@@ -173,7 +173,7 @@ public class MetaPathAPVPA {
 					j = pv2.getPaper();
 					for (String author: paper_authorslist_map.get(j)){
 						if (author.equals(b)){
-							System.out.println("There is a path from " + a + " to " + b + ": " + i + "-" + c + "-" + j);
+							//System.out.println("There is a path from " + a + " to " + b + ": " + i + "-" + c + "-" + j);
 							PathCount++;
 						}
 					}
@@ -198,11 +198,14 @@ public class MetaPathAPVPA {
 	 */
 	public static float pathSim(String a, String b){
 		float ps = (float) 0.0;
+		int a_a = pathCount(a,a); 
+		int b_b = pathCount(b,b); 
+		
 		// check if the source or destination author actually published in that interval to avoid NaN for 0.0/0.0
-		if ((float)(pathCount(a,a)+pathCount(b,b)) < 0.000000001)
+		if (a_a + b_b == 0)
 			return -1;
 		
-		ps = (float)2*pathCount(a,b) / (float)(pathCount(a,a)+pathCount(b,b));
+		ps = (float)2*pathCount(a,b) / (float)(a_a + b_b);
 		if (ps > 1)
 			System.out.println(pathCount(a,b) + " " + pathCount(a,a) + " " + pathCount(b,b));
 		return ps;
@@ -210,6 +213,28 @@ public class MetaPathAPVPA {
 
 
 
+	/**
+	 * Given index of two authors, calculate their pathSim [VLDB'11] of considering meta-path A-P-A-P-A (e.g. Jim-P1-Sam-P4-Tom)
+	 * @param authorIndex a
+	 * @param authorIndex b
+	 * @return pathSim between them
+	 */
+	public static float pathSim2(String a, String b){
+		float ps = (float) 0.0;
+		int a_a = pathCount2(a,a); 
+		int b_b = pathCount2(b,b); 
+		
+		// check if the source or destination author actually published in that interval to avoid NaN for 0.0/0.0
+		if (a_a + b_b == 0)
+			return -1;
+		
+		ps = (float)2*pathCount2(a,b) / (float)(a_a + b_b);
+		if (ps > 1)
+			System.out.println(pathCount2(a,b) + " " + pathCount2(a,a) + " " + pathCount2(b,b));
+		return ps;
+	}
+
+	
 	/**
 	 * Given index of an authors, return authors that are connected via A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
 	 * @param paperIndex of author: a
@@ -394,27 +419,36 @@ public class MetaPathAPVPA {
 			
 			try{
 				BufferedWriter bw = new BufferedWriter(new FileWriter(new File("APVPA.txt")));
+				BufferedWriter bw2 = new BufferedWriter(new FileWriter(new File("APAPA.txt")));
 
 				labels = new BufferedReader(new FileReader("labels.txt"));
 				// file format example
 				//0,1:1
 				//...
 				//2,3:0
+				int counter = 0;
 				int from = 0, to = 0, sourceNode, destNode;
 				while ((currentLineString = labels.readLine()) != null){
+					counter++;
 					from = 0;
 					to = currentLineString.indexOf(",", from);
 					sourceNode = Integer.parseInt(currentLineString.substring(from,to));
 					//if (sourceNode>20)
-					//	continue;
+					//	break;
 					from = to+1;
 					to = currentLineString.indexOf(":", from);
 					destNode = Integer.parseInt(currentLineString.substring(from,to));
 					bw.write(pathSim(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
+					if (counter%10000==0)
+						System.out.println(counter);
 					//System.out.println("-pathSim(" + sourceNode + "," + destNode+ ") = " + pathSim(Integer.toString(sourceNode), Integer.toString(destNode)) );
+					bw2.write(pathSim2(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
+					//System.out.println("-pathSim2(" + sourceNode + "," + destNode+ ") = " + pathSim2(Integer.toString(sourceNode), Integer.toString(destNode)) );
+
 				}
 
 				bw.close();
+				bw2.close();
 
 			}catch (IOException e) 
 			{

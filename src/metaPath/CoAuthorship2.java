@@ -42,13 +42,13 @@ public class CoAuthorship2 {
 		String currentLineString;
 		int paperIndex, authorIndex;
 		int year;
-		int fromYear = 2010, toYear = 2016;
+		int fromYear = 1996, toYear = 1998;
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader("paper_newindex_author.txt"));
 			BufferedReader br_year = new BufferedReader(new FileReader("paper_newindex_year.txt"));
 			//BufferedWriter bw = new BufferedWriter(new FileWriter(new File("coauthorship_int1_1936_2009.txt")));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("coauthorship_2of3_2010_2016.txt")));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("coauthorship_1of7_1996_1998.txt")));
 
 			while ((currentLineString = br_year.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(currentLineString,"\t");  

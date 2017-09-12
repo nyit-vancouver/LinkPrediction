@@ -28,14 +28,15 @@ public class DataSet {
 
             // skip first column and last column is the label
             int i = 1;
-            double[] data = new double[3];
+            double[] data = new double[4];
             data[0] = 1.0;
             data[1] = Double.parseDouble(columns[0]);
             data[2] = Double.parseDouble(columns[1]);
+            data[3] = Double.parseDouble(columns[2]);
 //            for (i=1; i<columns.length-1; i++) {
 //                data[i-1] = Integer.parseInt(columns[i]);
 //            }
-            int label = Integer.parseInt(columns[2]);
+            int label = Integer.parseInt(columns[3]);
             Instance instance = new Instance(label, data);
             dataset.add(instance);
         }

@@ -43,8 +43,7 @@ public class LogisticRegressionUseSGD
                     weights[j] = weights[j] + rate * (label - predicted) * x[j];
                 }
             }
-            System.out.println("iteration: " + n + " "
-                    + Arrays.toString(weights) + " mle: " + lik);
+            //System.out.println("iteration: " + n + " " + Arrays.toString(weights) + " mle: " + lik);
         }
     }
 
@@ -60,10 +59,13 @@ public class LogisticRegressionUseSGD
 
     public static void main(String... args) throws FileNotFoundException
     {
-        List<Instance> instances = DataSet.readDataSet("testSet.txt");
-        LogisticRegressionUseSGD logistic = new LogisticRegressionUseSGD(3);
+        List<Instance> instances = DataSet.readDataSet("dblpdataset1.txt");
+        LogisticRegressionUseSGD logistic = new LogisticRegressionUseSGD(4);  // LogisticRegressionUseSGD(n) where n is num of features +1
         logistic.train(instances);
         int flasecount = 0;
+        double totalError = 0.0;
+		double diff = 0.0;
+        
         for (Instance test : instances)
         {
 
@@ -71,24 +73,30 @@ public class LogisticRegressionUseSGD
             double probx = logistic.classify(test.getX());
             double y = test.getLabel();
             boolean correct = true;
+            
+			diff = y - probx;
+			diff*=diff;
+			totalError+=diff;
+
+            
             if ((probx >= 0.5 && y == 0) ||  (probx < 0.5 && y == 1))
             {
                 correct = false;
                 flasecount++;
             }
-            if(!correct)
+            
+            /*if(!correct)
             {
-            System.out.println("prob(x) = " + probx + " and real is: "
-                    + test.getLabel() +" and result is:"+correct);
+               System.out.println("prob(x) = " + probx + " and real is: "  + test.getLabel() +" and result is:"+correct);
             }
             else
             {
-                System.out.println("prob(x) = " + probx + " and real is: "
-                        + test.getLabel());  
-            }
+               System.out.println("prob(x) = " + probx + " and real is: "  + test.getLabel());  
+            }*/
             
         }
         System.out.println("total line:"+instances.size()+", and incorrect count:"+flasecount);
+		System.out.println("totalError: " + Math.sqrt(totalError));
 
     }
 }

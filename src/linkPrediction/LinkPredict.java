@@ -63,7 +63,7 @@ public class LinkPredict {
 		double weight=0.0;
 
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("Zmatrix_3of3.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("Zmatrix/Zmatrix_3of3.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -163,6 +163,7 @@ public class LinkPredict {
 
 
 			Double totalError = 0.0;
+			Double diff = 0.0;
 			Double predictionProbability = 0.0;
 			//int sourceNodeID = 11785;
 
@@ -175,9 +176,10 @@ public class LinkPredict {
 						predictionProbability += z[sourceNodeID][k]*z[destNodeID][k];
 					}
 					//predictionProbability = (predictionProbability>=0.5) ? 1.0 : 0.0;
-					predictionProbability*=predictionProbability;
-					totalError+=predictionProbability;
 					//System.out.println(predictionProbability);
+					diff = 1 - predictionProbability;
+					diff*=diff;
+					totalError+=diff;
 				}
 			}
 			System.out.println("totalError: " + Math.sqrt(totalError));
