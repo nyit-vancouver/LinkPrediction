@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: paper.aux
+The style file: abbrv.bst
+Database file #1: refs.bib
+Warning--empty journal in wang2016relsim
+You've used 11 entries,
+            2118 wiz_defined-function locations,
+            572 strings with 6243 characters,
+and the built_in function-call counts, 4848 in all, are:
+= -- 461
+> -- 283
+< -- 4
++ -- 112
+- -- 100
+* -- 378
+:= -- 789
+add.period$ -- 35
+call.type$ -- 11
+change.case$ -- 83
+chr.to.int$ -- 0
+cite$ -- 12
+duplicate$ -- 171
+empty$ -- 341
+format.name$ -- 100
+if$ -- 1015
+int.to.chr$ -- 0
+int.to.str$ -- 11
+missing$ -- 11
+newline$ -- 58
+num.names$ -- 22
+pop$ -- 88
+preamble$ -- 1
+purify$ -- 72
+quote$ -- 0
+skip$ -- 127
+stack$ -- 0
+substring$ -- 287
+swap$ -- 50
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 44
+warning$ -- 1
+while$ -- 40
+width$ -- 13
+write$ -- 124
+(There was 1 warning)

@@ -1,0 +1,33 @@
+\section{Experiments}
+
+\subsection{Dataset}
+
+
+
+The \textit{aminer} citation dataset\footnote{\url{https://aminer.org/citation}} V8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1930 to 2016. Each paper is associated with abstract, authors, year, venue, and title. \amin{We consider only those papers published since 2000, which includes X papers and Y authors.}
+
+We consider $k=3, 5, and 10$ different time intervals for the dynamic analysis. In our evaluation, we execute the learned model on the last interval to measure the prediction accuracy.
+
+The ml-latest-small\footnote{\url{http://files.grouplens.org/datasets/movielens/ml-latest-small-README.html}} dataset describes 5-star rating and free-text tagging activity from MovieLens\footnote{\url{https://movielens.org/}}, a movie recommendation service. It contains 100004 ratings and 1296 tag applications across 9125 movies. These data were created by 671 users between January 09, 1995 and October 16, 2016. This dataset was generated on October 17, 2016 \amin{Still not working with this dataset.}.
+
+
+\subsection{Baseline methods}
+
+Considering the effect of time-wise data decomposition. What if we shorten timespans of each $G_t$? The extreme is having only one graph or having it for each year. Can we find a trade-off?
+
+Heterogeneous non-temporal - Collection of PathSim (PathCount, NormalPCount, RandomWalk, Symmetric random walk)
+Homogeneous non-temporal (Katz, Jaccard)
+Homogeneous temporal (Katz, Jaccard)
+
+\begin{enumerate}
+    \item We use prediction error to evaluate the inference accuracy. Given the training graph G1, . . . , Gt, prediction error is defined as... Therefore, a smaller prediction error indicates better inference accuracy.
+    
+    \item For link prediction accuracy, we use Area Under Curves
+(both Receiver Operating Characteristic (ROC) and Precision-
+Recall (PR) curves), termed as AUCROC and AUCPR.
+
+    \item NDCG
+    
+    \item Trade-off analysis (time overhead)
+    
+\end{enumerate}

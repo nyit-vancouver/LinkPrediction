@@ -38,3 +38,14 @@ ehthumbs.db
 Thumbs.db
 # Project temporary files #
 .keystore
+
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+
+paper.pdf
