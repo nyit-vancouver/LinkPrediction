@@ -47,5 +47,5 @@ Thumbs.db
 *.fls
 *.out
 *.toc
-
+*.blg
 paper.pdf
