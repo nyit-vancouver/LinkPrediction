@@ -32,10 +32,10 @@ $Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation 
 
 
 
-An immediate adaptation of the above BCGD technique is to consider a sequence of augmented reduced graphs as input, i.e., graphs with source and destination of a target relationship type with edges between them if the target relation exists in the original graph. This changes equation (\ref{latentOrigEqu}) to the following
+An immediate adaptation of the above BCGD technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target relationship type with edges between them if the target relation exists in the original graph. This changes equation (\ref{latentOrigEqu}) to the following
 \begin{equation}\label{latentReducedEqu}
     \begin{array}{l}
-\argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G^{R}_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
+\argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G^{P}_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
 \\
 \text{subject to :} \forall u,\tau,Z_{\tau}\geq 0, Z_{\tau}(u)Z_{\tau}(u)^T=1
     \end{array}
@@ -45,6 +45,7 @@ An immediate adaptation of the above BCGD technique is to consider a sequence of
 
 
 Algorithm \ref{alg1} gets as an input a dynamic heterogeneous graph $G$, number of graph snapshots $t$, a target relation meta path $P(a,b)$, and latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the BCGD technique in \cite{Zhu2016} is applied (lines 9-10) to infer $k$-dimensional temporal latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
+\amin{How $Z_{t+1}$ depends on $Z_1, ..., Z_t$ from the algorithm? Explain assumptions in \cite{Zhu2016}.}
 
 
 \begin{algorithm}[t]
@@ -79,7 +80,7 @@ Algorithm \ref{alg1} gets as an input a dynamic heterogeneous graph $G$, number 
 
 \subsection{Meta path-based prediction}
 
-The homogenize approach, however, does not consider different semantics of meta paths between two nodes. Thus we use the idea of meta path \cite{sun2011pathsim} on a given network schema and a target relation type $P$ (e.g. relation between two authors) to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.
+The homogenize approach, however, does not consider different semantics of meta paths between two nodes. Thus we use the idea of meta path \cite{sun2011pathsim} on a given network schema and a target relation type $P$, such as co-authorship, to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.
 
 Algorithm \ref{alg2} gets as an input a dynamic heterogeneous graph $G$, number of graph snapshots $t$, a network schema $S$, target relation meta path $P(a,b)$ between node types $a$ and $b$, maximum length of a meta path $l$, and latent space dimension $k$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). It then produces the set of all meta paths between a node type $a$ and type $b$ defined in the given target relation $P(a,b)$ (line 2). This is done by traversing the network schema $S$ (for instance a BFS traversal) and generating meta paths with maximum length of $l$ .
 
@@ -128,12 +129,11 @@ Algorithm \ref{alg2} gets as an input a dynamic heterogeneous graph $G$, number 
 \end{algorithm}
 
 
- Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight between 0 and 1, based on a similarity measure. For example \textit{PathSim} \cite{sun2011pathsim}, path count, or random walk are measures for the relation of two nodes given link type and meta path, such as authorship.
+ Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight between 0 and 1, based on a similarity measure. For example \textit{PathSim} \cite{sun2011pathsim}, path count, or random walk are measures for the relation of two nodes given link type and meta path, such as co-authorship.
 
 \amin{Note that values of $G^P_i$ depends on meta-path $P$}.
 
-Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization with the block-coordinate gradient descent (BCGD) technique presented in \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$ that minimizes the quadratic loss with temporal regularization
-
+Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization with the BCGD technique \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$.
 
 % \begin{equation}\label{latentEqu}
 %     \begin{array}{l}
@@ -148,25 +148,19 @@ Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are genera
 
 %* Restrict pathSim to 3-hops and not beyond
 
-\head{Learning meta path weights}. Zhu at al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features help boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with parameters indicating importance of the corresponding meta path.
+\head{Learning meta path weights}. Zhu at al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with parameters indicating importance of the corresponding meta path.
 
-Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features. To do so, we use logistic regression as the prediction model. we can define the probability of existence of a link between nodes $a$ and $b$ as follows:
+Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features. To do so, we use logistic regression as the prediction model. we can define the probability of existence of a link between nodes $a$ and $b$ as 
 \begin{equation*}
 Pr(label = 1|a, b; \boldsymbol{\theta}) = \frac{e^{z}}{e^{z}+1}
 \end{equation*}
-where $z=\sum\limits_{i=1}^{n}\theta_i.w_i$ for $n$ meta paths, $\theta_i$ is a normalized weight value for weight $w_i$ (meta path-based feature) indicating its importance for prediction.
-
-In order to learn prediction model, we use
-logistic regression with $L_2$ regularization to estimate the optimal $\theta$ given a training dataset $T$.
-\begin{equation*}
+where $z=\sum\limits_{i=1}^{n}\theta_i.w_i$ for $n$ meta paths, $\theta_i$ is a normalized weight value for weight $w_i$ (meta path-based feature) indicating its importance for prediction. In order to learn the prediction model, we use
+logistic regression with $L_2$ regularization to estimate the optimal $\theta$. \begin{equation*}
 \boldsymbol{\hat{\theta}} = 
 \operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
 \end{equation*}
 
 We derive \textbf{$\hat{\theta}$} which maximizes the likelihood of all the training pairs, using maximum likelihood estimation.
-
-
-\amin{How $Z_{t+1}$ depends on $Z_1, ..., Z_t$ from the algorithm? Explain assumptions in \cite{Zhu2016}.}
 
 
 \textbf{Training:} For each pair of nodes $(a,b)$ in $G^{P^*}_{t}$, where $b \in N(a)$ add a feature vector to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label 1 if $(a,b) \in E^{P^*}_{t}$ otherwise label 0.
