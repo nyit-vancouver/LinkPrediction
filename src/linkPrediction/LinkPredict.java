@@ -19,7 +19,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * 		This is to predict the probability of a link between two nodes a and be by calculating the product of 
+ * 		This is to predict the probability of a link between two nodes a and b by calculating the product of 
  * 		their sparse encoding of latent positions in Z by calculating ZZ^T (TKDE16)
  * 		input file format example
  *

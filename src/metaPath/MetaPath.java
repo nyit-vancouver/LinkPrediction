@@ -112,6 +112,10 @@ public class MetaPath {
 		//		if j has author index b, then PathCount++
 		
 		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
+		
+		if (papervenuelist.size()<5)
+			return -10;
+		
 		for (PaperVenue pv : papervenuelist){
 			// ignore papers out of target interval
 			if (pv.getYear() < fromYear || pv.getYear() > toYear)
@@ -157,6 +161,10 @@ public class MetaPath {
 		//		if j has author index b, then PathCount++
 		
 		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
+
+		if (papervenuelist.size()<5)
+			return -10;
+
 		for (PaperVenue pv : papervenuelist){
 			// ignore papers out of target interval
 			if (pv.getYear() < fromYear || pv.getYear() > toYear)
@@ -201,6 +209,11 @@ public class MetaPath {
 		int a_a = pathCount(a,a); 
 		int b_b = pathCount(b,b); 
 		
+		// ignore less productive
+		if (a_a<0 || b_b<0)
+			return -10;
+
+		
 		// check if the source or destination author actually published in that interval to avoid NaN for 0.0/0.0
 		if (a_a + b_b == 0)
 			return -1;
@@ -223,6 +236,10 @@ public class MetaPath {
 		float ps = (float) 0.0;
 		int a_a = pathCount2(a,a); 
 		int b_b = pathCount2(b,b); 
+		
+		// ignore less productive
+		if (a_a<0 || b_b<0)
+			return -10;
 		
 		// check if the source or destination author actually published in that interval to avoid NaN for 0.0/0.0
 		if (a_a + b_b == 0)
@@ -418,8 +435,8 @@ public class MetaPath {
 		
 			
 			try{
-				BufferedWriter bw = new BufferedWriter(new FileWriter(new File("APVPA.txt")));
-				BufferedWriter bw2 = new BufferedWriter(new FileWriter(new File("APAPA.txt")));
+				BufferedWriter bw = new BufferedWriter(new FileWriter(new File("APVPA2.txt")));
+				BufferedWriter bw2 = new BufferedWriter(new FileWriter(new File("APAPA2.txt")));
 
 				labels = new BufferedReader(new FileReader("labels.txt"));
 				// file format example
@@ -439,7 +456,7 @@ public class MetaPath {
 					to = currentLineString.indexOf(":", from);
 					destNode = Integer.parseInt(currentLineString.substring(from,to));
 					bw.write(pathSim(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
-					if (counter%10000==0)
+					if (counter%100000==0)
 						System.out.println(counter);
 					//System.out.println("-pathSim(" + sourceNode + "," + destNode+ ") = " + pathSim(Integer.toString(sourceNode), Integer.toString(destNode)) );
 					bw2.write(pathSim2(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");

@@ -56,11 +56,12 @@ public class LabelGenerator {
 		int year;
 		int fromYear1 = 1996, toYear1 = 2002;  // these are to set intervals for the first chunk
 		int fromYear2 = 2003, toYear2 = 2009;  // these are to set intervals for the second chunk
+		int minPublication = 8; // if an author has less than this min papers, will not be considered in the dataset
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader("paper_newindex_author.txt"));
 			BufferedReader br_year = new BufferedReader(new FileReader("paper_newindex_year.txt"));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("labels.txt")));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("labels2.txt")));
 
 			while ((currentLineString = br_year.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(currentLineString,"\t");  
@@ -123,6 +124,9 @@ public class LabelGenerator {
 			for (int i=0; i<1752443; i++){
 				TreeSet<Integer> coauthorsList = new TreeSet<Integer>();
 				if (author_papers_map1.containsKey(i)){
+					// disregard author who has less than min papers
+					if (author_papers_map1.get(i).size() < minPublication)
+						continue;
 					for (Integer p: author_papers_map1.get(i)){
 						for (Integer a: paper_authors_map1.get(p)){
 							if (a != i) 
@@ -197,7 +201,8 @@ public class LabelGenerator {
 							cocoauthorsList = coauthors1.get(j);
 							twoHopCoauthors.addAll(coauthors1.get(j));
 							for (Integer k:cocoauthorsList){
-								threeHopCoauthors.addAll(coauthors1.get(k));
+								if (coauthors1.containsKey(k))
+									threeHopCoauthors.addAll(coauthors1.get(k));
 							}					
 						}
 					}

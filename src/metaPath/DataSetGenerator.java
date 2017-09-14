@@ -39,28 +39,32 @@ public class DataSetGenerator {
 			BufferedReader apapa = new BufferedReader(new FileReader("APAPA.txt"));
 			BufferedReader predfile = new BufferedReader(new FileReader("tempPredictFeature.txt"));
 			BufferedReader lfile = new BufferedReader(new FileReader("labels.txt"));
-			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("newdblpdataset1.txt")));
-			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("newdblpdataset2.txt")));
-			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("newdblpdataset3.txt")));
+			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("dataset1.txt")));
+			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("dataset2.txt")));
+			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("dataset3.txt")));
 
 			String f1, f2, f3, label;
 			
 			for (int i=0; i<8645734; i++){
 				f1 = apvpa.readLine();
-				
 				f2 = apapa.readLine();
-				
 				f3 = predfile.readLine();
 				
 				currentLineString = lfile.readLine();
 				label = currentLineString.substring(currentLineString.indexOf(":")+1);
 
-				/*dataset1.write(f1 + "\t" + f2 + "\t" + f3 + "\t" + label +"\n");
+				if (f1.contains("-1") || f2.contains("-1"))
+					continue;
+
+				
+				dataset1.write(f1 + "\t" + f2 + "\t" + f3 + "\t" + label +"\n");
 				dataset2.write(f1 + "\t" + f2 + "\t" + label +"\n");
 				dataset3.write(f3 + "\t" + label +"\n");
-				*/
+				
 
-				if (label.equals("1"))
+				
+				// For SVM setting
+				/*if (label.equals("1"))
 					label = "+1";
 				else
 					label = "-1";
@@ -70,7 +74,7 @@ public class DataSetGenerator {
 				dataset1.write(label + " 1:" + f1 + " 2:" + f2 + " 3:" + f3 + "\n");
 				dataset2.write(label + " 1:" + f1 + " 2:" + f2 + "\n");
 				dataset3.write(label + " 1:" + f3 + "\n");
-
+				*/
 			}
 			
 
