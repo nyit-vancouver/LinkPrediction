@@ -77,8 +77,8 @@ public class LogisticRegressionUseMLE
 	}
 
 	public static void main(String... args) throws FileNotFoundException {
-		List<Instance> trainset = DataSet.readDataSet("dblpdataset1");
-		List<Instance> testset = DataSet.readDataSet("dblpdataset1");
+		List<Instance> trainset = DataSet.readDataSet("dataset1");
+		List<Instance> testset = DataSet.readDataSet("dataset1");
 		LogisticRegressionUseMLE logistic = new LogisticRegressionUseMLE(4);
 		logistic.train(trainset);
 		int flasecount = 0;
