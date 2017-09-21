@@ -40,7 +40,7 @@ public class TemporalPredictionFeature {
 		double weight=0.0;
 
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("Zmatrix_2of3.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("Zmatrix/Zmatrix_2of3.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -94,8 +94,8 @@ public class TemporalPredictionFeature {
 		// reading original coauthorship file
 
 		try{
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("tempPredictFeature.txt")));
-			BufferedReader labels = new BufferedReader(new FileReader("labels.txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("temporalPredictFeature.txt")));
+			BufferedReader labels = new BufferedReader(new FileReader("shuffledlabels_1996_2002_newLinkIn_2003_2009.txt"));
 			// file format example
 			//0,1:1
 			//...
@@ -113,7 +113,7 @@ public class TemporalPredictionFeature {
 				to = currentLineString.indexOf(":", from);
 				destNode = Integer.parseInt(currentLineString.substring(from,to));
 
-				if (counter%100000==0)
+				if (counter%500000==0)
 					System.out.println(counter);
 
 				Double predictionProbability = 0.0;

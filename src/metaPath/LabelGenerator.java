@@ -49,19 +49,35 @@ public class LabelGenerator {
 
 	private static ArrayList<Integer> newConnections = new ArrayList<Integer>();    // coauthors in the first interval
 
+	
+	// arguments : minPublication, fromYear1, toYear1, fromYear2, toYear1, output file name
 	public static void main(String[] args) 
 	{	 
 		String currentLineString;
 		int paperIndex, authorIndex;
 		int year;
 		int fromYear1 = 1996, toYear1 = 2002;  // these are to set intervals for the first chunk
-		int fromYear2 = 2003, toYear2 = 2009;  // these are to set intervals for the second chunk
-		int minPublication = 8; // if an author has less than this min papers, will not be considered in the dataset
+		int fromYear2 = 2003, toYear2 = 2009;  // these are to set intervals for the second chunk (to find new links for +1 labels)
+		
+		int minPublication = 1; // (default should be 1) if an author has less than this min papers, will not be considered in the dataset
+
+		minPublication = Integer.parseInt(args[0]);
+		fromYear1 = Integer.parseInt(args[1]);
+		toYear1 = Integer.parseInt(args[2]);  
+		fromYear2 = Integer.parseInt(args[3]);
+	    toYear2 = Integer.parseInt(args[4]);  
+	    toYear2 = Integer.parseInt(args[4]);  
+	    String lableFileName = args[5];
+		
+		/*
+		int fromYear1 = 2003, toYear1 = 2009;  // these are to set intervals for the first chunk
+		int fromYear2 = 2010, toYear2 = 2016;  // these are to set intervals for the second chunk (to find new links for +1 labels)
+		*/
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader("paper_newindex_author.txt"));
 			BufferedReader br_year = new BufferedReader(new FileReader("paper_newindex_year.txt"));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("labels2.txt")));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(lableFileName)));
 
 			while ((currentLineString = br_year.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(currentLineString,"\t");  
@@ -113,13 +129,6 @@ public class LabelGenerator {
 
 			}
 
-			// file format example for the temporal inference paper (TKDE16)
-			//410 
-			//0,5:1,1:4,1:5,1:49,1:50,1
-			//1,8:0,1:5,1:38,1:39,1:49,1:69,1:71,1:107,1
-
-			// add number of authors in the first line
-
 
 			for (int i=0; i<1752443; i++){
 				TreeSet<Integer> coauthorsList = new TreeSet<Integer>();
@@ -134,6 +143,8 @@ public class LabelGenerator {
 						}
 					}
 					coauthors1.put(i, coauthorsList);
+				}else{
+					//System.out.println("Author " + i + " has no publication at time1!.");
 				}
 
 				TreeSet<Integer> coauthorsList2 = new TreeSet<Integer>();
@@ -158,31 +169,34 @@ public class LabelGenerator {
 
 				if (coauthors1.containsKey(i)){
 					firstIntervalCoAuthors = coauthors1.get(i);
-					//System.out.println("coauthors1.get(i): " + firstIntervalCoAuthors);
+					//System.out.println("coauthors1.get(" + i + "): " + firstIntervalCoAuthors);
+					
+					
+					if (coauthors2.containsKey(i)){
+						secondIntervalCoAuthors = coauthors2.get(i);
+						//System.out.println("coauthors2.get(" + i + "): " + secondIntervalCoAuthors);
+					}else{
+						newConnections.add(0);
+						//System.out.println("No new connections for " + i);
+						continue;
+					}
+
+					int count = 0;
+					for (Integer c: secondIntervalCoAuthors){
+						if (!firstIntervalCoAuthors.contains(c)){
+							count++;
+							//System.out.println(c + " is a new connection for " + i);
+							//System.out.println(i + "," +c + ":1");
+							bw.write(i + "," + c + ":1\n");
+						}
+					}
+					newConnections.add(count);
+					
 				}else{
 					//firstIntervalCoAuthors.clear();
 					//firstIntervalCoAuthors.add(-1);
-				}
-
-				if (coauthors2.containsKey(i)){
-					secondIntervalCoAuthors = coauthors2.get(i);
-					//System.out.println("coauthors2.get(i): " + secondIntervalCoAuthors);
-				}else{
 					newConnections.add(0);
-					//System.out.println("No new connections for " + i);
-					continue;
 				}
-
-				int count = 0;
-				for (Integer c: secondIntervalCoAuthors){
-					if (!firstIntervalCoAuthors.contains(c)){
-						count++;
-						//System.out.println(c + " is a new connection for " + i);
-						//System.out.println(i + "," +c + ":1");
-						bw.write(i + "," + c + ":1\n");
-					}
-				}
-				newConnections.add(count);
 
 
 			}
@@ -193,6 +207,7 @@ public class LabelGenerator {
 			TreeSet<Integer> threeHopCoauthors = new TreeSet<Integer>();
 			TreeSet<Integer> cocoauthorsList = new TreeSet<Integer>();
 			for (int i=0; i<1752443; i++){  // 1752443
+			//for (int i=0; i<50; i++){  // 1752443
 
 				if (coauthors1.containsKey(i)){
 					TreeSet<Integer> coauthorsList = coauthors1.get(i);
@@ -206,10 +221,16 @@ public class LabelGenerator {
 							}					
 						}
 					}
+					// finally decide to mergethem all!
+					threeHopCoauthors.addAll(twoHopCoauthors);
+					
 					threeHopCoauthors.remove(i); // remove author himself
 					threeHopCoauthors.removeAll(coauthorsList); // remove first hop coauthors
 
-					//System.out.println(newConnections.get(i));
+					//System.out.println("1Hop(" + i + ")=" + coauthorsList);
+					//System.out.println("2Hop(" + i + ")=" + twoHopCoauthors);
+					//System.out.println("2Hop(" + i + ")=" + twoHopCoauthors);
+					//System.out.println("newConnections.get(i): " + newConnections.get(i));
 					// choose n = newConnections.get(i) random for 0 label from threeHopCoauthors
 					if (threeHopCoauthors.size() >= newConnections.get(i)){
 						ArrayList<Integer> candidatesForNegativeLabel = new ArrayList<Integer>();   
@@ -221,7 +242,14 @@ public class LabelGenerator {
 							//System.out.println(i + "," +candidatesForNegativeLabel.get(j)+ ":0");
 							bw.write(i + "," +candidatesForNegativeLabel.get(j)+ ":0\n");
 						}
+					}else{
+						// add all 3hops
+						for (Integer c: threeHopCoauthors){
+							//System.out.println(i + ",c=" + c + ":0");
+							bw.write(i + "," + c + ":0\n");
+						}
 					}
+					
 
 					threeHopCoauthors.removeAll(twoHopCoauthors); // remove two hop coauthors
 
@@ -242,7 +270,6 @@ public class LabelGenerator {
 
 					twoHopCoauthors.clear();
 					threeHopCoauthors.clear();
-
 
 				}
 

@@ -113,8 +113,8 @@ public class MetaPath {
 		
 		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
 		
-		if (papervenuelist.size()<5)
-			return -10;
+		//if (papervenuelist.size()<5)
+		//	return -10;
 		
 		for (PaperVenue pv : papervenuelist){
 			// ignore papers out of target interval
@@ -162,8 +162,8 @@ public class MetaPath {
 		
 		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
 
-		if (papervenuelist.size()<5)
-			return -10;
+		//if (papervenuelist.size()<5)
+		//	return -10;
 
 		for (PaperVenue pv : papervenuelist){
 			// ignore papers out of target interval
@@ -193,7 +193,6 @@ public class MetaPath {
 		return PathCount;
 	}
 
-	
 	
 	
 	
@@ -295,7 +294,17 @@ public class MetaPath {
 		boolean readFromSavedGeneratedHashmaps = true;
 		fromYear = 1996;
 		toYear = 2002;
+		String APVPA_file_name = "APVPA_1996_2002.txt";
+		String APAPA_file_name = "APAPA_1996_2002.txt";
+		String labels_file_name = "shuffledlabels_1996_2002_newLinkIn_2003_2009.txt";
 
+		fromYear = Integer.parseInt(args[0]);
+		toYear = Integer.parseInt(args[1]);
+		APVPA_file_name = args[2];
+		APAPA_file_name = args[3];
+		labels_file_name = args[4];
+
+		
 		long startTime = System.currentTimeMillis();
 
 		try{
@@ -435,10 +444,11 @@ public class MetaPath {
 		
 			
 			try{
-				BufferedWriter bw = new BufferedWriter(new FileWriter(new File("APVPA2.txt")));
-				BufferedWriter bw2 = new BufferedWriter(new FileWriter(new File("APAPA2.txt")));
+				
+				BufferedWriter bw = new BufferedWriter(new FileWriter(new File(APVPA_file_name)));
+				BufferedWriter bw2 = new BufferedWriter(new FileWriter(new File(APAPA_file_name)));
 
-				labels = new BufferedReader(new FileReader("labels.txt"));
+				labels = new BufferedReader(new FileReader(labels_file_name));
 				// file format example
 				//0,1:1
 				//...
