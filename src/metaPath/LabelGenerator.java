@@ -61,14 +61,22 @@ public class LabelGenerator {
 		
 		int minPublication = 1; // (default should be 1) if an author has less than this min papers, will not be considered in the dataset
 
-		minPublication = Integer.parseInt(args[0]);
+		/*minPublication = Integer.parseInt(args[0]);
 		fromYear1 = Integer.parseInt(args[1]);
 		toYear1 = Integer.parseInt(args[2]);  
 		fromYear2 = Integer.parseInt(args[3]);
 	    toYear2 = Integer.parseInt(args[4]);  
-	    toYear2 = Integer.parseInt(args[4]);  
 	    String lableFileName = args[5];
-		
+		*/
+	    
+		minPublication = 5;
+		fromYear1 = 2002;
+		toYear1 = 2004;  
+		fromYear2 = 2005;
+	    toYear2 = 2007;  // 5-7 8-10 11-13 14-16
+	    String lableFileName = "labels_2002_2004_newLinkIn_2005_2007_min5paper.txt";//_min5paper
+
+	    
 		/*
 		int fromYear1 = 2003, toYear1 = 2009;  // these are to set intervals for the first chunk
 		int fromYear2 = 2010, toYear2 = 2016;  // these are to set intervals for the second chunk (to find new links for +1 labels)

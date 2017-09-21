@@ -93,15 +93,15 @@ public class TemporalPredictionFeature {
 
 		// reading original coauthorship file
 
+		int from = 0, to = 0, sourceNode = 0, destNode = 0;
 		try{
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("temporalPredictFeature.txt")));
-			BufferedReader labels = new BufferedReader(new FileReader("shuffledlabels_1996_2002_newLinkIn_2003_2009.txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("temporalPredictFeature_2010_2016.txt")));
+			BufferedReader labels = new BufferedReader(new FileReader("shuffledlabels_2003_2009_newLinkIn_2010_2016.txt"));
 			// file format example
 			//0,1:1
 			//...
 			//2,3:0
 			int counter = 0;
-			int from = 0, to = 0, sourceNode, destNode;
 			while ((currentLineString = labels.readLine()) != null){
 				counter++;
 				from = 0;
@@ -126,9 +126,12 @@ public class TemporalPredictionFeature {
 			}
 
 			bw.close();
+			labels.close();
 
-		}catch (IOException e) 
+		}catch (Exception e) 
 		{
+			System.out.println(sourceNode);
+			System.out.println(destNode);
 			e.printStackTrace();
 		} 
 

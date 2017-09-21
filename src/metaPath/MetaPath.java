@@ -457,6 +457,9 @@ public class MetaPath {
 				int from = 0, to = 0, sourceNode, destNode;
 				while ((currentLineString = labels.readLine()) != null){
 					counter++;
+					if (counter < 2880000)
+						continue;
+					
 					from = 0;
 					to = currentLineString.indexOf(",", from);
 					sourceNode = Integer.parseInt(currentLineString.substring(from,to));

@@ -35,18 +35,22 @@ public class DataSetGenerator {
 
 
 		try{
-			BufferedReader apvpa = new BufferedReader(new FileReader("APVPA_1996_2002.txt"));
-			BufferedReader apapa = new BufferedReader(new FileReader("APAPA_1996_2002.txt"));
-			BufferedReader predfile = new BufferedReader(new FileReader("temporalPredictFeature_2003_2009.txt"));
-			BufferedReader lfile = new BufferedReader(new FileReader("shuffledlabels_1996_2002_newLinkIn_2003_2009.txt"));
-			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("dataset1_1996_2002.txt")));
-			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("dataset2_1996_2002.txt")));
-			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("dataset3_1996_2002.txt")));
+			BufferedReader apvpa = new BufferedReader(new FileReader("APVPA_1996_2002_min5paper.txt"));
+			BufferedReader apapa = new BufferedReader(new FileReader("APAPA_1996_2002_min5paper.txt"));
+			BufferedReader predfile = new BufferedReader(new FileReader("temporalPredictFeature_2003_2009_min5paper.txt"));
+			BufferedReader lfile = new BufferedReader(new FileReader("shuffledlabels_1996_2002_newLinkIn_2003_2009_min5paper.txt"));
+			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("dataset1_1996_2002_min5paper.txt")));
+			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("dataset2_1996_2002_min5paper.txt")));
+			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("dataset3_1996_2002_min5paper.txt")));
 
+			
 			String f1, f2, f3, label;
 
 			//for (int i=0; i<8645734; i++){
-			while ((currentLineString = lfile.readLine()) != null) {
+			//while ((currentLineString = lfile.readLine()) != null) {
+			for (int i=0; i<2888731; i++){
+
+				currentLineString = lfile.readLine();
 				label = currentLineString.substring(currentLineString.indexOf(":")+1);
 
 				f1 = apvpa.readLine();
