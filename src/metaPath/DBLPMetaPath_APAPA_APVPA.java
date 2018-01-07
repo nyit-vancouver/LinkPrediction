@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
-public class MetaPath {
+public class DBLPMetaPath_APAPA_APVPA {
 
 	private static String currentLineString, paperIndex = null, authorIndex=null, venueIndex=null;
 
@@ -457,8 +457,6 @@ public class MetaPath {
 				int from = 0, to = 0, sourceNode, destNode;
 				while ((currentLineString = labels.readLine()) != null){
 					counter++;
-					if (counter < 2880000)
-						continue;
 					
 					from = 0;
 					to = currentLineString.indexOf(",", from);
@@ -482,6 +480,7 @@ public class MetaPath {
 
 			}catch (IOException e) 
 			{
+				System.out.println(e);
 				e.printStackTrace();
 			} 
 			

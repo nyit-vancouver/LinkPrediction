@@ -47,7 +47,7 @@ class LatentPosWeigh{
 	}
 }
 
-public class LinkPredict {
+public class DBLPLinkPredict {
 
 	public static void main(String[] args) 
 	{	
@@ -57,7 +57,7 @@ public class LinkPredict {
 		double[][] z = new double[numberOfNodes][numOfDimensions];
 		ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
 
-		ArrayList <ArrayList<LinkPredict>> latentSpace = new ArrayList <ArrayList<LinkPredict>>(); 
+		ArrayList <ArrayList<DBLPLinkPredict>> latentSpace = new ArrayList <ArrayList<DBLPLinkPredict>>(); 
 		String currentLineString, numOfNonZero=null;
 		int latentPosIndex=0, nodeIndex = 0, neighborIndex = 0;
 		double weight=0.0;

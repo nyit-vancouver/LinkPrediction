@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class SortByYear {
+public class DBLPSortByYear {
 	
 	public static class YearPaperInex {
         public String year;

@@ -28,7 +28,7 @@ import logRegression.Instance;
  * 
  * @author aminmf
  */
-public class TKDE_error {
+public class IMDB_TKDE_error {
 
 
 	public static void main(String[] args) 
@@ -39,7 +39,7 @@ public class TKDE_error {
 
 		try{
 
-	        Scanner scanner = new Scanner(new File("dataset3.txt"));
+	        Scanner scanner = new Scanner(new File("IMDB/3intervals/training3_for_1of3.txt"));
 	        while(scanner.hasNextLine()) {
 	        	lines++;
 	            String line = scanner.nextLine();

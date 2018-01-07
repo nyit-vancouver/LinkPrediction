@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class PaperExtract {
+public class DBLPPaperExtract {
 	public static void main(String[] args) 
 	{	 
 		int i, p, venueIndex = 0, currentVenuewIndex = 0,authorIndex = 0;

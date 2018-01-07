@@ -26,7 +26,7 @@ import java.util.TreeSet;
  * 
  * @author aminmf
  */
-public class Min5paper {
+public class DBLPMin5paper {
 
 
 	public static void main(String[] args) 
@@ -45,7 +45,7 @@ public class Min5paper {
 
 			String apvpa, apapa, source_dest_label;
 
-			for (int i=0; i<2888731; i++){
+			for (int i=0; i<5720663; i++){
 				ArrayList<String> features = new ArrayList<String>();
 
 				source_dest_label = all_labels_file.readLine();

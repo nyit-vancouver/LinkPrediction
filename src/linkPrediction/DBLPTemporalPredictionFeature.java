@@ -24,7 +24,7 @@ import java.util.TreeSet;
  * @author aminmf
  */
 
-public class TemporalPredictionFeature {
+public class DBLPTemporalPredictionFeature {
 
 	public static void main(String[] args) 
 	{	
@@ -34,7 +34,7 @@ public class TemporalPredictionFeature {
 		double[][] z = new double[numberOfNodes][numOfDimensions];
 		ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
 
-		ArrayList <ArrayList<TemporalPredictionFeature>> latentSpace = new ArrayList <ArrayList<TemporalPredictionFeature>>(); 
+		ArrayList <ArrayList<DBLPTemporalPredictionFeature>> latentSpace = new ArrayList <ArrayList<DBLPTemporalPredictionFeature>>(); 
 		String currentLineString, numOfNonZero=null;
 		int latentPosIndex=0, nodeIndex = 0, neighborIndex = 0;
 		double weight=0.0;
@@ -95,8 +95,8 @@ public class TemporalPredictionFeature {
 
 		int from = 0, to = 0, sourceNode = 0, destNode = 0;
 		try{
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("temporalPredictFeature_2010_2016.txt")));
-			BufferedReader labels = new BufferedReader(new FileReader("shuffledlabels_2003_2009_newLinkIn_2010_2016.txt"));
+			BufferedReader labels = new BufferedReader(new FileReader("7IntervalsPrediction/labels_2011_2013_newLinkIn_2014_2016_min5paper.txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("7IntervalsPrediction/temporalPredictionFor_2014_2016_min5paper.txt")));
 			// file format example
 			//0,1:1
 			//...
@@ -113,7 +113,7 @@ public class TemporalPredictionFeature {
 				to = currentLineString.indexOf(":", from);
 				destNode = Integer.parseInt(currentLineString.substring(from,to));
 
-				if (counter%500000==0)
+				if (counter%1000000==0)
 					System.out.println(counter);
 
 				Double predictionProbability = 0.0;

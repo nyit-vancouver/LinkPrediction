@@ -34,7 +34,7 @@ import java.util.TreeSet;
  * 
  * @author aminmf
  */
-public class LabelGenerator {
+public class DBLPLabelGenerator {
 
 	private static TreeMap<Integer, ArrayList<Integer>> author_papers_map1 = new TreeMap<Integer, ArrayList<Integer>>();    
 	private static TreeMap<Integer, ArrayList<Integer>> paper_authors_map1 = new TreeMap<Integer, ArrayList<Integer>>();    
@@ -45,11 +45,10 @@ public class LabelGenerator {
 	private static TreeMap<Integer, Integer> paper_year_map = new TreeMap<Integer, Integer>();
 
 	private static TreeMap<Integer, TreeSet<Integer>> coauthors1 = new TreeMap<Integer, TreeSet<Integer>>();    // coauthors in the first interval
+	private static TreeMap<Integer, TreeSet<Integer>> coauthors1_minPublication = new TreeMap<Integer, TreeSet<Integer>>();    // min paper constraints
 	private static TreeMap<Integer, TreeSet<Integer>> coauthors2 = new TreeMap<Integer, TreeSet<Integer>>();    // coauthors in the second interval
 
-	private static ArrayList<Integer> newConnections = new ArrayList<Integer>();    // coauthors in the first interval
 
-	
 	// arguments : minPublication, fromYear1, toYear1, fromYear2, toYear1, output file name
 	public static void main(String[] args) 
 	{	 
@@ -58,34 +57,48 @@ public class LabelGenerator {
 		int year;
 		int fromYear1 = 1996, toYear1 = 2002;  // these are to set intervals for the first chunk
 		int fromYear2 = 2003, toYear2 = 2009;  // these are to set intervals for the second chunk (to find new links for +1 labels)
-		
+
 		int minPublication = 1; // (default should be 1) if an author has less than this min papers, will not be considered in the dataset
 
-		/*minPublication = Integer.parseInt(args[0]);
-		fromYear1 = Integer.parseInt(args[1]);
-		toYear1 = Integer.parseInt(args[2]);  
-		fromYear2 = Integer.parseInt(args[3]);
-	    toYear2 = Integer.parseInt(args[4]);  
-	    String lableFileName = args[5];
-		*/
-	    
+		//minPublication = Integer.parseInt(args[0]);
+		fromYear1 = Integer.parseInt(args[0]);
+		toYear1 = Integer.parseInt(args[1]);  
+		fromYear2 = Integer.parseInt(args[2]);
+		toYear2 = Integer.parseInt(args[3]);  
+
+
 		minPublication = 5;
+		//fromYear1 = 1996;
+		//toYear1 = 1998;  
+		//fromYear2 = 1999;
+		//toYear2 = 2001;  // 5-7 8-10 11-13 14-16
+
+		String posLableFileName = fromYear1+"_"+toYear1+"_newLinkIn_"+fromYear2+"_"+toYear2+"_posLabels.txt";
+		String negLableFileName = fromYear1+"_"+toYear1+"_newLinkIn_"+fromYear2+"_"+toYear2+"_negLabels.txt";
+		String minPubPosLableFileName = fromYear1+"_"+toYear1+"_newLinkIn_"+fromYear2+"_"+toYear2+"_min5paper_posLabels.txt";
+		String minPubNegLableFileName = fromYear1+"_"+toYear1+"_newLinkIn_"+fromYear2+"_"+toYear2+"_min5paper_negLabels.txt";
+
+
+		/*minPublication = 5;
 		fromYear1 = 2002;
 		toYear1 = 2004;  
 		fromYear2 = 2005;
 	    toYear2 = 2007;  // 5-7 8-10 11-13 14-16
 	    String lableFileName = "labels_2002_2004_newLinkIn_2005_2007_min5paper.txt";//_min5paper
+		 */
 
-	    
 		/*
 		int fromYear1 = 2003, toYear1 = 2009;  // these are to set intervals for the first chunk
 		int fromYear2 = 2010, toYear2 = 2016;  // these are to set intervals for the second chunk (to find new links for +1 labels)
-		*/
+		 */
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader("paper_newindex_author.txt"));
 			BufferedReader br_year = new BufferedReader(new FileReader("paper_newindex_year.txt"));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(lableFileName)));
+			BufferedWriter bw_pos_all = new BufferedWriter(new FileWriter(new File(posLableFileName)));
+			BufferedWriter bw_neg_all = new BufferedWriter(new FileWriter(new File(negLableFileName)));
+			BufferedWriter bw_pos_minpub = new BufferedWriter(new FileWriter(new File(minPubPosLableFileName)));
+			BufferedWriter bw_neg_minpub = new BufferedWriter(new FileWriter(new File(minPubNegLableFileName)));
 
 			while ((currentLineString = br_year.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(currentLineString,"\t");  
@@ -141,8 +154,8 @@ public class LabelGenerator {
 			for (int i=0; i<1752443; i++){
 				TreeSet<Integer> coauthorsList = new TreeSet<Integer>();
 				if (author_papers_map1.containsKey(i)){
-					// disregard author who has less than min papers
-					if (author_papers_map1.get(i).size() < minPublication)
+					// disregard author who has less than 1 papers
+					if (author_papers_map1.get(i).size() < 1)
 						continue;
 					for (Integer p: author_papers_map1.get(i)){
 						for (Integer a: paper_authors_map1.get(p)){
@@ -167,6 +180,29 @@ public class LabelGenerator {
 				}
 			}
 
+
+			for (int i=0; i<1752443; i++){
+				TreeSet<Integer> coauthorsList_minPublication = new TreeSet<Integer>();
+				if (author_papers_map1.containsKey(i)){
+					// disregard author who has less than min papers
+					if (author_papers_map1.get(i).size() < minPublication)
+						continue;
+					for (Integer p: author_papers_map1.get(i)){
+						for (Integer a: paper_authors_map1.get(p)){
+							if (a != i) 
+								coauthorsList_minPublication.add(a);
+						}
+					}
+					coauthors1_minPublication.put(i, coauthorsList_minPublication);
+				}else{
+					//System.out.println("Author " + i + " has no publication at time1!.");
+				}			
+			}
+
+
+
+			
+			
 			TreeSet<Integer> firstIntervalCoAuthors = new TreeSet<Integer>();
 			TreeSet<Integer> secondIntervalCoAuthors = new TreeSet<Integer>();
 
@@ -178,44 +214,142 @@ public class LabelGenerator {
 				if (coauthors1.containsKey(i)){
 					firstIntervalCoAuthors = coauthors1.get(i);
 					//System.out.println("coauthors1.get(" + i + "): " + firstIntervalCoAuthors);
-					
-					
+
 					if (coauthors2.containsKey(i)){
 						secondIntervalCoAuthors = coauthors2.get(i);
 						//System.out.println("coauthors2.get(" + i + "): " + secondIntervalCoAuthors);
 					}else{
-						newConnections.add(0);
 						//System.out.println("No new connections for " + i);
 						continue;
 					}
 
-					int count = 0;
 					for (Integer c: secondIntervalCoAuthors){
 						if (!firstIntervalCoAuthors.contains(c)){
-							count++;
 							//System.out.println(c + " is a new connection for " + i);
 							//System.out.println(i + "," +c + ":1");
-							bw.write(i + "," + c + ":1\n");
+							bw_pos_all.write(i + "," + c + ":1\n");
 						}
 					}
-					newConnections.add(count);
-					
+
 				}else{
 					//firstIntervalCoAuthors.clear();
 					//firstIntervalCoAuthors.add(-1);
-					newConnections.add(0);
+				}
+			}
+
+
+			for (int i=0; i<1752443; i++){
+				if (coauthors1_minPublication.containsKey(i)){
+					firstIntervalCoAuthors = coauthors1_minPublication.get(i);
+					//System.out.println("coauthors1.get(" + i + "): " + firstIntervalCoAuthors);
+
+					if (coauthors2.containsKey(i)){
+						secondIntervalCoAuthors = coauthors2.get(i);
+						//System.out.println("coauthors2.get(" + i + "): " + secondIntervalCoAuthors);
+					}else{
+						//System.out.println("No new connections for " + i);
+						continue;
+					}
+
+					for (Integer c: secondIntervalCoAuthors){
+						if (!firstIntervalCoAuthors.contains(c)){
+							//System.out.println(c + " is a new connection for " + i);
+							//System.out.println(i + "," +c + ":1");
+							bw_pos_minpub.write(i + "," + c + ":1\n");
+						}
+					}
+
+				}else{
+					//firstIntervalCoAuthors.clear();
+					//firstIntervalCoAuthors.add(-1);
+				}
+			}
+
+
+			// Negative labels
+
+			TreeSet<Integer> twoHopCoauthors = new TreeSet<Integer>();
+			TreeSet<Integer> threeHopCoauthors = new TreeSet<Integer>();
+			TreeSet<Integer> cocoauthorsList = new TreeSet<Integer>();
+
+			//for (int i=0; i<1752443; i++){  // 1752443
+			for (int i=0; i<1752443; i++){  // 1752443
+
+				if (coauthors1.containsKey(i)){
+					TreeSet<Integer> coauthorsList = coauthors1.get(i);
+					for (Integer j:coauthorsList){
+						if (coauthors1.containsKey(j)){
+							//cocoauthorsList = coauthors1.get(j);
+							twoHopCoauthors.addAll(coauthors1.get(j));
+							//for (Integer k:cocoauthorsList){
+							//	if (coauthors1.containsKey(k))
+							//		threeHopCoauthors.addAll(coauthors1.get(k));
+							//}					
+						}
+					}
+					// finally decide to mergethem all!
+					twoHopCoauthors.remove(i); // remove author himself
+					twoHopCoauthors.removeAll(coauthorsList); // remove first hop coauthors
+
+					//threeHopCoauthors.addAll(twoHopCoauthors);
+					//threeHopCoauthors.remove(i); // remove author himself
+					//threeHopCoauthors.removeAll(coauthorsList); // remove first hop coauthors
+
+					for (Integer c: twoHopCoauthors){
+						bw_neg_all.write(Integer.toString(i)+","+Integer.toString(c) + ":0\n");
+						//negativeLabelLinks.add(Integer.toString(i)+","+Integer.toString(c));
+					}					
+
+					twoHopCoauthors.clear();
+					//threeHopCoauthors.clear();
+				}
+
+
+
+				if (coauthors1_minPublication.containsKey(i)){
+					TreeSet<Integer> coauthorsList = coauthors1_minPublication.get(i);
+					for (Integer j:coauthorsList){
+						if (coauthors1_minPublication.containsKey(j)){
+							twoHopCoauthors.addAll(coauthors1_minPublication.get(j));
+						}
+					}
+					// finally decide to mergethem all!
+					twoHopCoauthors.remove(i); // remove author himself
+					twoHopCoauthors.removeAll(coauthorsList); // remove first hop coauthors
+
+					for (Integer c: twoHopCoauthors){
+						bw_neg_minpub.write(Integer.toString(i)+","+Integer.toString(c) + ":0\n");
+					}					
+
+					twoHopCoauthors.clear();
 				}
 
 
 			}
 
 
+			//Collections.shuffle(negativeLabelLinks);
 
-			TreeSet<Integer> twoHopCoauthors = new TreeSet<Integer>();
+			//System.out.println("negativeLabelLinks: " + negativeLabelLinks.size());
+
+			//for (int j=0;j<totalPositiveSamples;j++){
+			//System.out.println(i + "," +candidatesForNegativeLabel.get(j)+ ":0");
+			//	bw1.write(negativeLabelLinks.get(j) + ":0\n");
+			//}
+
+
+
+
+
+			/**
+			 * IGNORE!
+			 */
+
+
+			/*TreeSet<Integer> twoHopCoauthors = new TreeSet<Integer>();
 			TreeSet<Integer> threeHopCoauthors = new TreeSet<Integer>();
 			TreeSet<Integer> cocoauthorsList = new TreeSet<Integer>();
 			for (int i=0; i<1752443; i++){  // 1752443
-			//for (int i=0; i<50; i++){  // 1752443
 
 				if (coauthors1.containsKey(i)){
 					TreeSet<Integer> coauthorsList = coauthors1.get(i);
@@ -231,7 +365,7 @@ public class LabelGenerator {
 					}
 					// finally decide to mergethem all!
 					threeHopCoauthors.addAll(twoHopCoauthors);
-					
+
 					threeHopCoauthors.remove(i); // remove author himself
 					threeHopCoauthors.removeAll(coauthorsList); // remove first hop coauthors
 
@@ -257,7 +391,7 @@ public class LabelGenerator {
 							bw.write(i + "," + c + ":0\n");
 						}
 					}
-					
+
 
 					threeHopCoauthors.removeAll(twoHopCoauthors); // remove two hop coauthors
 
@@ -269,24 +403,21 @@ public class LabelGenerator {
 					//System.out.println("Size of 1Hop(" + i + ")=" + coauthorsList.size());
 					//System.out.println("Size of 2Hop(" + i + ")=" + twoHopCoauthors.size() + "\tSize of 3Hop(" + i + ")=" + threeHopCoauthors.size());
 
-					/*if (i==2){
-						System.out.println(newConnections.get(i));
-						System.out.println("1Hop(" + i + ")=" + coauthorsList);
-						System.out.println("2Hop(" + i + ")=" + twoHopCoauthors);
-						System.out.println("3Hop(" + i + ")=" + threeHopCoauthors);
-					}*/
-
 					twoHopCoauthors.clear();
 					threeHopCoauthors.clear();
 
 				}
 
 			}
-
+			 */
 
 
 			br.close();
-			bw.close();
+			br_year.close();
+			bw_pos_all.close();
+			bw_neg_all.close();
+			bw_pos_minpub.close();
+			bw_neg_minpub.close();
 
 		}catch (IOException e) 
 		{

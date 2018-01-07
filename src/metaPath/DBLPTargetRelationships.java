@@ -27,7 +27,7 @@ import java.util.TreeSet;
  * 
  * @author aminmf
  */
-public class CoAuthorship {
+public class DBLPTargetRelationships {
 
 	private static TreeMap<Integer, ArrayList<Integer>> author_papers_map = new TreeMap<Integer, ArrayList<Integer>>();    
 	private static TreeMap<Integer, ArrayList<Integer>> paper_authors_map = new TreeMap<Integer, ArrayList<Integer>>();    

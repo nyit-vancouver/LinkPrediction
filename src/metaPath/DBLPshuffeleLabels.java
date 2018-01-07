@@ -25,28 +25,35 @@ import logRegression.DataSet;
 import logRegression.Instance;
 
 
-public class shuffeleDataSet {
+public class DBLPshuffeleLabels {
 
 
 	public static void main(String[] args) 
 	{	 
 		String currentLineString;
 
+	    String lableFileName = args[0];
+	    String shuffledlableFileName = args[1];
+
 
 		try{
-			BufferedReader dataset = new BufferedReader(new FileReader("svmdataset3.txt"));
-			BufferedWriter newdataset = new BufferedWriter(new FileWriter(new File("shuffledsvmdataset3.txt")));
+			//BufferedReader dataset = new BufferedReader(new FileReader("labels_1996_2002_newLinkIn_2003_2009.txt"));
+			//BufferedWriter newdataset = new BufferedWriter(new FileWriter(new File("shuffledlabels_1996_2002_newLinkIn_2003_2009.txt")));
+			BufferedReader dataset = new BufferedReader(new FileReader(lableFileName));
+			BufferedWriter newdataset = new BufferedWriter(new FileWriter(new File(shuffledlableFileName)));
 
 			List<String> instances = new ArrayList<String>();
-
-			for (int i=0; i<5408146; i++){
-				String data = dataset.readLine();
-				instances.add(data);
-			}
+			String data;
+			int count = 0;
+			
+	         while ((data = dataset.readLine()) != null) {
+					instances.add(data);
+					count++;
+	          } 
 
 			Collections.shuffle(instances);
 
-			for (int i=0; i<5408146; i++){
+			for (int i=0; i<count; i++){
 				newdataset.write(instances.get(i) + "\n");
 			}
 
