@@ -130,7 +130,7 @@ public class IMDBMetaPathUMUM {
 			for(int k=0;k<10109; k++)
 				heteSim2 += (user_movies[u][k]/(float)sum1)*(movie_user_movie_m[k]/(float)sum2);
 
-			int a = 0, b = 0; float c;
+			float a = 0, b = 0; float c;
 			for(int k=0;k<10109; k++){
 				a+=Math.pow((movie_user_movie_m[k]/(float)sum1), 2);
 				b+=Math.pow((user_movies[u][k]/(float)sum2), 2);
@@ -160,9 +160,12 @@ public class IMDBMetaPathUMUM {
 
 	public static void main(String[] args) throws ClassNotFoundException 
 	{	 
-		String usre_movie_file_name = "IMDB/3intervals/user_movie_relation_1of3.txt"; // user-movie and movie-user infor for current time
-		String labels_file_name = "IMDB/3intervals/labels_for_1of3_newMovies_in_2of3.txt";				  // labels for current time based on next time
-		String metaPath_file_name = "IMDB/3intervals/UMUM_1of3.txt"; // outputFile
+		String currentInterval = args[0]; // e.g. is interval=2
+		String intervals = args[1]; // e.g. is intervals=7
+		String usre_movie_file_name = "IMDB/" + intervals + "intervals/user_movie_relation_" + currentInterval + "of" + intervals + ".txt"; // user-movie and movie-user infor for current time
+		String labels_file_name = "IMDB/" + intervals + "intervals/labels_for_" + currentInterval + "of" + intervals + "_newMovies_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time
+		String metaPath_file_name = "IMDB/" + intervals + "intervals/UMUM_" + currentInterval + "of" + intervals + ".txt"; // outputFile
+
 
 		String currentLine, numOfConnectedNodes;
 		int from = 0, to = 0, userIndex = 0, movieIndex = 0;

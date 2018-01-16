@@ -27,59 +27,77 @@ import java.util.zip.GZIPOutputStream;
 /**
  * Meta path counts are calculated using matrix multiplication. 
  *
- * We have 2113 users, 10109 rated movies, and 20 generes  
+ * We have 2113 users and 10109 rated movies  
  */
 
 
-public class IMDBMetaPathUMGM {
+public class IMDBMetaPathUMDM {
 
 	/**
-	 * Given index of a user and a movie, calculate number of different meta-path of type U-M-G-M
-	 * P1 decomposition: UM-MGM, P2 decomposition: UMG-GM (MG is reverse path)
-	 * UMG = UM*MG , MGM = MG*GM
-	 * 
+	 * Given index of a user and a movie, calculate number of different meta-path of type U-M-U-M
 	 * @param userIndex u
 	 * @param movieIndex m
 	 * @return pathCount between them
 	 */
 
 	private static int[][] user_movies = new int[2113][10109];
-	private static int[][] movie_generes = new int[10109][20];
-	private static int[][] genere_movies = new int[20][10109];
-	private static HashMap<String, Integer> genere_id_map = new HashMap<String, Integer>();    
+	private static int[][] movie_users = new int[10109][2113];
+
+	public static int pathCount_UMUM(int u, int m){
+		int pathCount = 0;
+
+		m = m-2113;  // re-indexing movieID to start from 0 
+
+		// Let A be user_movie matrix and B be movie_user matrix
+		// D_um = sum C_uk*A_km for k=1..2113, and C_uk = sum A_ul*Blk for l=1..10109
+
+		int[] C_u = new int[2113];
+
+		for(int k=0;k<2113; k++)
+			for(int l=0;l<10109; l++)
+				C_u[k] += user_movies[u][l] * movie_users[l][k];
+
+		for(int k=0;k<2113; k++)
+			pathCount += C_u[k] * user_movies[k][m];
+
+		//System.out.println("u: " + u + ", m: " + m + " -> " + pathCount);
+		//System.out.println(a + "-" + b);
+
+		return pathCount;
+	}
 
 
-	public static float heteSim_UMGM(int u, int m){
+	public static float heteSim_UMUM(int u, int m){
 		float heteSim1 = 0, heteSim2 = 0;
 
 		m = m-2113;  // re-indexing movieID to start from 0 
 
-		// P:UMGM decomposition (1): PL=UMG and PR=GM so PR^-1=MG (reverse path) 
+		// P:UMUM decomposition (1): PL=UMU and PR=UM so PR^-1=MU (reverse path) 
 
-		// user_movie_genre_u[i] = sum user_movies[u][j]*movie_generes[j][i] for j=1..10109
-		int[] user_movie_genre_u = new int[20];
+		// user_movie_user_u[i] = sum user_movies[u][j]*movie_users[j][i] for j=1..10109
+		int[] user_movie_user_u = new int[2113];
 
-		for(int i=0;i<20; i++)
+		for(int i=0;i<2113; i++)
 			for(int j=0;j<10109; j++)
-				user_movie_genre_u[i] += user_movies[u][j] * movie_generes[j][i];
+				user_movie_user_u[i] += user_movies[u][j] * movie_users[j][i];
 
 		int sum1 = 0, sum2 =0; // for normalization
-		for(int k=0;k<20; k++){
-			sum1 += user_movie_genre_u[k];
-			sum2 += movie_generes[m][k];
+		for(int k=0;k<2113; k++){
+			sum1 += user_movie_user_u[k];
+			sum2 += movie_users[m][k];
 		}
 		if (sum1==0 || sum2==0){
 			heteSim1=0;
 		}else{
 
-			// heteSim1 = user_movie_genre_u * movie_generes[m]^T / Norm2(user_movie_genre_u)*Norm2(movie_generes[m])
-			for(int k=0;k<20; k++)
-				heteSim1 += (user_movie_genre_u[k]/(float)sum1)*(movie_generes[m][k]/(float)sum2);
+			// heteSim1 = user_movie_user_u * movie_users[m]^T / Norm2(user_movie_user_u)*Norm2(movie_users[m])
+			for(int k=0;k<2113; k++)
+				heteSim1 += (user_movie_user_u[k]/(float)sum1)*(movie_users[m][k]/(float)sum2);
 
 			float a = 0, b = 0, c;
-			for(int k=0;k<20; k++){
-				a+=Math.pow((user_movie_genre_u[k]/(float)sum1), 2);
-				b+=Math.pow((movie_generes[m][k]/(float)sum2), 2);
+			for(int k=0;k<2113; k++){
+				a+=Math.pow((user_movie_user_u[k]/(float)sum1), 2);
+				b+=Math.pow((movie_users[m][k]/(float)sum2), 2);
 			}
 			//System.out.println(a + " - " + b);
 			c = (float) (Math.sqrt(a)*Math.sqrt(b));  
@@ -91,30 +109,30 @@ public class IMDBMetaPathUMGM {
 			//System.out.println("heteSim1: " + heteSim1);
 		}
 
-		// P:UMGM decomposition (2): PL=UM and PR=MGM so PR^-1=MGM (reverse path) 
-		// movie_genre_movie_m[i] = sum movie_generes[m][j]*genere_movies[j][i] for j=1..10
-		int[] movie_genre_movie_m = new int[10109];
+		// P:UMUM decomposition (2): PL=UM and PR=MUM so PR^-1=MUM (reverse path) 
+		// user_movie_user_m[i] = sum movie_users[m][j]*user_movies[j][i] for j=1..2113
+		int[] movie_user_movie_m = new int[10109];
 
 		for(int i=0;i<10109; i++)
-			for(int j=0;j<20; j++)
-				movie_genre_movie_m[i] += movie_generes[m][j] * genere_movies[j][i];
+			for(int j=0;j<2113; j++)
+				movie_user_movie_m[i] += movie_users[m][j] * user_movies[j][i];
 
 		sum1=0; sum2=0;
 		for(int k=0;k<10109; k++){
 			sum1 += user_movies[u][k];
-			sum2 += movie_genre_movie_m[k];
+			sum2 += movie_user_movie_m[k];
 		}
 
 		if (sum1==0 || sum2==0){
 			heteSim2=0;
 		}else{
-			// heteSim2 = user_movies[u]*movie_genre_movie_m / Norm2(user_movies[u])*Norm2(movie_genre_movie_m)
+			// heteSim2 = user_movies[u]*movie_user_movie_m / Norm2(user_movies[u])*Norm2(movie_user_movie_m)
 			for(int k=0;k<10109; k++)
-				heteSim2 += (user_movies[u][k]/(float)sum1)*(movie_genre_movie_m[k]/(float)sum2);
+				heteSim2 += (user_movies[u][k]/(float)sum1)*(movie_user_movie_m[k]/(float)sum2);
 
 			float a = 0, b = 0; float c;
 			for(int k=0;k<10109; k++){
-				a+=Math.pow((movie_genre_movie_m[k]/(float)sum1), 2);
+				a+=Math.pow((movie_user_movie_m[k]/(float)sum1), 2);
 				b+=Math.pow((user_movies[u][k]/(float)sum2), 2);
 			}
 			//System.out.println(a + " - " + b);
@@ -141,24 +159,20 @@ public class IMDBMetaPathUMGM {
 	 */
 
 	public static void main(String[] args) throws ClassNotFoundException 
-	{	
-		String currentInterval = args[0]; // e.g. is interval=2
-		String intervals = args[1]; // e.g. is intervals=7
-		String usre_movie_file_name = "IMDB/" + intervals + "intervals/user_movie_relation_" + currentInterval + "of" + intervals + ".txt"; // user-movie and movie-user infor for current time
-		String labels_file_name = "IMDB/" + intervals + "intervals/labels_for_" + currentInterval + "of" + intervals + "_newMovies_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time
-		String movie_generes_file_name = "MovielensIMDB/movie_genre_relation.txt";	// all time movie-genres
-		String generes_file_name = "MovielensIMDB/genres.txt";				  // all genres ids
-		String metaPath_file_name = "IMDB/" + intervals + "intervals/UMGM_" + currentInterval + "of" + intervals + ".txt"; // outputFile
+	{	 
+		String usre_movie_file_name = "IMDB/3intervals/user_movie_relation_1of3.txt"; // user-movie and movie-user infor for current time
+		String labels_file_name = "IMDB/3intervals/labels_for_1of3_newMovies_in_2of3.txt";				  // labels for current time based on next time
+		String metaPath_file_name = "IMDB/3intervals/UMUM_1of3.txt"; // outputFile
 
 		String currentLine, numOfConnectedNodes;
-		int from = 0, to = 0, userIndex = 0, movieIndex = 0, genreIndex = 0;
+		int from = 0, to = 0, userIndex = 0, movieIndex = 0;
 
 		try{
 
 			BufferedWriter bwUserMovieLabel = new BufferedWriter(new FileWriter(new File(metaPath_file_name)));
 
 			BufferedReader userMovieFile = new BufferedReader(new FileReader(usre_movie_file_name));
-			// userMovieFile file format example (3 nodes)
+			// file format example (3 nodes)
 			//3
 			//0,0
 			//1,3:2,1:3,1:4,1
@@ -183,31 +197,26 @@ public class IMDBMetaPathUMGM {
 					user_movies[userIndex][movieIndex-2113]=1;
 				}
 			}
-
-
-			BufferedReader genereIdsFile = new BufferedReader(new FileReader(generes_file_name));
-			// movieGeneresFile format example
-			//genreID	genre
-			//0	Action
-			currentLine = genereIdsFile.readLine(); // ignore the first line
-			while ((currentLine = genereIdsFile.readLine()) != null){
-				StringTokenizer st = new StringTokenizer(currentLine,"\t");  
-				genreIndex = Integer.parseInt(st.nextToken());
-				genere_id_map.put(st.nextToken(), genreIndex);
+			for (int i=0; i < 10109; i++){  // considering only movies
+				ArrayList<Integer> usersList = new ArrayList<Integer>();
+				currentLine = userMovieFile.readLine();
+				from = 0;
+				to = currentLine.indexOf(",", from);
+				movieIndex = Integer.parseInt(currentLine.substring(from,to));
+				from = to+1;
+				to = currentLine.indexOf(":", from);
+				if (to<=0) to = currentLine.length();
+				numOfConnectedNodes = currentLine.substring(from,to);
+				for (int j=0; j < Integer.parseInt(numOfConnectedNodes) ; j++){
+					from = to+1;
+					to = currentLine.indexOf(",", from);
+					userIndex = Integer.parseInt(currentLine.substring(from,to));
+					// ignoring weight
+					from = to+1;  to = from+1;
+					movie_users[movieIndex-2113][userIndex]=1;
+				}
 			}
-			
-			BufferedReader movieGeneresFile = new BufferedReader(new FileReader(movie_generes_file_name));
-			// movieGeneresFile format example
-			//newMovieID	genreID
-			//2307	Adventure
-			currentLine = movieGeneresFile.readLine(); // ignore the first line
-			while ((currentLine = movieGeneresFile.readLine()) != null){
-				StringTokenizer st = new StringTokenizer(currentLine,"\t");  
-				movieIndex = Integer.parseInt(st.nextToken());
-				genreIndex = genere_id_map.get(st.nextToken());
-				movie_generes[movieIndex-2113][genreIndex] = 1;
-				genere_movies[genreIndex][movieIndex-2113] = 1;
-			}
+
 
 
 			BufferedReader labels = new BufferedReader(new FileReader(labels_file_name));
@@ -231,7 +240,7 @@ public class IMDBMetaPathUMGM {
 				//heteSim_UMUM(sourceNode, destNode);
 
 				//System.out.println("label: " + currentLine.substring(to));
-				bwUserMovieLabel.write(heteSim_UMGM(sourceNode, destNode)+"\n");
+				bwUserMovieLabel.write(heteSim_UMUM(sourceNode, destNode)+"\n");
 
 				if (counter%10000==0){
 					System.out.println(counter);
@@ -244,8 +253,6 @@ public class IMDBMetaPathUMGM {
 
 
 			userMovieFile.close();
-			movieGeneresFile.close();
-			genereIdsFile.close();
 			bwUserMovieLabel.close();
 
 		}catch (IOException e) 

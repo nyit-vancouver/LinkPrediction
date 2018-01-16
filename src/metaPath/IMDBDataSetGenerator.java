@@ -36,8 +36,8 @@ public class IMDBDataSetGenerator {
 
 		try{
 			// taget relation is user-movie (UM), meta paths are: UMUM, UMGM, UMDM, UMAM
-			//BufferedReader UMUM = new BufferedReader(new FileReader("IMDB/3intervals/UMUM_1of3.txt")); // same user
-			//BufferedReader UMGM = new BufferedReader(new FileReader("IMDB/3intervals/UMGM_1of3.txt")); // same genre
+			BufferedReader UMUM = new BufferedReader(new FileReader("IMDB/7intervals/UMUM_1of7.txt")); // same user
+			BufferedReader UMGM = new BufferedReader(new FileReader("IMDB/7intervals/UMGM_1of7.txt")); // same genre
 			//BufferedReader UMDM = new BufferedReader(new FileReader("IMDB/3intervals/UMDM_1of3.txt")); // same director
 			//BufferedReader UMAM = new BufferedReader(new FileReader("IMDB/3intervals/UMAM_1of3.txt")); // same actors
 			BufferedReader predfile = new BufferedReader(new FileReader("IMDB/7intervals/temporalPredictionFor_2of7.txt")); // for next time interval
@@ -55,13 +55,16 @@ public class IMDBDataSetGenerator {
 
 				label = currentLineString.substring(currentLineString.indexOf(":")+1);
 
-				//f0 = UMUM.readLine();
-				//f1 = UMGM.readLine();
+				f0 = UMUM.readLine();
+				f1 = UMGM.readLine();
 				//f2 = UMDM.readLine();
 				//f3 = UMAM.readLine();
 				f4 = predfile.readLine();
 
 
+				//System.out.println("f0: " + f0);
+				//System.out.println("f1: " + f1);
+				
 				if (f0.contains("-1") || f1.contains("-1") || f2.contains("-1") || f3.contains("-1"))
 					continue;
 				/*if (f0.contains("-1"))
@@ -86,8 +89,10 @@ public class IMDBDataSetGenerator {
 
 				//+1 1:0 2:0.661 3:0.037 4:0.500 5:0.199 6:0.006 7:0.000 8:0.015 9:0.100
 
-				dataset1.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f2 + " 4:" + f3 + " 5:" + f4 +"\n");
-				dataset2.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f2 + " 4:" + f3 + "\n");
+				//dataset1.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f2 + " 4:" + f3 + " 5:" + f4 +"\n");
+				//dataset2.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f2 + " 4:" + f3 + "\n");
+				dataset1.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f4 +"\n");
+				dataset2.write(label + " 1:" + f0 + " 2:" + f1 + "\n");
 				dataset3.write(label + " 1:" + f4 + "\n");
 
 			}
