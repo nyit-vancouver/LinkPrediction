@@ -26,7 +26,7 @@ import java.util.TreeSet;
  * 
  * @author aminmf
  */
-public class IMDBDataSetGenerator {
+public class IMDBNewDataSetGenerator {
 
 
 	public static void main(String[] args) 
@@ -42,9 +42,14 @@ public class IMDBDataSetGenerator {
 			//BufferedReader UMAM = new BufferedReader(new FileReader("IMDB/3intervals/UMAM_1of3.txt")); // same actors
 			BufferedReader predfile = new BufferedReader(new FileReader("IMDB/3intervals/temporalPredictionFor_3of3.txt")); // for next time interval
 			BufferedReader lfile = new BufferedReader(new FileReader("IMDB/3intervals/labels_for_2of3_newMovies_in_3of3.txt"));
-			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/training1_for_2of3.txt"))); // for this interval
-			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/training2_for_2of3.txt")));
-			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/training3_for_2of3.txt")));
+			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/newtraining1_for_2of3.txt"))); // for this interval
+			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/newtraining2_for_2of3.txt")));
+			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/newtraining3_for_2of3.txt")));
+
+	
+			dataset1.write("f0,f1,f4,label\n");
+			dataset2.write("f0,f1,label\n");
+			dataset3.write("f4,label\n");
 
 			
 			String f0="0", f1="0", f2="0", f3="0", f4, label;
@@ -83,17 +88,17 @@ public class IMDBDataSetGenerator {
 
 				// For SVM and regression library format
 				if (label.equals("1"))
-					label = "+1";
+					label = "1";
 				else
-					label = "-1";
+					label = "0";
 
 				//+1 1:0 2:0.661 3:0.033 4:0.500 5:0.199 6:0.006 7:0.000 8:0.015 9:0.100
 
 				//dataset1.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f2 + " 4:" + f3 + " 5:" + f4 +"\n");
 				//dataset2.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f2 + " 4:" + f3 + "\n");
-				dataset1.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f4 +"\n");
-				dataset2.write(label + " 1:" + f0 + " 2:" + f1 + "\n");
-				dataset3.write(label + " 1:" + f4 + "\n");
+				dataset1.write(f0 + "," + f1 + "," + f4 + "," + label +"\n");
+				dataset2.write(f0 + "," + f1 + "," + label+ "\n");
+				dataset3.write(f4 + "," + label + "\n");
 
 			}
 
