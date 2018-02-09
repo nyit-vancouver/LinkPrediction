@@ -24,7 +24,7 @@ import java.util.TreeSet;
  * @author aminmf
  */
 
-public class IMDBTemporalPredictionFeature {
+public class InfectionTemporalPredictionFeature {
 
 	public static void main(String[] args) 
 	{	
@@ -34,15 +34,14 @@ public class IMDBTemporalPredictionFeature {
 		double[][] z = new double[numberOfNodes][numOfDimensions];
 		ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
 
-		ArrayList <ArrayList<IMDBTemporalPredictionFeature>> latentSpace = new ArrayList <ArrayList<IMDBTemporalPredictionFeature>>(); 
+		ArrayList <ArrayList<InfectionTemporalPredictionFeature>> latentSpace = new ArrayList <ArrayList<InfectionTemporalPredictionFeature>>(); 
 		String currentLineString, numOfNonZero=null;
 		int latentPosIndex=0, nodeIndex = 0, neighborIndex = 0;
 		double weight=0.0;
 
-		String ZmatrixFileName = "Zmatrix8.txt";
-		String labelFileName = "IMDB/7intervals/labels_for_6of7_newMovies_in_7of7.txt";
-		String temporalPredictionFileName = "IMDB/7intervals/newtemporalPredictionFor_7of7.txt";
-		
+		String ZmatrixFileName = "Infection/Zmatrix1.txt"; // previous Z e.g. for t=3 IMDB/Zmatrix/Zmatrix_2of3.txt
+		String labelFileName = "Infection/labels_for_2of3_newLinks_in_3of3.txt";
+		String temporalPredictionFileName = "Infection/newtemporalPredictionFor_3of3_local.txt";
 		
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(ZmatrixFileName)); 
@@ -123,6 +122,10 @@ public class IMDBTemporalPredictionFeature {
 
 				Double predictionProbability = 0.0;
 
+				//for (int k=0; k<numOfDimensions; k++)
+				//	predictionProbability += z[sourceNode][k]*z[destNode][k];
+
+				
 				for (int k=0; k<numOfDimensions; k++)
 					predictionProbability += z[sourceNode][k]*z[destNode][k];
 

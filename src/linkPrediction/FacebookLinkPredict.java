@@ -35,23 +35,23 @@ import java.util.TreeSet;
  */
 
 
-public class IMDBLinkPredict {
+public class FacebookLinkPredict {
 
 	public static void main(String[] args) 
 	{	
 		// inputs
-		int numberOfNodes = 12222, numOfDimensions = 20;
+		int numberOfNodes = 63731, numOfDimensions = 20;
 
 		double[][] z = new double[numberOfNodes][numOfDimensions];
 		ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
 
-		ArrayList <ArrayList<IMDBLinkPredict>> latentSpace = new ArrayList <ArrayList<IMDBLinkPredict>>(); 
+		ArrayList <ArrayList<FacebookLinkPredict>> latentSpace = new ArrayList <ArrayList<FacebookLinkPredict>>(); 
 		String currentLineString, numOfNonZero=null;
 		int latentPosIndex=0, nodeIndex = 0, neighborIndex = 0;
 		double weight=0.0;
 
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("IMDB/Zmatrix/Zmatrix3.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("Facebook/Zmatrix3.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -104,7 +104,7 @@ public class IMDBLinkPredict {
 
 		// reading original coauthorship file
 		try{
-			BufferedReader br2 = new BufferedReader(new FileReader("IMDB/3intervals/user_movie_relation_3of3.txt"));
+			BufferedReader br2 = new BufferedReader(new FileReader("Facebook/facebook_all_3of3.txt"));
 			// file format example (3 nodes)
 			//3
 			//0,0
@@ -155,7 +155,7 @@ public class IMDBLinkPredict {
 			Double predictionProbability = 0.0;
 			//int sourceNodeID = 11785;
 
-			for(int sourceNodeID = 0; sourceNodeID <12222; sourceNodeID++){ 
+			for(int sourceNodeID = 0; sourceNodeID <63731; sourceNodeID++){ 
 				for (int destNodeID: neighbors.get(sourceNodeID)){
 					//System.out.println(destNodeID);
 

@@ -36,15 +36,15 @@ public class IMDBNewDataSetGenerator {
 
 		try{
 			// taget relation is user-movie (UM), meta paths are: UMUM, UMGM, UMDM, UMAM
-			BufferedReader UMUM = new BufferedReader(new FileReader("IMDB/3intervals/UMUM_2of3.txt")); // same user
-			BufferedReader UMGM = new BufferedReader(new FileReader("IMDB/3intervals/UMGM_2of3.txt")); // same genre
+			BufferedReader UMUM = new BufferedReader(new FileReader("IMDB/7intervals/UMUM_2of7.txt")); // same user
+			BufferedReader UMGM = new BufferedReader(new FileReader("IMDB/7intervals/UMGM_2of7.txt")); // same genre
 			//BufferedReader UMDM = new BufferedReader(new FileReader("IMDB/3intervals/UMDM_1of3.txt")); // same director
 			//BufferedReader UMAM = new BufferedReader(new FileReader("IMDB/3intervals/UMAM_1of3.txt")); // same actors
-			BufferedReader predfile = new BufferedReader(new FileReader("IMDB/3intervals/temporalPredictionFor_3of3.txt")); // for next time interval
-			BufferedReader lfile = new BufferedReader(new FileReader("IMDB/3intervals/labels_for_2of3_newMovies_in_3of3.txt"));
-			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/newtraining1_for_2of3.txt"))); // for this interval
-			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/newtraining2_for_2of3.txt")));
-			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("IMDB/3intervals/newtraining3_for_2of3.txt")));
+			BufferedReader predfile = new BufferedReader(new FileReader("IMDB/7intervals/temporalPredictionFor_3of7.txt")); // for next time interval
+			BufferedReader lfile = new BufferedReader(new FileReader("IMDB/7intervals/labels_for_2of7_newMovies_in_3of7.txt"));
+			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("IMDB/7intervals/newtraining1_for_2of7.txt"))); // for this interval
+			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("IMDB/7intervals/newtraining2_for_2of7.txt")));
+			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("IMDB/7intervals/newtraining3_for_2of7.txt")));
 
 	
 			dataset1.write("f0,f1,f4,label\n");

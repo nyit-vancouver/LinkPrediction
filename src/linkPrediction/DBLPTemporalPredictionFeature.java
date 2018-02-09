@@ -40,7 +40,7 @@ public class DBLPTemporalPredictionFeature {
 		double weight=0.0;
 
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("Zmatrix/Zmatrix_2of3.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("DBLP/Zmatrix/Zmatrix_7of7.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -95,8 +95,8 @@ public class DBLPTemporalPredictionFeature {
 
 		int from = 0, to = 0, sourceNode = 0, destNode = 0;
 		try{
-			BufferedReader labels = new BufferedReader(new FileReader("7IntervalsPrediction/labels_2011_2013_newLinkIn_2014_2016_min5paper.txt"));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("7IntervalsPrediction/temporalPredictionFor_2014_2016_min5paper.txt")));
+			BufferedReader labels = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/labels_2011_2013_newLinkIn_2014_2016_min5paper.txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/temporalPredictionFor_2014_2016_min5paper.txt")));
 			// file format example
 			//0,1:1
 			//...
