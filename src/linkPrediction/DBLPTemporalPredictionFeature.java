@@ -93,7 +93,7 @@ public class DBLPTemporalPredictionFeature {
 
 		// reading original coauthorship file
 
-		int from = 0, to = 0, sourceNode = 0, destNode = 0;
+		int from = 0, to = 0, sourceNode = 0, destNode = 0, label;
 		try{
 			BufferedReader labels = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/labels_2011_2013_newLinkIn_2014_2016_min5paper.txt"));
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/temporalPredictionFor_2014_2016_min5paper.txt")));
@@ -112,6 +112,7 @@ public class DBLPTemporalPredictionFeature {
 				from = to+1;
 				to = currentLineString.indexOf(":", from);
 				destNode = Integer.parseInt(currentLineString.substring(from,to));
+				label=Integer.parseInt(currentLineString.substring(currentLineString.indexOf(":")+1));
 
 				if (counter%1000000==0)
 					System.out.println(counter);
@@ -121,7 +122,7 @@ public class DBLPTemporalPredictionFeature {
 				for (int k=0; k<numOfDimensions; k++)
 					predictionProbability += z[sourceNode][k]*z[destNode][k];
 
-				bw.write( String.format("%.6f",predictionProbability) +"\n");
+				bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
 
 			}
 

@@ -105,7 +105,7 @@ public class FacebookTemporalPredictionFeature {
 			//0,1:1
 			//...
 			//2,3:0
-			int counter = 0;
+			int counter = 0,label;
 			while ((currentLineString = labels.readLine()) != null){
 				counter++;
 				from = 0;
@@ -116,7 +116,7 @@ public class FacebookTemporalPredictionFeature {
 				from = to+1;
 				to = currentLineString.indexOf(":", from);
 				destNode = Integer.parseInt(currentLineString.substring(from,to));
-
+				label=Integer.parseInt(currentLineString.substring(currentLineString.indexOf(":")+1));
 				if (counter%1000000==0)
 					System.out.println(counter);
 
@@ -129,7 +129,7 @@ public class FacebookTemporalPredictionFeature {
 				for (int k=0; k<numOfDimensions; k++)
 					predictionProbability += z[sourceNode][k]*z[destNode][k];
 
-				bw.write( String.format("%.6f",predictionProbability) +"\n");
+				bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
 
 			}
 

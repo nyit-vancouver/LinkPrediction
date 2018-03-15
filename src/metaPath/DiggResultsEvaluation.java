@@ -25,7 +25,7 @@ import java.util.TreeSet;
  * 
  * @author aminmf
  */
-public class DBLPResultsEvaluation {
+public class DiggResultsEvaluation {
 
 
 	public static void main(String[] args) 
@@ -55,27 +55,28 @@ public class DBLPResultsEvaluation {
 
 		try{
 			// Regression prediction with combined feature (Ours) 
-			BufferedReader pred1file = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/predict1_2003_2009_min5paper.txt"));
-			//BufferedReader pred1file = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/predict1_1999_2001_min5paper.txt"));
+			BufferedReader pred1file = new BufferedReader(new FileReader("Digg/3intervals_friends/training3_for_1of3.txt"));
+			//BufferedReader pred1file = new BufferedReader(new FileReader("Digg/7IntervalsPrediction/predict1_1999_2001_min5paper.txt"));
 			// Regression prediction with metapath feature (ASONAM) 
-			BufferedReader pred2file = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/predict2_2003_2009_min5paper.txt"));
-			//BufferedReader pred2file = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/predict2_1999_2001_min5paper.txt"));
+			BufferedReader pred2file = new BufferedReader(new FileReader("Digg/3intervals_friends/training3_for_1of3.txt"));
+			//BufferedReader pred2file = new BufferedReader(new FileReader("Digg/7IntervalsPrediction/predict2_1999_2001_min5paper.txt"));
 			// Regression prediction with TKDE feature 
-			BufferedReader pred3file = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/predict3_2003_2009_min5paper.txt"));
-			//BufferedReader pred3file = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/predict3_1999_2001_min5paper.txt"));
+			BufferedReader pred3file = new BufferedReader(new FileReader("Digg/3intervals_friends/training3_for_1of3.txt"));
+			//BufferedReader pred3file = new BufferedReader(new FileReader("Digg/7IntervalsPrediction/predict3_1999_2001_min5paper.txt"));
 			// TKDE predicted lables (0.5 cut-off) this file contain both true labels (t+1) and TKDE predicts (t+1) 
-			BufferedReader pred4file = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/newtraining3_2003_2009_min5paper.txt"));
-			//BufferedReader pred4file = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/training3_1999_2001_min5paper.txt"));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/dblpPredict_3.txt")));
+			BufferedReader pred4file = new BufferedReader(new FileReader("Digg/3intervals_friends/training3_for_1of3.txt"));
+			//BufferedReader pred4file = new BufferedReader(new FileReader("Digg/7IntervalsPrediction/training3_1999_2001_min5paper.txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("Digg/3intervals_friends/DiggPredict_friend_for_2of3.txt")));
 
 
 			double temporalPredict;
 			int label, pred1, pred2, pred3, pred4;
 
 			// ignore the first line for prediction files
-			pred1file.readLine();
-			pred2file.readLine();
-			pred3file.readLine();
+			//pred1file.readLine();
+			//pred2file.readLine();
+			//pred3file.readLine();
+			bw.write("prediction,actual\n");
 
 			while ((currentLineString = pred4file.readLine()) != null) {
 				label = (currentLineString.charAt(0) == '-') ? 0 : 1 ; 
@@ -85,9 +86,10 @@ public class DBLPResultsEvaluation {
 				
 				currentLineString2 = pred1file.readLine();
 				
-				StringTokenizer st = new StringTokenizer(currentLineString2," ");  
-				st.nextToken();
-				float pred = Float.parseFloat(st.nextToken());
+				//StringTokenizer st = new StringTokenizer(currentLineString2," ");  
+				//st.nextToken();
+				//float pred = Float.parseFloat(st.nextToken());
+				float pred = Float.parseFloat(currentLineString2.substring(currentLineString2.indexOf(":")+1));
 				bw.write(pred + "," + label + "\n");
 								
 				pred1 = (currentLineString2.charAt(0) == '-') ? 0 : 1 ;

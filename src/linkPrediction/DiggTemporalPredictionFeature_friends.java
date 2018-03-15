@@ -24,25 +24,24 @@ import java.util.TreeSet;
  * @author aminmf
  */
 
-public class IMDBTemporalPredictionFeature {
+public class DiggTemporalPredictionFeature_friends {
 
 	public static void main(String[] args) 
 	{	
 		// inputs
-		int numberOfNodes = 12222, numOfDimensions = 20;
+		int numberOfNodes = 279631, numOfDimensions = 20;
 
 		double[][] z = new double[numberOfNodes][numOfDimensions];
 		ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
 
-		ArrayList <ArrayList<IMDBTemporalPredictionFeature>> latentSpace = new ArrayList <ArrayList<IMDBTemporalPredictionFeature>>(); 
+		ArrayList <ArrayList<DiggTemporalPredictionFeature_friends>> latentSpace = new ArrayList <ArrayList<DiggTemporalPredictionFeature_friends>>(); 
 		String currentLineString, numOfNonZero=null;
 		int latentPosIndex=0, nodeIndex = 0, neighborIndex = 0;
 		double weight=0.0;
 
-		String ZmatrixFileName = "IMDB/Zmatrix/Zmatrix7.txt";
-		String labelFileName = "IMDB/7intervals/labels_for_6of7_newMovies_in_7of7.txt";
-		String temporalPredictionFileName = "IMDB/7intervals/IMDBnewtemporalPredictionFor_7of7.txt";
-		
+		String ZmatrixFileName = "Digg/7intervals_friends/Zmatrix5.txt"; // previous Z e.g. for t=3 IMDB/Zmatrix/Zmatrix_2of3.txt
+		String labelFileName = "Digg/7intervals_friends/labels_for_6of7_newLinks_in_7of7.txt";
+		String temporalPredictionFileName = "Digg/7intervals_friends/temporalPredictionFor_7of7.txt";
 		
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(ZmatrixFileName)); 
@@ -98,7 +97,7 @@ public class IMDBTemporalPredictionFeature {
 
 		// reading original coauthorship file
 
-		int from = 0, to = 0, sourceNode = 0, destNode = 0,label;
+		int from = 0, to = 0, sourceNode = 0, destNode = 0;
 		try{
 			BufferedReader labels = new BufferedReader(new FileReader(labelFileName));
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(temporalPredictionFileName)));
@@ -117,17 +116,20 @@ public class IMDBTemporalPredictionFeature {
 				from = to+1;
 				to = currentLineString.indexOf(":", from);
 				destNode = Integer.parseInt(currentLineString.substring(from,to));
-				label=Integer.parseInt(currentLineString.substring(currentLineString.indexOf(":")+1));
 
 				if (counter%1000000==0)
 					System.out.println(counter);
 
 				Double predictionProbability = 0.0;
 
+				//for (int k=0; k<numOfDimensions; k++)
+				//	predictionProbability += z[sourceNode][k]*z[destNode][k];
+
+				
 				for (int k=0; k<numOfDimensions; k++)
 					predictionProbability += z[sourceNode][k]*z[destNode][k];
 
-				bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
+				bw.write( String.format("%.6f",predictionProbability) +"\n");
 
 			}
 
