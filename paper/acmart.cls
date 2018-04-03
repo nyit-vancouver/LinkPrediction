@@ -980,7 +980,7 @@ Computing Machinery]
 \def\acmArticleSeq#1{\def\@acmArticleSeq{#1}}
 \acmArticleSeq{\@acmArticle}
 \def\acmYear#1{\def\@acmYear{#1}}
-\acmYear{2016}
+\acmYear{2017}
 \def\acmMonth#1{\def\@acmMonth{#1}}
 \acmMonth{1}
 \def\@acmPubDate{\ifcase\@acmMonth\or
