@@ -1,20 +1,20 @@
 \section{Problem Statement}
 
 \begin{definition}[Dynamic heterogeneous information network]
-A dynamic heterogeneous information network is defined as a directed graph $G$ = ($V$, $E$), where $V$ and $E$ are set of nodes and edges of different types, and edges have timestamps. $\Box$ \cite{check with standard definition of HIN in J. Han paper}
+A dynamic heterogeneous information network is defined as a directed graph $G$ = ($V$, $E$), where $V$ and $E$ are set of nodes and edges of different types, and edges have timestamps. $\Box$ \amin{check with standard definition of HIN in J. Han paper}
 \end{definition}
 
 \begin{example}
 The DBLP bibliographic network\footnote{\url{http://dblp.uni-trier.de/db/}} is a dynamic heterogeneous information network, containing different types of nodes such as papers, authors, topics, and publication venues, with publication links associated with date. Twitter social network is another example with nodes of types posted tweets, users, topics, and hashtags and time window associated with these tweets. $\Box$
 \end{example}
 
-In the context of a heterogenous network, a \textit{link} can be either \textit{direct} or \textit{indirect}. An indirect link is a sequence of relationships (direct links) in the network. Thus, two nodes might not be directly connected, however they might be connected considering the semantic of a sequence of links of different types. In this work, therefore, the \textit{link prediction} problem refers to predicting whether two nodes will be connected in future via a sequence of relationships in the graph. Note that the length of sequence can be greater than or equal to one. For instance in a bibliographic network a direct link exist between an author and a paper he wrote, and an indirect link exist between him and his co-authors through the paper, which they wrote together.
+In the context of a heterogenous network, a \textit{relation} can be in the form of a \textit{direct link} or an \textit{indirect link}, where an indirect link is a sequence of direct links in the network. Thus, two nodes might not be directly connected, however they might be connected considering the semantic of a sequence of links of different types. In this work, we use the terms \textit{relationship prediction} and \textit{link prediction} interchangeably referring to predicting whether two nodes will be connected in future via a sequence of relationships in the graph. Note that the length of sequence can be greater than or equal to one. For instance in a bibliographic network a direct link exist between an author and a paper he wrote, and an indirect link exist between him and his co-authors through the paper, which they wrote together.
 
-\begin{definition}[\textbf{Link prediction problem}]\label{problemdef}
- Given A dynamic heterogeneous social network $G$ at time $t$ and a target relation $R$, we aim to predict the existence of a link of type $R$ between two given nodes at time $t+1$. $\Box$
+\begin{definition}[\textbf{Relationship prediction problem}]\label{problemdef}
+Given A dynamic heterogeneous information network $G$ at time $t$, and a target relation type $R$, we aim to predict the existence of a relation of type $R$ between two given nodes at time $t+1$. $\Box$
  \end{definition}
 
-In order to better understand different types of nodes and their relation in a network, the concept of \textit{network schema} \cite{sun2011pathsim} is used. The network schema is a meta structure graph that summarizes a heterogeneous social network and is formally defined as bellow.
+In order to better understand different types of nodes and their relation in a network, the concept of \textit{network schema} \cite{sun2011pathsim} is used. The network schema is a meta structure graph that summarizes a heterogeneous information network and is formally defined as bellow.
 
 \begin{definition}[Network schema]
 The network schema $S_G=\mathcal{(A,R)}$ is a directed meta graph for a heterogeneous network $G=(V,E)$, where $\mathcal{A}$ is the set of node types in $V$ and $\mathcal{R}$ is the set of relation types in $E$.  $\Box$
