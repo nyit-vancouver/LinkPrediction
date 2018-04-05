@@ -1,22 +1,20 @@
-\section{Link Prediction Approach}
+\section{Relationship Prediction Approach}
 
-Given a dynamic heterogeneous social network graph $G=(V,E)$, and number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ heterogeneous graphs ${G_1, .., G_t}$ with respect to associated timestamps. We then apply our techniques to predict $G_{t+1}$.
-
-As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target relation) between two nodes in a heterogeneous network. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
+Given a dynamic heterogeneous information network graph $G=(V,E)$, and number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ heterogeneous graphs ${G_1, .., G_t}$ with respect to its associated timestamps. We then apply our techniques to predict $G_{t+1}$. As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target relation) between two nodes in a heterogeneous network. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
 
 \begin{definition}[Augmented reduced graph]\label{def:ARG}
-For a given heterogeneous graph $G=(V,E)$ and a target relation meta path $P(a,b)$ between nodes of type $a$ and $b$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $a$ and $b$, and edges in $E^P$ are of type $P$. $\Box$
+Given a heterogeneous graph $G=(V,E)$ and a target relation meta path $P(a,b)$ between nodes of type $a$ and $b$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $a$ and $b$, and edges in $E^P$ indicates relationships of type $P$ in $G$. $\Box$
 \end{definition}
 
 \begin{example}
-An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target relation meta path $P(Author,Author)$=\textit{A--P--V--P--A} is graph, where nodes are of type \textit{Author} and edges represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider another meta path $P(Author,Author)$=\textit{A--P--A}, the augmented reduced graph represent is a co-authorship graph, where nodes are of type \textit{Author} and edges represent \textit{co-authorship} relationship.  $\Box$
+An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target relation meta path $P(Author,Author)$=\textit{A--P--V--P--A} is graph, where nodes are of type \textit{Author} and edges represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider another meta path $P(Author,Author)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship} relationship.  $\Box$
 
 \end{example}
 
 
 %\subsection{Algorithm}
 
-\subsection{Homogenize prediction}
+\subsection{Homogenize link prediction}
 % We refer to this approach as \texttt{HomoTemp}.
 
 Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (BCGD) technique that for each $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space representation matrix $Z_\tau$ that minimizes the quadratic loss with temporal regularization
@@ -28,9 +26,7 @@ Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the
     \end{array}
 \end{equation}
 where $\lambda$ is a regularization parameter, and  $(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)$ penalizes node $u$ for suddenly changing its latent position. %Note that when computing the quadratic loss $\left \| G^R_\tau-Z_{\tau}BZ_{\tau}^T \right \|^2_F$, we ignore all of the diagonal entries.
-$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,c)$ indicates the position of $u$ in the $c$-th dimension at $Z$. The intuition behind their prediction model is that nodes move smoothly in the latent space over time, and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}. Also their model assumes that user interactions are more likely to occur between similar users in a latent space representation. Thus it needs $Z_{t+1}$ to predict the future graph $G_{t+1}$. They assume $Z_{t+1}$ can be approximated by $Z_1, ..., Z_t$. Finally they use $Z_tZ_t^T$ to predict $G_{t+1}$.
-
-
+$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,c)$ indicates the position of $u$ in the $c$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. Thus it needs $Z_{t+1}$ to predict the future graph $G_{t+1}$. They assume $Z_{t+1}$ can be approximated by $Z_1, ..., Z_t$. Finally they use $Z_tZ_t^T$ to predict $G_{t+1}$. \amin{However, the authors mentioned that the predicted graph at t + 1 can be formulated as Phi(f($Z_1,...Z_t$)), where Phi is the link function and f is the temporal function. Learning or selecting the best link function Phi and temporal function f is beyond the scope of this work. For example, we could apply nonparametric approaches [25] to automatically learn the link function F.}
 
 An immediate adaptation of the above BCGD technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target relationship type with edges between them if the target relation exists in the original graph. This changes equation (\ref{latentOrigEqu}) to the following
 \begin{equation}\label{latentReducedEqu}
