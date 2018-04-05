@@ -28,14 +28,17 @@ Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the
 where $\lambda$ is a regularization parameter, and  $(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)$ penalizes node $u$ for suddenly changing its latent position. %Note that when computing the quadratic loss $\left \| G^R_\tau-Z_{\tau}BZ_{\tau}^T \right \|^2_F$, we ignore all of the diagonal entries.
 $Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,c)$ indicates the position of $u$ in the $c$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. Thus it needs $Z_{t+1}$ to predict the future graph $G_{t+1}$. They assume $Z_{t+1}$ can be approximated by $Z_1, ..., Z_t$. Finally they use $Z_tZ_t^T$ to predict $G_{t+1}$. \amin{However, the authors mentioned that the predicted graph at t + 1 can be formulated as Phi(f($Z_1,...Z_t$)), where Phi is the link function and f is the temporal function. Learning or selecting the best link function Phi and temporal function f is beyond the scope of this work. For example, we could apply nonparametric approaches [25] to automatically learn the link function F.}
 
-An immediate adaptation of the above BCGD technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target relationship type with edges between them if the target relation exists in the original graph. This changes equation (\ref{latentOrigEqu}) to the following
-\begin{equation}\label{latentReducedEqu}
-    \begin{array}{l}
-\argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G^{P}_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
-\\
-\text{subject to :} \forall u,\tau,Z_{\tau}\geq 0, Z_{\tau}(u)Z_{\tau}(u)^T=1
-    \end{array}
-\end{equation}
+An immediate adaptation of the above BCGD technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target relationship type with edges between them if the target relation exists in the original graph $G_i$. This changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
+
+
+%to the following
+%\begin{equation}\label{latentReducedEqu}
+%    \begin{array}{l}
+%\argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G^{P}_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
+%\\
+%\text{subject to :} \forall u,\tau,Z_{\tau}\geq 0, Z_{\tau}(u)Z_{\tau}(u)^T=1
+%    \end{array}
+%\end{equation}
 
 %Their BCGD technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
 
@@ -64,7 +67,7 @@ Algorithm \ref{alg1} gets as an input a dynamic heterogeneous graph $G$, number 
 
 \ENDFOR
 %\STATE $G^R_{t+1} \leftarrow BCGD(G^R,k)$ \cite{Zhu2016}
-\STATE Infer temporal latent spaces $Z_1, .., Z_t$ by optimizing Eq. \ref{latentReducedEqu}
+\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{BCGD}%by optimizing Eq. \ref{latentReducedEqu}
 
 \STATE $G^P_{t+1} \leftarrow Z_tZ^T_t$ 
 
@@ -76,7 +79,7 @@ Algorithm \ref{alg1} gets as an input a dynamic heterogeneous graph $G$, number 
 
 \subsection{Meta path-based prediction}
 
-The homogenize approach, however, does not consider different semantics of meta paths between two nodes. Thus we use the idea of meta path \cite{sun2011pathsim} on a given network schema and a target relation type $P$, such as co-authorship, to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.
+The homogenize approach, however, does not consider different semantics of meta paths between the source and destination nodes. Therefore we leverage the idea of meta path \cite{sun2011pathsim} on a given network schema and a target relation type $P$, such as co-authorship, to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
 
 Algorithm \ref{alg2} gets as an input a dynamic heterogeneous graph $G$, number of graph snapshots $t$, a network schema $S$, target relation meta path $P(a,b)$ between node types $a$ and $b$, maximum length of a meta path $l$, and latent space dimension $k$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). It then produces the set of all meta paths between a node type $a$ and type $b$ defined in the given target relation $P(a,b)$ (line 2). This is done by traversing the network schema $S$ (for instance a BFS traversal) and generating meta paths with maximum length of $l$ .
 
@@ -106,7 +109,7 @@ Algorithm \ref{alg2} gets as an input a dynamic heterogeneous graph $G$, number 
 \ENDFOR
 
 %\STATE $G^R_{t+1} \leftarrow BCGD(G^R,k)$ \cite{Zhu2016}
-\STATE Infer temporal latent spaces $Z_1, .., Z_t$ by optimizing Eq. \ref{latentReducedEqu}
+\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{BCGD}%by optimizing Eq. \ref{latentReducedEqu}
 \STATE $G^{P_j}_{t+1} \leftarrow Z_tZ^T_t$ 
 
 \ENDFOR
@@ -144,7 +147,7 @@ Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are genera
 
 %* Restrict pathSim to 3-hops and not beyond
 
-\head{Learning meta path weights}. Zhu at al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with parameters indicating importance of the corresponding meta path.
+\head{The predictive model}. Zhu at al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with parameters indicating importance of the corresponding meta path.
 
 Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features. To do so, we use logistic regression as the prediction model. we can define the probability of existence of a link between nodes $a$ and $b$ as 
 \begin{equation*}
