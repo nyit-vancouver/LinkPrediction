@@ -79,7 +79,9 @@ Algorithm \ref{alg1} gets as an input a dynamic heterogeneous graph $G$, number 
 
 \subsection{Meta path-based prediction}
 
-The homogenize approach, however, does not consider different semantics of meta paths between the source and destination nodes. Therefore we leverage the idea of meta path \cite{sun2011pathsim} on a given network schema and a target relation type $P$, such as co-authorship, to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
+The homogenize approach, however, does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu at al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features \cite{sun2011pathsim} helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with topological meta path-based features.
+
+We define a set of meta paths \cite{sun2011pathsim} on a given network schema and a target relation meta path $P$, such as co-authorship, to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
 
 Algorithm \ref{alg2} gets as an input a dynamic heterogeneous graph $G$, number of graph snapshots $t$, a network schema $S$, target relation meta path $P(a,b)$ between node types $a$ and $b$, maximum length of a meta path $l$, and latent space dimension $k$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). It then produces the set of all meta paths between a node type $a$ and type $b$ defined in the given target relation $P(a,b)$ (line 2). This is done by traversing the network schema $S$ (for instance a BFS traversal) and generating meta paths with maximum length of $l$ .
 
@@ -147,9 +149,7 @@ Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are genera
 
 %* Restrict pathSim to 3-hops and not beyond
 
-\head{The predictive model}. Zhu at al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with parameters indicating importance of the corresponding meta path.
-
-Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features. To do so, we use logistic regression as the prediction model. we can define the probability of existence of a link between nodes $a$ and $b$ as 
+\head{The predictive model}. Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features. To do so, we use logistic regression as the prediction model. we can define the probability of existence of a link between nodes $a$ and $b$ as 
 \begin{equation*}
 Pr(label = 1|a, b; \boldsymbol{\theta}) = \frac{e^{z}}{e^{z}+1}
 \end{equation*}
