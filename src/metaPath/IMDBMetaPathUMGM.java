@@ -48,7 +48,33 @@ public class IMDBMetaPathUMGM {
 	private static int[][] genere_movies = new int[20][10109];
 	private static HashMap<String, Integer> genere_id_map = new HashMap<String, Integer>();    
 
+	// UMGM = UM*MG*GM
 
+	public static int pathCount_UMGM(int u, int m){
+		int pathCount = 0;
+
+		m = m-2113;  // re-indexing movieID to start from 0 
+
+		// P:UMGM decomposition (1): PL=UMG and PR=GM so PR^-1=MG (reverse path) 
+
+		// user_movie_genre_u[i] = sum user_movies[u][j]*movie_generes[j][i] for j=1..10109
+		int[] user_movie_genre_u = new int[20];
+
+		for(int i=0;i<20; i++)
+			for(int j=0;j<10109; j++)
+				user_movie_genre_u[i] += user_movies[u][j] * movie_generes[j][i];
+
+		for(int k=0;k<20; k++)
+			pathCount += user_movie_genre_u[k] * genere_movies[k][m];
+
+		//System.out.println("u: " + u + ", m: " + m + " -> " + pathCount);
+		//System.out.println(a + "-" + b);
+
+		return pathCount;
+
+	}
+
+	
 	public static float heteSim_UMGM(int u, int m){
 		float heteSim1 = 0, heteSim2 = 0;
 
@@ -132,6 +158,7 @@ public class IMDBMetaPathUMGM {
 	}
 
 
+
 	/**
 	 * Meta paths:
 	 * - user-movie-user-movie (UMUM)
@@ -142,8 +169,8 @@ public class IMDBMetaPathUMGM {
 
 	public static void main(String[] args) throws ClassNotFoundException 
 	{	
-		String currentInterval = args[0]; // e.g. is interval=2
-		String intervals = args[1]; // e.g. is intervals=7
+		String currentInterval = "3";//args[0]; // e.g. is interval=2
+		String intervals = "7";//args[1]; // e.g. is intervals=7
 		String usre_movie_file_name = "IMDB/" + intervals + "intervals/user_movie_relation_" + currentInterval + "of" + intervals + ".txt"; // user-movie and movie-user infor for current time
 		String labels_file_name = "IMDB/" + intervals + "intervals/labels_for_" + currentInterval + "of" + intervals + "_newMovies_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time
 		String movie_generes_file_name = "MovielensIMDB/movie_genre_relation.txt";	// all time movie-genres
@@ -231,9 +258,10 @@ public class IMDBMetaPathUMGM {
 				//heteSim_UMUM(sourceNode, destNode);
 
 				//System.out.println("label: " + currentLine.substring(to));
-				bwUserMovieLabel.write(heteSim_UMGM(sourceNode, destNode)+"\n");
+				//bwUserMovieLabel.write(heteSim_UMGM(sourceNode, destNode)+"\n");
+				bwUserMovieLabel.write(pathCount_UMGM(sourceNode, destNode)+"\n");
 
-				if (counter%10000==0){
+				if (counter%100000==0){
 					System.out.println(counter);
 					endTime = System.currentTimeMillis();
 					duration = (endTime - startTime);

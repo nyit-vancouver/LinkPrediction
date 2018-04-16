@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
-public class DBLPMetaPath_APAPA_APVPA {
+public class DBLP_PC_APAPA_APVPA {
 
 	private static String currentLineString, paperIndex = null, authorIndex=null, venueIndex=null;
 
@@ -95,6 +95,91 @@ public class DBLPMetaPath_APAPA_APVPA {
 	private static BufferedReader labels;
 	private static BufferedWriter bwHashMap;
 
+	
+	/**
+	 * Finds authors of paths of type A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
+	 * @return 
+	 */
+	public static HashSet<String> pathFind(String a){
+		HashSet<String> connections = new HashSet<String>();
+		String v, i, j;
+		//long startTime = System.currentTimeMillis();
+
+		// for author with index a for each paper index i 
+		//   find venue v where i is published at
+		//   find authors that published in v
+		
+		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
+		
+		//if (papervenuelist.size()<5)
+		//	return -10;
+		
+		for (PaperVenue pv : papervenuelist){
+			// ignore papers out of target interval
+			if (pv.getYear() < fromYear || pv.getYear() > toYear)
+				continue;
+			
+			i = pv.getPaper();
+			v = pv.getVenue();
+			//System.out.println("v: " + v);
+			List<PaperAuthors> paperauthorslist = venue_paperauthorslist_map.get(v);
+			for (PaperAuthors pa: paperauthorslist){
+				if (pa.getYear() < fromYear || pa.getYear() > toYear)
+					continue;
+				j = pa.getPaper();
+				for (String author: pa.getAuthors())
+					connections.add(author);
+					//System.out.println("There is a path from " + a + " to " + author + ": " + i + "-" + v + "-" + j);
+			}
+		}
+		return connections;
+	}
+
+	
+	/**
+	 * Finds authors of paths of type A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
+	 * @return 
+	 */
+	public static int countPath(String a, String b){
+		String v, i, j;
+		int PathCount = 0;
+		//long startTime = System.currentTimeMillis();
+
+		// for author with index a for each paper index i 
+		//   find venue v where i is published at
+		//   find authors that published in v
+		
+		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
+		
+		//if (papervenuelist.size()<5)
+		//	return -10;
+		
+		for (PaperVenue pv : papervenuelist){
+			// ignore papers out of target interval
+			if (pv.getYear() < fromYear || pv.getYear() > toYear)
+				continue;
+			
+			i = pv.getPaper();
+			v = pv.getVenue();
+			//System.out.println("v: " + v);
+			List<PaperAuthors> paperauthorslist = venue_paperauthorslist_map.get(v);
+			for (PaperAuthors pa: paperauthorslist){
+				if (pa.getYear() < fromYear || pa.getYear() > toYear)
+					continue;
+				j = pa.getPaper();
+				for (String author: pa.getAuthors())
+					if (author.equals(b))
+						PathCount++;
+					//System.out.println("There is a path from " + a + " to " + author + ": " + i + "-" + v + "-" + j);
+			}
+		}
+		return PathCount;
+	}
+	
+	
+	
+	
+	
 	/**
 	 * Given index of two authors, calculate number of different paths of type A-P-V-P-A (e.g. Jim-P1-KDD-P4-Tom)
 	 * @param authorIndex a
@@ -161,7 +246,7 @@ public class DBLPMetaPath_APAPA_APVPA {
 		//		if j has author index b, then PathCount++
 		
 		List<PaperVenue> papervenuelist = author_papervenuelist_map.get(a);
-
+		
 		//if (papervenuelist.size()<5)
 		//	return -10;
 
@@ -181,7 +266,8 @@ public class DBLPMetaPath_APAPA_APVPA {
 					j = pv2.getPaper();
 					for (String author: paper_authorslist_map.get(j)){
 						if (author.equals(b)){
-							//System.out.println("There is a path from " + a + " to " + b + ": " + i + "-" + c + "-" + j);
+							//if (b.equals("485596"))
+							//	System.out.println("There is a path from " + a + " to " + b + ": " + i + "-" + c + "-" + j);
 							PathCount++;
 						}
 					}
@@ -205,6 +291,7 @@ public class DBLPMetaPath_APAPA_APVPA {
 	 */
 	public static float pathSim(String a, String b){
 		float ps = (float) 0.0;
+		
 		int a_a = pathCount(a,a); 
 		int b_b = pathCount(b,b); 
 		
@@ -233,6 +320,7 @@ public class DBLPMetaPath_APAPA_APVPA {
 	 */
 	public static float pathSim2(String a, String b){
 		float ps = (float) 0.0;
+		
 		int a_a = pathCount2(a,a); 
 		int b_b = pathCount2(b,b); 
 		
@@ -296,7 +384,7 @@ public class DBLPMetaPath_APAPA_APVPA {
 		toYear = 2002;
 		String APVPA_file_name = "DBLP/APVPA_1996_2002.txt";
 		String APAPA_file_name = "DBLP/APAPA_1996_2002.txt";
-		String labels_file_name = "DBLP/labels_1996_2002_newLinkIn_2003_2009";
+		String labels_file_name = "DBLP/labels_1996_2002_newLinkIn_2003_2009.txt";
 
 		/*fromYear = Integer.parseInt(args[0]);
 		toYear = Integer.parseInt(args[1]);
@@ -304,7 +392,6 @@ public class DBLPMetaPath_APAPA_APVPA {
 		APAPA_file_name = args[3];
 		labels_file_name = args[4];
 		*/
-
 		
 		long startTime = System.currentTimeMillis();
 
@@ -467,20 +554,33 @@ public class DBLPMetaPath_APAPA_APVPA {
 					from = to+1;
 					to = currentLineString.indexOf(":", from);
 					destNode = Integer.parseInt(currentLineString.substring(from,to));
-					bw.write(pathSim(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
-					//if (counter%100000==0)
-					//	System.out.println(counter);
+					
+					//System.out.println(sourceNode + " : " + pathFind(Integer.toString(sourceNode)));
+					System.out.println(sourceNode + ", " +destNode+ " : " + countPath(Integer.toString(sourceNode), Integer.toString(destNode)));
+					System.out.println(sourceNode + ", " +destNode+ " : " + pathCount(Integer.toString(sourceNode), Integer.toString(destNode)));
+					System.out.println(sourceNode + ", " +destNode+ " : " + pathSim(Integer.toString(sourceNode), Integer.toString(destNode)));
 
-					float pc1 = pathSim(Integer.toString(sourceNode), Integer.toString(destNode));
+					if (counter%10==0){
+						long endTime = System.currentTimeMillis();
+						long duration = (endTime - startTime);
+						System.out.println(counter + " - total time : " + duration/1000 + " seconds!");
+					}
+
+					
+					/*float pc1 = pathSim(Integer.toString(sourceNode), Integer.toString(destNode));
 					float pc2 = pathSim2(Integer.toString(sourceNode), Integer.toString(destNode));
-					//bw.write(pc1 +"\n");
-					//bw2.write(pc2 +"\n");
-					if (counter%10==0)
-						System.out.println(counter);
+					bw.write(pc1 +"\n");
+					bw2.write(pc2 +"\n");
+					if (counter%100000==0){
+						long endTime = System.currentTimeMillis();
+						long duration = (endTime - startTime);
+						System.out.println(counter + " - total time : " + duration/1000 + " seconds!");
+					}
+					*/
 					
-					System.out.println("-pathSim(" + sourceNode + "," + destNode+ ") = " + pc1 );
-					System.out.println("-pathSim2(" + sourceNode + "," + destNode+ ") = " + pc2 );
-					
+					//System.out.println("-pathSim(" + sourceNode + "," + destNode+ ") = " + pc1 );
+					//System.out.println("-pathSim2(" + sourceNode + "," + destNode+ ") = " + pc2 );
+
 				}
 
 				bw.close();
@@ -493,41 +593,6 @@ public class DBLPMetaPath_APAPA_APVPA {
 			} 
 			
 			
-			//for (int i=0; i<3177887;i++){
-			for (int i=0; i<0;i++){
-				authorIndex = Integer.toString(i);
-				TreeSet<Integer> n = getNeighbors(authorIndex);
-				System.out.println("Author " + authorIndex + " has " + n.size() + " neighbors");
-				//System.out.println(n.size() + " neighbors of " + authorIndex + " are " + n);
-				int c = 0;
-				for (int neighborIndex: n){
-					System.out.println(++c + "-pathSim(" + authorIndex + "," + neighborIndex+ ") = " + pathSim(authorIndex, Integer.toString(neighborIndex)) );
-				}
-				/*
-				for (int neighborIndex: n){
-					// check if they are actually co-authors
-					//System.out.println("neighborIndex: " + neighborIndex);
-				
-					List<PaperVenue> papervenuelist = author_papervenuelist_map.get(authorIndex);
-					for (PaperVenue pv : papervenuelist){
-						List<PaperAuthors> paperauthorslist = venue_paperauthorslist_map.get(pv.getVenue());
-						for (PaperAuthors pa: paperauthorslist){
-							if (pv.getPaper().equals(pa.getPaper())){ // find the same paper
-								for (String author: pa.getAuthors())
-									if (Integer.parseInt(author) == neighborIndex){
-										System.out.println("authorIndex: " + authorIndex +" - neighborIndex: " + neighborIndex + " are co-authors");
-									}
-							}
-						}
-					}
-
-					//pathSim(authorIndex, neighborIndex);
-				}*/
-								
-			}
-
-			//pathCount("41527","29176");
-
 			brPaperAuthor.close();
 			brPaperVenue.close();
 			labels.close();

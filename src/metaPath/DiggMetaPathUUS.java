@@ -71,7 +71,7 @@ public class DiggMetaPathUUS {
 		String currentInterval = "6"; //args[0]; // e.g. is interval=2
 		String intervals = "7"; //args[1]; // e.g. is intervals=7
 		String usre_story_file_name = "Digg/" + intervals + "intervals_votes/digg_votes_" + currentInterval + "of" + intervals + ".txt"; // user-story and story-user infor for current time
-		String labels_file_name = "Digg/" + intervals + "intervals_friends/labels_for_" + currentInterval + "of" + intervals + "_newLinks_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time
+		String labels_file_name = "Digg/" + intervals + "intervals_votes/labels_for_" + currentInterval + "of" + intervals + "_newLinks_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time
 		String metaPath_file_name = "Digg/" + intervals + "intervals_votes/USU_" + currentInterval + "of" + intervals + ".txt"; // outputFile
 
 

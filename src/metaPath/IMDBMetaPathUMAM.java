@@ -31,10 +31,10 @@ import java.util.zip.GZIPOutputStream;
  */
 
 
-public class IMDBMetaPathUMDM {
+public class IMDBMetaPathUMAM {
 
 	/**
-	 * Given index of a user and a movie, calculate number of different meta-path of type U-M-D-M (user-movie-director-movie)
+	 * Given index of a user and a movie, calculate number of different meta-path of type U-M-D-M (user-movie-actor-movie)
 	 * 
 	 * @param userIndex u
 	 * @param movieIndex m
@@ -43,14 +43,14 @@ public class IMDBMetaPathUMDM {
 
 	// old version: not efficient
 	//private static int[][] user_movies = new int[2113][10109];
-	//private static int[][] movie_directors = new int[10109][4060];
-	//private static int[][] director_movies = new int[4060][10109];
+	//private static int[][] movie_actors = new int[10109][95321];
+	//private static int[][] actor_movies = new int[95321][10109];
 
 	private static Map<Integer, ArrayList<Integer>> user_movies_map = new HashMap<Integer, ArrayList<Integer>>();    
-	private static Map<Integer, ArrayList<Integer>> movie_directors_map = new HashMap<Integer, ArrayList<Integer>>();    
-	private static Map<Integer, ArrayList<Integer>> director_movies_map = new HashMap<Integer, ArrayList<Integer>>();    
+	private static Map<Integer, ArrayList<Integer>> movie_actors_map = new HashMap<Integer, ArrayList<Integer>>();    
+	private static Map<Integer, ArrayList<Integer>> actor_movies_map = new HashMap<Integer, ArrayList<Integer>>();    
 
-	private static HashMap<String, Integer> director_id_map = new HashMap<String, Integer>();    
+	private static HashMap<String, Integer> actor_id_map = new HashMap<String, Integer>();    
 
 	// UMDM = UM*MD*DM
 
@@ -59,29 +59,29 @@ public class IMDBMetaPathUMDM {
 
 		m = m-2113;  // re-indexing movieID to start from 0 
 
-		// user_movie_director_u[i] = sum user_movies[u][j]*movie_directors[j][i] for j=1..10109
-		int[] user_movie_director_u = new int[4060];
+		// user_movie_actor_u[i] = sum user_movies[u][j]*movie_actors[j][i] for j=1..10109
+		int[] user_movie_actor_u = new int[95321];
 
 		//old version : not efficient
-		//for(int i=0;i<4060; i++)
+		//for(int i=0;i<95321; i++)
 		//	for(int j=0;j<10109; j++)
-		//		user_movie_director_u[i] += user_movies[u][j] * movie_directors[j][i];
+		//		user_movie_actor_u[i] += user_movies[u][j] * movie_actors[j][i];
 
 		if (user_movies_map.containsKey(u))
 			for(int l: user_movies_map.get(u))
-				if (movie_directors_map.containsKey(l))
-					for (int k : movie_directors_map.get(l)){
-						user_movie_director_u[k]++;
+				if (movie_actors_map.containsKey(l))
+					for (int k : movie_actors_map.get(l)){
+						user_movie_actor_u[k]++;
 					}
 
 		//old version : not efficient
-		//for(int k=0;k<4060; k++)
-		//	pathCount += user_movie_director_u[k] * director_movies[k][m];
+		//for(int k=0;k<95321; k++)
+		//	pathCount += user_movie_actor_u[k] * actor_movies[k][m];
 
-		for(int k=0;k<4060; k++){
-			if (director_movies_map.containsKey(k))
-				if (director_movies_map.get(k).contains(m))
-					pathCount += user_movie_director_u[k]; // pathCount += user_movie_director_u[k] * 1
+		for(int k=0;k<95321; k++){
+			if (actor_movies_map.containsKey(k))
+				if (actor_movies_map.get(k).contains(m))
+					pathCount += user_movie_actor_u[k]; // pathCount += user_movie_actor_u[k] * 1
 		}
 
 		//System.out.println("u: " + u + ", m: " + m + " -> " + pathCount);
@@ -96,12 +96,12 @@ public class IMDBMetaPathUMDM {
 		String intervals = args[1]; // e.g. is intervals=7
 		String usre_movie_file_name = "IMDB/" + intervals + "intervals/user_movie_relation_" + currentInterval + "of" + intervals + ".txt"; // user-movie and movie-user infor for current time
 		String labels_file_name = "IMDB/" + intervals + "intervals/labels_for_" + currentInterval + "of" + intervals + "_newMovies_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time
-		String movie_directors_file_name = "MovielensIMDB/movie_director_relation.txt";	// all time movie-directors
-		String directors_file_name = "MovielensIMDB/directors.txt";				  // all directors ids
+		String movie_actors_file_name = "MovielensIMDB/movie_actor_relation.txt";	// all time movie-actors
+		String actors_file_name = "MovielensIMDB/actors.txt";				  // all actors ids
 		String metaPath_file_name = "IMDB/" + intervals + "intervals/UMDM_" + currentInterval + "of" + intervals + ".txt"; // outputFile
 
 		String currentLine, numOfConnectedNodes;
-		int from = 0, to = 0, userIndex = 0, movieIndex = 0, directorIndex = 0;
+		int from = 0, to = 0, userIndex = 0, movieIndex = 0, actorIndex = 0;
 
 		try{
 
@@ -144,42 +144,42 @@ public class IMDBMetaPathUMDM {
 			}
 
 
-			BufferedReader directorIdsFile = new BufferedReader(new FileReader(directors_file_name));
-			// moviedirectorsFile format example
-			//directorID	director
+			BufferedReader actorIdsFile = new BufferedReader(new FileReader(actors_file_name));
+			// movieactorsFile format example
+			//actorID	actor
 			//2620	majid_majidi
-			currentLine = directorIdsFile.readLine(); // ignore the first line
-			while ((currentLine = directorIdsFile.readLine()) != null){
+			currentLine = actorIdsFile.readLine(); // ignore the first line
+			while ((currentLine = actorIdsFile.readLine()) != null){
 				StringTokenizer st = new StringTokenizer(currentLine,"\t");  
-				directorIndex = Integer.parseInt(st.nextToken());
-				director_id_map.put(st.nextToken(), directorIndex);
+				actorIndex = Integer.parseInt(st.nextToken());
+				actor_id_map.put(st.nextToken(), actorIndex);
 			}
 
-			BufferedReader moviedirectorsFile = new BufferedReader(new FileReader(movie_directors_file_name));
-			// moviedirectorsFile format example
-			//newMovieID	directorID
+			BufferedReader movieactorsFile = new BufferedReader(new FileReader(movie_actors_file_name));
+			// movieactorsFile format example
+			//newMovieID	actorID
 			//4430	majid_majidi
-			currentLine = moviedirectorsFile.readLine(); // ignore the first line
-			while ((currentLine = moviedirectorsFile.readLine()) != null){
+			currentLine = movieactorsFile.readLine(); // ignore the first line
+			while ((currentLine = movieactorsFile.readLine()) != null){
 				StringTokenizer st = new StringTokenizer(currentLine,"\t");  
 				movieIndex = Integer.parseInt(st.nextToken());
-				directorIndex = director_id_map.get(st.nextToken());
+				actorIndex = actor_id_map.get(st.nextToken());
 
 				// old version : not efficient
-				//movie_directors[movieIndex-2113][directorIndex] = 1;
-				//director_movies[directorIndex][movieIndex-2113] = 1;
+				//movie_actors[movieIndex-2113][actorIndex] = 1;
+				//actor_movies[actorIndex][movieIndex-2113] = 1;
 
 				ArrayList<Integer> b = new ArrayList<Integer>();
-				if (movie_directors_map.containsKey(movieIndex-2113))
-					b = movie_directors_map.get(movieIndex-2113);
-				b.add( (directorIndex));	
-				movie_directors_map.put(movieIndex-2113, b);
+				if (movie_actors_map.containsKey(movieIndex-2113))
+					b = movie_actors_map.get(movieIndex-2113);
+				b.add( (actorIndex));	
+				movie_actors_map.put(movieIndex-2113, b);
 
 				ArrayList<Integer> c = new ArrayList<Integer>();
-				if (director_movies_map.containsKey(directorIndex))
-					c = director_movies_map.get(directorIndex);
+				if (actor_movies_map.containsKey(actorIndex))
+					c = actor_movies_map.get(actorIndex);
 				c.add( (movieIndex-2113));	
-				director_movies_map.put(directorIndex, c);
+				actor_movies_map.put(actorIndex, c);
 
 			}
 
@@ -208,7 +208,7 @@ public class IMDBMetaPathUMDM {
 				//bwUserMovieLabel.write(heteSim_UMDM(sourceNode, destNode)+"\n");
 				bwUserMovieLabel.write(pathCount_UMDM(sourceNode, destNode)+"\n");
 
-				if (counter%100==0){
+				if (counter%10000==0){
 					System.out.println(counter);
 					endTime = System.currentTimeMillis();
 					duration = (endTime - startTime);
@@ -219,8 +219,8 @@ public class IMDBMetaPathUMDM {
 
 
 			userMovieFile.close();
-			moviedirectorsFile.close();
-			directorIdsFile.close();
+			movieactorsFile.close();
+			actorIdsFile.close();
 			bwUserMovieLabel.close();
 
 		}catch (IOException e) 

@@ -43,6 +43,8 @@ public class IMDBMetaPathUMUM {
 	private static int[][] user_movies = new int[2113][10109];
 	private static int[][] movie_users = new int[10109][2113];
 
+	
+	// UMUM = UM*MU*UM
 	public static int pathCount_UMUM(int u, int m){
 		int pathCount = 0;
 
@@ -243,7 +245,8 @@ public class IMDBMetaPathUMUM {
 				//heteSim_UMUM(sourceNode, destNode);
 
 				//System.out.println("label: " + currentLine.substring(to));
-				bwUserMovieLabel.write(heteSim_UMUM(sourceNode, destNode)+"\n");
+				//bwUserMovieLabel.write(heteSim_UMUM(sourceNode, destNode)+"\n");
+				bwUserMovieLabel.write(pathCount_UMUM(sourceNode, destNode)+"\n");
 
 				if (counter%10000==0){
 					System.out.println(counter);

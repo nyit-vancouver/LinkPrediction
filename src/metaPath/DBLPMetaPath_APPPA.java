@@ -122,13 +122,14 @@ public class DBLPMetaPath_APPPA {
 
 		fromYear = 1996;
 		toYear = 2002;
-		String APPPA_file_name = "3IntervalsPrediction/APPPA_1996_2002.txt";
-		String labels_file_name = "3IntervalsPrediction/labels_1996_2002_newLinkIn_2003_2009.txt";
+		String APPPA_file_name = "DBLP/PC_APPPA_1996_2002.txt";
+		String labels_file_name = "DBLP/labels_1996_2002_newLinkIn_2003_2009.txt";
 
 		fromYear = Integer.parseInt(args[0]);
 		toYear = Integer.parseInt(args[1]);
 		APPPA_file_name = args[2];
 		labels_file_name = args[3];
+		
 		
 
 		long startTime = System.currentTimeMillis();
@@ -219,7 +220,8 @@ public class DBLPMetaPath_APPPA {
 					from = to+1;
 					to = currentLineString.indexOf(":", from);
 					destNode = Integer.parseInt(currentLineString.substring(from,to));
-					bw.write(pathSim(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
+					bw.write(pathCount(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
+					//bw.write(pathSim(Integer.toString(sourceNode), Integer.toString(destNode))+"\n");
 					if (counter%100000==0){
 						System.out.println(counter);
 						endTime = System.currentTimeMillis();

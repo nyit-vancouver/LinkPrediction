@@ -34,16 +34,27 @@ public class DBLPDataSetGenerator {
 		String currentLineString;
 
 
-		try{
-			BufferedReader apvpa = new BufferedReader(new FileReader("7IntervalsPrediction/APVPA_1996_1998_min5paper.txt"));
-			BufferedReader apapa = new BufferedReader(new FileReader("7IntervalsPrediction/APAPA_1996_1998_min5paper.txt"));
-			BufferedReader apppa = new BufferedReader(new FileReader("7IntervalsPrediction/APPPA_1996_1998_min5paper.txt"));
-			BufferedReader predfile = new BufferedReader(new FileReader("7IntervalsPrediction/temporalPredictionFor_1999_2001_min5paper.txt"));
-			BufferedReader lfile = new BufferedReader(new FileReader("7IntervalsPrediction/labels_1996_1998_newLinkIn_1999_2001_min5paper.txt"));
-			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("7IntervalsPrediction/newtraining1_1996_1998_min5paper.txt")));
-			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("7IntervalsPrediction/newtraining2_1996_1998_min5paper.txt")));
-			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("7IntervalsPrediction/newtraining3_1996_1998_min5paper.txt")));
 
+		try{
+			BufferedReader apvpa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APVPA_1996_2002.txt"));
+			BufferedReader apapa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APAPA_1996_2002.txt"));
+			BufferedReader apppa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APPPA_1996_2002.txt"));
+			BufferedReader predfile = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/temporalPredictionFor_2003_2009.txt"));
+			BufferedReader lfile = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/labels_1996_2002_newLinkIn_2003_2009.txt"));
+			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training1_1996_2002.txt")));
+			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training2_1996_2002.txt")));
+			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training3_1996_2002.txt")));
+
+			/*BufferedReader apvpa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APVPA_1996_1998.txt"));
+			BufferedReader apapa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APAPA_1996_1998.txt"));
+			BufferedReader apppa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APPPA_1996_1998.txt"));
+			BufferedReader predfile = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/temporalPredictionFor_1999_2001.txt"));
+			BufferedReader lfile = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/labels_1996_1998_newLinkIn_1999_2001.txt"));
+			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training1_1996_1998.txt")));
+			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training2_1996_1998.txt")));
+			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training3_1996_1998.txt")));
+			*/
+			
 			
 			String f0, f1, f2, f3, label;
 
@@ -58,25 +69,11 @@ public class DBLPDataSetGenerator {
 				f1 = apvpa.readLine();
 				f2 = apapa.readLine();
 				f3 = predfile.readLine();
-
-
-				if (f0.contains("-1") || f1.contains("-1") || f2.contains("-1"))
-					continue;
-				if (f0.contains("-1"))
-					f0 = "0.0";
-				if (f1.contains("-1"))
-					f1 = "0.0";
-				if (f2.contains("-1"))
-					f2 = "0.0";
-
-
+				
 				//dataset1.write(f1 + "\t" + f2 + "\t" + f3 + "\t" + label +"\n");
 				//dataset2.write(f1 + "\t" + f2 + "\t" + label +"\n");
 				//dataset3.write(f3 + "\t" + label +"\n");
 
-
-
-				// For SVM setting
 				if (label.equals("1"))
 					label = "+1";
 				else
@@ -88,6 +85,7 @@ public class DBLPDataSetGenerator {
 				dataset2.write(label + " 1:" + f0 + " 2:" + f1 + " 3:" + f2 + "\n");
 				dataset3.write(label + " 1:" + f3 + "\n");
 
+
 			}
 
 
@@ -98,6 +96,7 @@ public class DBLPDataSetGenerator {
 			dataset1.close();
 			dataset2.close();
 			dataset3.close();
+
 
 		}catch (IOException e) 
 		{
