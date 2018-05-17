@@ -77,7 +77,7 @@ Algorithm \ref{alg1} gets as an input a dynamic heterogeneous graph $G$, number 
 
 
 
-\subsection{Meta path-based prediction}
+\subsection{Meta path-based relationship prediction}
 
 The homogenize approach, however, does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu at al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features \cite{sun2011pathsim} helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with topological meta path-based features.
 
@@ -165,6 +165,17 @@ We derive \textbf{$\hat{\theta}$} which maximizes the likelihood of all the trai
 \textbf{Training:} For each pair of nodes $(a,b)$ in $G^{P^*}_{t}$, where $b \in N(a)$ add a feature vector to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label 1 if $(a,b) \in E^{P^*}_{t}$ otherwise label 0.
 
 \textbf{Testing:} Perform logestic regression to learn the model. Apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P^*}_{t+1}$ based on the cut-off values for the output of prediction model.
+
+
+
+\amin{ISSUES TO DISCUSS}
+
+- Although gradient descent is fast, computing meta path values for all pairs is not scalable thus we restrict it to those links that make new connections in future or negative samples and use logistic regression. 
+
+- After $p$-value analysis some latent features might be correlated with MPs. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
+
+- $G_{ij} \approx  \sum_{l=1}^{m} \theta_l MP_l(i,j) + \sum_{l=1}^{k} \theta_l Z_{il}Z_{jl}$
+
 
 
 \subsection{Implementation}

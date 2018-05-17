@@ -127,7 +127,9 @@ public class IMDBTemporalPredictionFeature {
 				for (int k=0; k<numOfDimensions; k++)
 					predictionProbability += z[sourceNode][k]*z[destNode][k];
 
-				bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
+				//bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
+				bw.write( String.format("%.6f",predictionProbability) +"\n");
+
 
 			}
 

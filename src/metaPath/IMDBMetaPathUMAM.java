@@ -98,7 +98,7 @@ public class IMDBMetaPathUMAM {
 		String labels_file_name = "IMDB/" + intervals + "intervals/labels_for_" + currentInterval + "of" + intervals + "_newMovies_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time
 		String movie_actors_file_name = "MovielensIMDB/movie_actor_relation.txt";	// all time movie-actors
 		String actors_file_name = "MovielensIMDB/actors.txt";				  // all actors ids
-		String metaPath_file_name = "IMDB/" + intervals + "intervals/UMDM_" + currentInterval + "of" + intervals + ".txt"; // outputFile
+		String metaPath_file_name = "IMDB/" + intervals + "intervals/UMAM_" + currentInterval + "of" + intervals + ".txt"; // outputFile
 
 		String currentLine, numOfConnectedNodes;
 		int from = 0, to = 0, userIndex = 0, movieIndex = 0, actorIndex = 0;

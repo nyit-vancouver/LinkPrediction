@@ -43,7 +43,10 @@ public class IMDBMetaPathUMUM {
 	private static int[][] user_movies = new int[2113][10109];
 	private static int[][] movie_users = new int[10109][2113];
 
-	
+	private static Map<Integer, ArrayList<Integer>> user_movies_map = new HashMap<Integer, ArrayList<Integer>>();    
+	private static Map<Integer, ArrayList<Integer>> movie_users_map = new HashMap<Integer, ArrayList<Integer>>();    
+
+
 	// UMUM = UM*MU*UM
 	public static int pathCount_UMUM(int u, int m){
 		int pathCount = 0;
@@ -55,16 +58,28 @@ public class IMDBMetaPathUMUM {
 
 		int[] C_u = new int[2113];
 
-		for(int k=0;k<2113; k++)
+		/*for(int k=0;k<2113; k++)
 			for(int l=0;l<10109; l++)
 				C_u[k] += user_movies[u][l] * movie_users[l][k];
 
 		for(int k=0;k<2113; k++)
 			pathCount += C_u[k] * user_movies[k][m];
+		 */
+
+		if (user_movies_map.containsKey(u))
+			for(int l: user_movies_map.get(u))
+				for (int k : movie_users_map.get(l)){
+					C_u[k]++;
+				}
+
+		for(int k=0;k<2113; k++){
+			if (user_movies_map.containsKey(k))
+				if (user_movies_map.get(k).contains(m))
+					pathCount += C_u[k]; // pathCount += C_u[k] * 1
+		}
+
 
 		//System.out.println("u: " + u + ", m: " + m + " -> " + pathCount);
-		//System.out.println(a + "-" + b);
-
 		return pathCount;
 	}
 
@@ -199,7 +214,16 @@ public class IMDBMetaPathUMUM {
 					movieIndex = Integer.parseInt(currentLine.substring(from,to));
 					// ignoring weight
 					from = to+1;  to = from+1;
-					user_movies[userIndex][movieIndex-2113]=1;
+					// old version : not efficient
+					// user_movies[userIndex][movieIndex-2113]=1;
+					ArrayList<Integer> a = new ArrayList<Integer>();
+					if (user_movies_map.containsKey(userIndex))
+						a = user_movies_map.get(userIndex);
+					a.add( (movieIndex-2113));	
+					user_movies_map.put(userIndex, a);
+
+
+
 				}
 			}
 			for (int i=0; i < 10109; i++){  // considering only movies
@@ -218,7 +242,13 @@ public class IMDBMetaPathUMUM {
 					userIndex = Integer.parseInt(currentLine.substring(from,to));
 					// ignoring weight
 					from = to+1;  to = from+1;
-					movie_users[movieIndex-2113][userIndex]=1;
+					// old version : not efficient
+					// movie_users[movieIndex-2113][userIndex]=1;
+					ArrayList<Integer> a = new ArrayList<Integer>();
+					if (movie_users_map.containsKey((movieIndex-2113)))
+						a = movie_users_map.get((movieIndex-2113));
+					a.add(userIndex);	
+					movie_users_map.put( (movieIndex-2113), a);
 				}
 			}
 
