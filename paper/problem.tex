@@ -60,3 +60,17 @@ Each meta path indicates a different semantic for a path connecting two nodes, a
 %By checking the existing topological features defined in homogeneous networks, we can find that both the neighbor set-based features and path-based features can be generalized in heterogeneous information networks, by considering paths following different meta paths. For example, if we treat each type of neighbors separately and extend the immediate neighbors to n-hop neighbors (i.e., the distance between one object and its neighbors are n), the common neighbor feature between two authors is then becoming the count of paths between the two authors following different meta paths. For path-based features, such as Katz, it can be extended as a combination of paths following different meta paths. 
 
 
+\begin{table*}[h]
+\centering
+\caption{Notations and their description.}
+\label{table_notations}
+\begin{tabular}{|c|l|} \hline
+\textbf{Notation} & \textbf{Description} \\ \hline
+$\mathcal{P}$, $p$  & Meta path and path \\ \hline
+$k$ & The dimension of latent features \\ \hline
+$G_\tau$ & Graph $G$ at time $\tau$  \\ \hline
+$Z_\tau$ & low rank $k$-dimensional latent space representation matrix for $G_\tau$ \\ \hline
+
+\end{tabular}
+\end{table*}
+
