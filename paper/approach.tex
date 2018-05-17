@@ -26,7 +26,7 @@ Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the
     \end{array}
 \end{equation}
 where $\lambda$ is a regularization parameter, and  $(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)$ penalizes node $u$ for suddenly changing its latent position. %Note that when computing the quadratic loss $\left \| G^R_\tau-Z_{\tau}BZ_{\tau}^T \right \|^2_F$, we ignore all of the diagonal entries.
-$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,c)$ indicates the position of $u$ in the $c$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. Thus it needs $Z_{t+1}$ to predict the future graph $G_{t+1}$. They assume $Z_{t+1}$ can be approximated by $Z_1, ..., Z_t$. Finally they use $Z_tZ_t^T$ to predict $G_{t+1}$. \amin{However, the authors mentioned that the predicted graph at t + 1 can be formulated as Phi(f($Z_1,...Z_t$)), where Phi is the link function and f is the temporal function. Learning or selecting the best link function Phi and temporal function f is beyond the scope of this work. For example, we could apply nonparametric approaches [25] to automatically learn the link function F.}
+$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,c)$ indicates the position of $u$ in the $c$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. Thus it needs $Z_{t+1}$ to predict the future graph $G_{t+1}$. They assume $Z_{t+1}$ can be approximated by $Z_1, ..., Z_t$. Finally they use $Z_tZ_t^T$ to predict $G_{t+1}$. \amin{However, the authors mentioned that the predicted graph at t + 1 can be formulated as $\Phi(f(Z_1,...Z_t))$, where Phi is the link function and f is the temporal function. Learning or selecting the best link function Phi and temporal function f is beyond the scope of this work. For example, we could apply nonparametric approaches [25] to automatically learn the link function F.}
 
 An immediate adaptation of the above BCGD technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target relationship type with edges between them if the target relation exists in the original graph $G_i$. This changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
 
@@ -167,6 +167,7 @@ We derive \textbf{$\hat{\theta}$} which maximizes the likelihood of all the trai
 \textbf{Testing:} Perform logestic regression to learn the model. Apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P^*}_{t+1}$ based on the cut-off values for the output of prediction model.
 
 
+\subsection{Combining latent and meta path-based features}
 
 \amin{ISSUES TO DISCUSS}
 
@@ -174,8 +175,14 @@ We derive \textbf{$\hat{\theta}$} which maximizes the likelihood of all the trai
 
 - After $p$-value analysis some latent features might be correlated with MPs. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
-- $G_{ij} \approx  \sum_{l=1}^{m} \theta_l MP_l(i,j) + \sum_{l=1}^{k} \theta_l Z_{il}Z_{jl}$
+- $G_{ij} \approx  \sum_{l=1}^{m} \theta_l w_l(i,j) + \sum_{l=1}^{k} \theta_l Z_{il}Z_{jl}$
 
+$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w) \right \|^2_F $
+
+
+- Augmenting latent with explicit features helps to combine latent features with the results of any other link prediction model. Suppose scores $w_{ij}$ is the meta path feature between nodes $i$ and $j$. Then, we can treat this as being a dyadic feature $z_ij$ in the above framework, and learn latent features that fit the residual of these scores. In general then, the latent feature approach has a natural mechanism by which any predictive signal can be incorporated, whether it is an explicit feature vector or model predictions. However, a caveat is in order: it is not necessary that combining latent features with another model will improve performance on test data. If the latent features learn similar structure to the other model, then combining the two cannot be expected to yield better results.
+
+As a final remark, we note that the linear combination of latent and explicit features is not the only way to incorporate side information. This issue has beenstudied in the context of the cold-start problem [29] in collaborative filtering. Recent advances in this literature are based on inferring reasonable values oflatent features by falling back to the side information as a prior [2,12]. However, unlike most collaborative filtering applications, in link prediction we are mostlyinterested in using side information to improve predictions, rather than dealing with cold-start nodes. Therefore, we expect it to be most useful to directlyaugment the latent feature prediction with one based on side information.
 
 
 \subsection{Implementation}
