@@ -1,5 +1,12 @@
 \begin{thebibliography}{10}
 
+\bibitem{Cantador:RecSys2011}
+I.~Cantador, P.~Brusilovsky, and T.~Kuflik.
+\newblock 2nd workshop on information heterogeneity and fusion in recommender
+  systems (hetrec 2011).
+\newblock In {\em Proceedings of the 5th ACM conference on Recommender
+  systems}, RecSys 2011, New York, NY, USA, 2011. ACM.
+
 \bibitem{huang2016meta}
 Z.~Huang, Y.~Zheng, R.~Cheng, Y.~Sun, N.~Mamoulis, and X.~Li.
 \newblock Meta structure: Computing relevance in large heterogeneous
@@ -11,6 +18,12 @@ D.~Liben-Nowell and J.~Kleinberg.
 \newblock The link-prediction problem for social networks.
 \newblock {\em journal of the Association for Information Science and
   Technology}, 58(7):1019--1031, 2007.
+
+\bibitem{ou2016asymmetric}
+M.~Ou, P.~Cui, J.~Pei, Z.~Zhang, and W.~Zhu.
+\newblock Asymmetric transitivity preserving graph embedding.
+\newblock In {\em Proceedings of the 22nd ACM SIGKDD international conference
+  on Knowledge discovery and data mining}, pages 1105--1114. ACM, 2016.
 
 \bibitem{sarkar2005dynamic}
 P.~Sarkar and A.~W. Moore.
