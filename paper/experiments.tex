@@ -1,7 +1,7 @@
 \section{Experiments}
 
 
-We conduct experiments on a synthetic data and three real-world datasets. We will first introduce the experiment setting, then show the results and analysis on the two typesof datasets respectively.
+We conduct experiments on a synthetic data and three real-world datasets. We will first introduce the experiment setting, then show the results and analysis on the two types of datasets respectively.
 
 
 \subsection{Experiment Setting}
@@ -22,7 +22,79 @@ We conduct experiments on a synthetic data and three real-world datasets. We wil
 
 %\textbf{Movies dataset:} The RecSys HetRec 2011 movie data set \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by GroupLeans research group \footnote{\url{http://www.grouplens.org}} that links the movies of MovieLens dataset with their corresponding web pages at Internet Movie Database (IMDb\footnote{\url{http://www.imdb.com}}) and Rotten Tomatoes\footnote{\url{http://www.rottentomatoes.com}} movie review systems. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie), and 13,222 tags (avg. 22.69 tas per user, avg. 8.12 tas per movie).
 
+These databases have different characteristics and evolution behaviour. We also consider different type of target relationship as discussed in subsection \ref{targetRelashipSection}.
 
+Movies once release, users can rate them but a paper is published once and new co-authorship is made only at that time.
+
+In co-authorship all connections are new in MovieDB new connections to an existing movie. This is a common problem with all rating datasets.
+
+
+
+Datasets of different sizes.
+We also conduct our experiments on two variations of the DBLP, one with min 5paper as in ... and one with all.
+
+
+\subsubsection{Taget relationships}\label{targetRelashipSection}
+
+Network schema for the two datasets are shown in Figure X.
+
+
+\begin{figure}[t]
+\centering
+\subfigure[DBLP]{
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.47\hsize]{figs/publicationsSchema.pdf}
+ \label{Fig:DBLP}
+}
+\subfigure[IMDB]{
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.47\hsize]{figs/moviesSchema.pdf}
+ \label{Fig:IMDB}
+}
+\caption{The simplified network schema used for our experiments.} \label{Fig:expSchema}
+\end{figure}
+
+
+We consider .... based on the work in ... we con
+
+Authors in \cite{sun2011ASONAM} conducted Wald test in a case study and found that found that the p-value for the feature associated with each meta path and their significance level. From the results, we can see that the shared co-authors, shared venues, shared topics and co-cited papers for two authors all play very significant roles in determining their future collaboration(s). For...
+
+Similarly we only calculated the PC for these meta paths. Note that the goal of our paper is not to select the best features but to show the strength of using...
+
+Table \ref{table_publications} shows meta paths between authors under length 4 for the publications dataset.
+
+
+\begin{table}[h]
+\centering
+\caption{Publications Dataset Meta Paths (\textit{A} = author, \textit{P} = paper, \textit{A} = venue).}
+\label{table_publications}
+\begin{tabular}{|c|l|} \hline
+\textbf{Meta path} & \textbf{Meaning} \\ \hline
+
+\textit{A--P--A} & [\textit{The target relation}] Authors are coauthors \\ \hline
+\textit{A--P--V--P--A} & Authors publish in the same venue \\ \hline
+\textit{A--P--A--P--A} & Authors have the same co-author \\ \hline
+\textit{A--P--P--P--A} & Authors cite the same papers \\ \hline
+
+\end{tabular}
+\end{table}
+
+Unlike the \textit{A--P--A} target relation for the publication dataset for which both ends of the relation is of the same kind, we consider \textit{U--M} as the target meta path for the movie dataset to show the effectiveness of our proposed methods in predicting such relashipships.
+\amin{The issue with matrix factorization is that originally $G_{n*n}$ is for homogenous network with the same type of nodes. In our case $ZZ^T$ vs. $VU^T$ }
+
+\begin{table}[h]
+\centering
+\caption{Movies Dataset Meta Paths (\textit{U} = user, \textit{M} = movie, \textit{A} = actor, \textit{D} = director, \textit{G} = genre).}
+\label{table_movies}
+\begin{tabular}{|c|l|} \hline
+\textbf{Meta path} & \textbf{Meaning} \\ \hline
+\textit{U--M} & [\textit{The target relation}] A user watches a movie \\ \hline
+
+\textit{U--M--A--M} & A user watches a movie with the same actor \\ \hline
+\textit{U--M--D--M} & A user watches a movie with the same director \\ \hline
+\textit{U--M--G--M} & A user watches a movie of the same genre \\ \hline
+\textit{U--M--U--M} & A user watches a movie that another user  \\ \hline
+
+\end{tabular}
+\end{table}
 
 
 \subsubsection{Baseline methods}
@@ -53,7 +125,13 @@ Recall (PR) curves), termed as AUCROC and AUCPR.
 \end{itemize}
 
 
+\subsection{Results and Findings}
+
+\amin{One reason that \textit{A--P--V--P--A} is better with intervals is that one may publish in KDD but there are so many publishing there....}
+
 \subsection{Discussion}
+
+
 
 Our proposed technique can also be used in other applications. For example link recommendation 
 
