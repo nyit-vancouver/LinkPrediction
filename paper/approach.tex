@@ -189,6 +189,21 @@ As a final remark, we note that the linear combination of latent and explicit fe
 
 We use the implementation\footnote{\url{https://github.com/linhongseba/Temporal-Network-Embedding}} of temporal latent space inference for a sequence of dynamic graph snapshots \cite{Zhu2016}.
 
+For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package\footnote{\url{https://github.com/cjlin1/liblinear}} and set the type of solver to L2-regularized logistic regression (primal) that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
+
+
+
+
+and performed 5-fold cross validation.
+
+
+
+% https://arxiv.org/pdf/1803.00744.pdf
+
+%We perform leave-one-patient-out testing, where all data belonging to a single patient are left out in a particular test fold. All hyper-parameters were chosen through a nested cross-validation performed on the training data alone. We used the area under the ROC curve (AUROC) metric to evaluate our classifiers. We use the method presented by DeLong et al. [27] to compute 95\% confidence intervals and to perform statistical significance tests to compare competing prediction methods (significance level was set at 5\%). All reported p values are based on a two-sided z-test.
+
+%[27] DeLong, E.R., DeLong, D.M., Clarke-Pearson, D.L.: Comparing the areas under two or more correlated receiver operating characteristic curves: a nonparametric approach. Biometrics (1988) 837?845
+
 
 
 

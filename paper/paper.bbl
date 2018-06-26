@@ -7,6 +7,11 @@ I.~Cantador, P.~Brusilovsky, and T.~Kuflik.
 \newblock In {\em Proceedings of the 5th ACM conference on Recommender
   systems}, RecSys 2011, New York, NY, USA, 2011. ACM.
 
+\bibitem{fan2008liblinear}
+R.-E. Fan, K.-W. Chang, C.-J. Hsieh, X.-R. Wang, and C.-J. Lin.
+\newblock Liblinear: A library for large linear classification.
+\newblock {\em Journal of machine learning research}, 9(Aug):1871--1874, 2008.
+
 \bibitem{huang2016meta}
 Z.~Huang, Y.~Zheng, R.~Cheng, Y.~Sun, N.~Mamoulis, and X.~Li.
 \newblock Meta structure: Computing relevance in large heterogeneous
