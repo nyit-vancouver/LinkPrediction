@@ -189,12 +189,10 @@ As a final remark, we note that the linear combination of latent and explicit fe
 
 We use the implementation\footnote{\url{https://github.com/linhongseba/Temporal-Network-Embedding}} of temporal latent space inference for a sequence of dynamic graph snapshots \cite{Zhu2016}.
 
-For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package\footnote{\url{https://github.com/cjlin1/liblinear}} and set the type of solver to L2-regularized logistic regression (primal) that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
 
+% Self note: The hetrec-2011 dataset (MovieLense-IMDB) have missing user and movie ids as they only consider users with both rating and tags, thus we assign new ids to be able to use the TKDE code.
 
-
-
-and performed 5-fold cross validation.
+For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package\footnote{\url{https://github.com/cjlin1/liblinear}} and set the type of solver to L2-regularized logistic regression (primal) that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $wT w/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise. We performed 5-fold cross validation for the training phase.
 
 
 

@@ -9,6 +9,13 @@ PathSelClus [22] utilizes limited guidance from users in the form of seeds in so
 Heterogeneous Information Networks. In KDD, 2012.
 
 
+Some earlier works have used temporal smoothness for evolutionary clustering [36] and link prediction in a dynamic network \cite{Zhu2016}.
+
+There exist many embedding methods for static networks, however very few considered dynamic networks. Zhu et al. \cite{Zhu2016} attempt dynamic link prediction by adding a temporal-smoothing regularization term to a non-negative matrix factorization objective. Their goal is to reconstruct the adjacency matrix of different time-stamps of a graph. They use a Block-Coordinate Gradient Descent (BCGD) algorithm to perform non-negative factorization. Their formulation is almost identical to the algorithm of Chi et al. [36], who perform evolutionary spectral clustering that captures temporal smoothness. Because matrix factorization provides embedding vectors of the nodes for each time-stamp, the factorization by-product from this work can be considered as dynamic network embeddings.
+
+[36] Y. Chi, X. Song, D. Zhou, K. Hino, and B. L. Tseng, ?Evolutionary spectral clustering by incorporating temporal smoothness,? in Proceedings of the International Conference on Knowledge Discovery and Data Mining (KDD), 2007, pp. 153?162.
+
+
 
 
 % Link prediction is pervasive in biological network analysis, where verifying the existence of links between nodes requires costly experimental tests. Limiting the experiments to links ordered by presence likelihood has been shown to be very cost effective. In social networks, link prediction is used to predict probable friendships, which can be used for recommendation and lead to a more satisfactory user experience. Liben-Nowell et al. \cite{liben2007link}, Lu et al. [52] and Hasan et al. [53] survey the recent progress in this field and categorize the algorithms into (a) similarity based (local and global) [13], [14], [54], (b) maximum likelihood based [15], [16] and (c) probabilistic methods [17], [18], [55]. 

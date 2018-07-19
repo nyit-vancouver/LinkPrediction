@@ -36,7 +36,7 @@ We also conduct our experiments on two variations of the DBLP, one with min 5pap
 
 \subsubsection{Taget relationships}\label{targetRelashipSection}
 
-Network schema for the two datasets are shown in Figure X.
+Network schema for the two datasets are shown in Figure X. Note that we consider a simplified version and ignore nodes such as topic fro papers or tag for movies.
 
 
 \begin{figure}[t]
@@ -77,7 +77,7 @@ Table \ref{table_publications} shows meta paths between authors under length 4 f
 \end{tabular}
 \end{table}
 
-Unlike the \textit{A--P--A} target relation for the publication dataset for which both ends of the relation is of the same kind, we consider \textit{U--M} as the target meta path for the movie dataset to show the effectiveness of our proposed methods in predicting such relashipships.
+Unlike the \textit{A--P--A} target relation for the publication dataset for which both ends of the relation is of the same kind, we consider \textit{U--M} as the target meta path for the movie dataset to show the effectiveness of our proposed methods in predicting such relationships.
 \amin{The issue with matrix factorization is that originally $G_{n*n}$ is for homogenous network with the same type of nodes. In our case $ZZ^T$ vs. $VU^T$ }
 
 \begin{table}[h]
@@ -139,6 +139,15 @@ Our proposed technique can also be used in other applications. For example link 
 predicting missing edges in graphs.
 
 Vertex Recommendation similar to \cite{ou2016asymmetric} 
+
+
+In this work we modelled the predicted graph $ \hat{G}_\tau(i,j)$ as a combination of meta path features and latent features $\Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w))$. As explained in \cite{*}, one may also augment the model by incorporating some information regarding node affinities using implicit/explicit attributes and define node features $x_i$, which makes the model $\hat{G}_\tau(i,j) = \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w)$
+
+As shown in \cite{*} and \cite{Zhu2016}, latent features are more predictive of linking behaviour compared to unsupervised scoring techniques such as Katz, PrefferentailAttachemnet, and Adamic.
+
+Experiments in \cite{*} shows that although we cannot certainly infer that latent structure are more predictive than side-information, combining the two increases the prediction accuracy.
+
+* Link prediction via matrix factorization
 
 % visualize the network embeddings and features with t-SNE and use KL divergence to measure the performance
 
