@@ -1,0 +1,87 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{Cantador:RecSys2011}
+Cantador, I., Brusilovsky, P., Kuflik, T.: 2nd workshop on information
+  heterogeneity and fusion in recommender systems (hetrec 2011). In:
+  Proceedings of the 5th ACM conference on Recommender systems. RecSys 2011,
+  ACM, New York, NY, USA (2011)
+
+\bibitem{fan2008liblinear}
+Fan, R.E., Chang, K.W., Hsieh, C.J., Wang, X.R., Lin, C.J.: Liblinear: A
+  library for large linear classification. Journal of machine learning research
+   \textbf{9}(Aug),  1871--1874 (2008)
+
+\bibitem{huang2016meta}
+Huang, Z., Zheng, Y., Cheng, R., Sun, Y., Mamoulis, N., Li, X.: Meta structure:
+  Computing relevance in large heterogeneous information networks. In: KDD'16
+  (2016)
+
+\bibitem{liben2007link}
+Liben-Nowell, D., Kleinberg, J.: The link-prediction problem for social
+  networks. journal of the Association for Information Science and Technology
+  \textbf{58}(7),  1019--1031 (2007)
+
+\bibitem{amin:wwwj}
+Milani~Fard, A., Wang, K.: Neighborhood randomization for link privacy in
+  social network analysis. World Wide Web  \textbf{18}(1),  9--32 (2015)
+
+\bibitem{ou2016asymmetric}
+Ou, M., Cui, P., Pei, J., Zhang, Z., Zhu, W.: Asymmetric transitivity
+  preserving graph embedding. In: Proceedings of the 22nd ACM SIGKDD
+  international conference on Knowledge discovery and data mining. pp.
+  1105--1114. ACM (2016)
+
+\bibitem{sarkar2005dynamic}
+Sarkar, P., Moore, A.W.: Dynamic social network analysis using latent space
+  models. ACM SIGKDD Explorations Newsletter  \textbf{7}(2),  31--40 (2005)
+
+\bibitem{sun2011ASONAM}
+Sun, Y., Barber, R., Gupta, M., Aggarwal, C.C., Han, J.: Co-author relationship
+  prediction in heterogeneous bibliographic networks. In: 2011 International
+  Conference on Advances in Social Networks Analysis and Mining. pp. 121--128
+  (July 2011). \doi{10.1109/ASONAM.2011.112}
+
+\bibitem{Sun:2012:HRP:2124295.2124373}
+Sun, Y., Han, J., Aggarwal, C.C., Chawla, N.V.: When will it happen?:
+  Relationship prediction in heterogeneous information networks. In:
+  Proceedings of the Fifth ACM International Conference on Web Search and Data
+  Mining. pp. 663--672. WSDM '12, ACM, New York, NY, USA (2012).
+  \doi{10.1145/2124295.2124373},
+  \url{http://doi.acm.org/10.1145/2124295.2124373}
+
+\bibitem{sun2011pathsim}
+Sun, Y., Han, J., Yan, X., Yu, P.S., Wu, T.: Pathsim: Meta path-based top-k
+  similarity search in heterogeneous information networks. In: Proceedings of
+  the VLDB Endowment 4 (11). pp. 992--1003. VLDB Endowment (2011)
+
+\bibitem{sun2013pathselclus}
+Sun, Y., Norick, B., Han, J., Yan, X., Yu, P.S., Yu, X.: Pathselclus:
+  Integrating meta-path selection with user-guided object clustering in
+  heterogeneous information networks. ACM Transactions on Knowledge Discovery
+  from Data (TKDD)  \textbf{7}(3), ~11 (2013)
+
+\bibitem{wang2016relsim}
+Wang, C., Sun, Y., Song, Y., Han, J., Song, Y., Wang, L., Zhang, M.: Relsim:
+  Relation similarity search in schema-rich heterogeneous information networks
+  (2016)
+
+\bibitem{Yang2012}
+Yang, Y., Chawla, N., Sun, Y., Hani, J.: Predicting links in multi-relational
+  and heterogeneous networks. In: 2012 IEEE 12th International Conference on
+  Data Mining. pp. 755--764 (Dec 2012). \doi{10.1109/ICDM.2012.144}
+
+\bibitem{zhang2014inferring}
+Zhang, J., Wang, C., Wang, J., Yu, J.X.: Inferring continuous dynamic social
+  influence and personal preference for temporal behavior prediction.
+  Proceedings of the VLDB Endowment  \textbf{8}(3),  269--280 (2014)
+
+\bibitem{Zhu2016}
+Zhu, L., Guo, D., Yin, J., Steeg, G.V., Galstyan, A.: Scalable temporal latent
+  space inference for link prediction in dynamic social networks. IEEE
+  Transactions on Knowledge and Data Engineering (TKDE)  \textbf{28}(10),
+  2765--2777 (Oct 2016). \doi{10.1109/TKDE.2016.2591009}
+
+\end{thebibliography}
