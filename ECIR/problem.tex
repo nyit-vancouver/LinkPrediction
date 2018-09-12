@@ -1,17 +1,17 @@
 \section{Problem Statement}
 
 \begin{definition}[Dynamic heterogeneous information network]
-A dynamic heterogeneous information network is defined as a directed graph $G$ = ($V$, $E$), where $V$ and $E$ are set of nodes and edges of different types, and edges have timestamps. $\Box$ \amin{double check with HIN defiition}
+A dynamic heterogeneous information network (DHIN) is defined as a directed graph $G$ = ($V$, $E$), where $V$ and $E$ are set of nodes and edges of different types, and edges have timestamps. $\Box$ \amin{double check with HIN defiition}
 \end{definition}
 
-\begin{example}
-The DBLP bibliographic network\footnote{\url{http://dblp.uni-trier.de/db/}} is a dynamic heterogeneous information network, containing different types of nodes such as papers, authors, topics, and publication venues, with publication links associated with date. Twitter social network is another example with nodes of types posted tweets, users, topics, and hashtags and time window associated with these tweets. $\Box$
-\end{example}
+%\begin{example}
+The DBLP bibliographic network\footnote{\url{http://dblp.uni-trier.de/db/}} is an example of a DHIN, containing different types of nodes such as papers, authors, topics, and publication venues, with publication links associated with date. Another example is the Twitter social network with nodes of types posted tweets, users, topics, and hashtags and time window associated with these tweets. %$\Box$
+%\end{example}
 
 In the context of a heterogenous network, a \textit{relation} can be in the form of a \textit{direct link} or an \textit{indirect link}, where an indirect link is a sequence of direct links in the network. Thus, two nodes might not be directly connected, however they might be connected considering the semantic of a sequence of links of different types. In this work, we use the terms \textit{relationship prediction} and \textit{link prediction} interchangeably referring to predicting whether two nodes will be connected in future via a sequence of relations in the graph. Note that the length of a sequence can be greater than or equal to one. For instance in a bibliographic network a direct link exist between an author and a paper he wrote, and an indirect link exist between him and his co-authors through the paper, which they wrote together.
 
 \begin{definition}[\textbf{Relationship prediction problem}]\label{problemdef}
-Given a dynamic heterogeneous information network $G$ at time $t$, and a target relation type $R$, we aim to predict the existence of a relation of type $R$ between two given nodes at time $t+1$. $\Box$
+Given a DHIN graph $G$ at time $t$, and a target relation type $R$, we aim to predict the existence of a relation of type $R$ between two given nodes at time $t+1$. $\Box$
  \end{definition}
 
 In order to better understand different types of nodes and their relation in a network, the concept of \textit{network schema} \cite{sun2011pathsim} is used. The network schema is a meta structure graph that summarizes a heterogeneous information network and is formally defined as bellow.
@@ -20,15 +20,14 @@ In order to better understand different types of nodes and their relation in a n
 For a heterogeneous network $G=(V,E)$, the network schema $S_G=\mathcal{(A,R)}$ is a directed meta graph where $\mathcal{A}$ is the set of node types in $V$ and $\mathcal{R}$ is the set of relation types in $E$.  $\Box$
 \end{definition}
 
-\begin{example}
-Figure \ref{schema} shows the network schema for the DBLP bibliographic network with $\mathcal{A}$=\{\textit{Author}, \textit{Paper}, \textit{Venue}, \textit{Topic}\}. $\Box$
-\end{example}
-
+%\begin{example}
+Figure \ref{schema} shows the network schema for the DBLP bibliographic network with $\mathcal{A}$=\{\textit{Author}, \textit{Paper}, \textit{Venue}, \textit{Topic}\}. %$\Box$
+%\end{example}
 In this paper, we refer to different types of nodes in the DBLP bibliographic network with abbreviations $P$ for paper, $A$ for author, $T$ for topic, and $V$ for venue. 
 
 \begin{figure}[t]
   \centering
-      \includegraphics[width=0.4\textwidth]{figs/schema.pdf}
+      \includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.42\textwidth]{figs/schema.pdf}
   \caption{Network schema for DBLP network.}\label{schema}
 \end{figure}
 
@@ -42,12 +41,10 @@ A meta path $\mathcal{P}$ is a path in the network schema graph $S_G = (\mathcal
 
 
 
-\begin{example}
-In the DBLP network, the co-author relationphip can be described with the meta path $A\xrightarrow{write}P\xrightarrow{write^{-1}}A$ or in short form \textit{A--P--A}. Paths in thick solid lines in Figure \ref{sampleNetwork} correspond to \textit{A--P--V--P--A} meta paths between \textit{Max} and \textit{Ada}, indicating they published in the same venue, such as \textit{Max--P1--KDD--P3--Ada}. $\Box$
-
-\end{example}
-
-Each meta path indicates a different semantic for a path connecting two nodes, and defines a unique topology representing a special relation. For instance the relationship between two authors are different when they are co-authors (\textit{A--P--A}) versus one citing another's paper (\textit{A--P--P--A}).
+%\begin{example}
+In the DBLP network, the co-author relationphip can be described with the meta path $A\xrightarrow{write}P\xrightarrow{write^{-1}}A$ or in short form \textit{A--P--A}. Paths in thick solid lines in Figure \ref{sampleNetwork} correspond to \textit{A--P--V--P--A} meta paths between \textit{Max} and \textit{Ada}, indicating they published in the same venue, such as \textit{Max--P1--KDD--P3--Ada}. %$\Box$
+%\end{example}
+Each meta path indicates a different semantic for a path connecting two nodes, and defines a unique topology representing a special relation. For instance the relationship between two authors are different in meaning when they are co-authors (\textit{A--P--A}) versus one citing another's paper (\textit{A--P--P--A}).
 
 \begin{figure}[t]
   \centering
@@ -62,7 +59,8 @@ Each meta path indicates a different semantic for a path connecting two nodes, a
 
 \begin{table*}[h]
 \centering
-\caption{Notations and their description.\amin{Needs to be updated according to the latest version.}\amin{This table will be later removed to to page space limit.}}
+\caption{Notations and their description.\amin{update w.r.t the latest version.}\amin{This table will be later removed to to page space limit.}}
+\scriptsize
 \label{table_notations}
 \begin{tabular}{|c|l|} \hline
 \textbf{Notation} & \textbf{Description} \\ \hline

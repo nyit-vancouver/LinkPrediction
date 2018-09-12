@@ -39,11 +39,11 @@ Network schema for the two datasets are shown in Figure X. Note that we consider
 \begin{figure}[t]
 \centering
 \subfigure[DBLP]{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.47\hsize]{figs/publicationsSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.45\hsize]{figs/publicationsSchema.pdf}
  \label{Fig:DBLP}
 }
 \subfigure[IMDB]{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.47\hsize]{figs/moviesSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.45\hsize]{figs/moviesSchema.pdf}
  \label{Fig:IMDB}
 }
 \caption{The simplified network schema used for our experiments.} \label{Fig:expSchema}
@@ -62,6 +62,7 @@ Table \ref{table_publications} shows meta paths between authors under length 4 f
 \begin{table}[h]
 \centering
 \caption{Publications Dataset Meta Paths (\textit{A} = author, \textit{P} = paper, \textit{A} = venue).}
+\scriptsize
 \label{table_publications}
 \begin{tabular}{|c|l|} \hline
 \textbf{Meta path} & \textbf{Meaning} \\ \hline
@@ -80,6 +81,7 @@ Unlike the \textit{A--P--A} target relation for the publication dataset for whic
 \begin{table}[h]
 \centering
 \caption{Movies Dataset Meta Paths (\textit{U} = user, \textit{M} = movie, \textit{A} = actor, \textit{D} = director, \textit{G} = genre).}
+\scriptsize
 \label{table_movies}
 \begin{tabular}{|c|l|} \hline
 \textbf{Meta path} & \textbf{Meaning} \\ \hline
