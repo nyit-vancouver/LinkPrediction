@@ -130,7 +130,7 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 \end{algorithm}
 
 
- Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight between 0 and 1, based on a similarity measure. For example path count, PathSim \cite{sun2011pathsim}, or random walk are measures for the relation of two nodes given link type and meta path, such as co-authorship.
+ Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight between 0 and 1, based on a similarity measure. For example PathCount\cite{sun2011pathsim}, PathSim \cite{sun2011pathsim}, or random walk are measures for the relation of two nodes given link type and meta path, such as co-authorship.
 \amin{Note that values of $G^P_i$ depends on meta-path $P$}. Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization with the BCGD technique \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$.
 
 % \begin{equation}\label{latentEqu}

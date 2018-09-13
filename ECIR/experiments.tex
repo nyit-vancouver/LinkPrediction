@@ -31,7 +31,7 @@ In co-authorship all connections are new in MovieDB new connections to an existi
 We also conduct our experiments on two variations of the DBLP, one with min 5paper as in ... and one with all.
 
 
-\subsubsection{Taget relationships.} We consider different type of target relationship.
+\subsubsection{Meta paths and taget relationships.} We consider different type of target relationship.
 
 Network schema for the two datasets are shown in Figure X. Note that we consider a simplified version and ignore nodes such as topic fro papers or tag for movies.
 
@@ -96,30 +96,15 @@ Unlike the \textit{A--P--A} target relation for the publication dataset for whic
 \end{table}
 
 
-\subsubsection{Baseline methods}
-
-Considering the effect of time-wise data decomposition. What if we shorten timespans of each $G_t$? The extreme is having only one graph or having it for each year. Can we find a trade-off?
+\subsubsection{Baseline methods.} Considering the effect of time-wise data decomposition. What if we shorten timespans of each $G_t$? The extreme is having only one graph or having it for each year. Can we find a trade-off?
 
 \begin{itemize}
-    \item  Heterogeneous non-temporal - Collection of PathSim (PathCount, NormalPCount, RandomWalk, Symmetric random walk)
+    \item  Heterogeneous non-temporal (PathCount, PathSim, NormalPathCount, RandomWalk, SymmetricRandomWalk)
     \item  Homogeneous non-temporal (Katz, Jaccard)
-    \item  Homogeneous temporal (Katz, Jaccard)
+    \item  Homogeneous temporal (BCGD)
 \end{itemize}
 
-\subsubsection{Evaluation Metrics}
-
-\begin{itemize}
-    \item We use prediction error to evaluate the inference accuracy. Given the training graph G1, . . . , Gt, prediction error is defined as... Therefore, a smaller prediction error indicates better inference accuracy.
-    
-    \item For link prediction accuracy, we use Area Under Curves
-(both Receiver Operating Characteristic (ROC) and Precision-
-Recall (PR) curves), termed as AUCROC and AUCPR.
-    
-     \item \textit{Statistical Comparison.} In order to decide which classifier has a lower error rate, we perform McNemar's test, which assess the significance of the difference between two correlated proportions.
-   
- %   \item Trade-off analysis (time overhead)
-    
-\end{itemize}
+\subsubsection{Evaluation Metrics.} We use prediction error to evaluate the inference accuracy. Given the training graph G1, . . . , Gt, prediction error is defined as... Therefore, a smaller prediction error indicates better inference accuracy. For link prediction accuracy, we use Area Under Curves (both Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves), termed as AUCROC and AUCPR \cite{davis2006relationship}. Also in order to decide which classifier has a lower error rate, we perform McNemar's test that assess the significance of the difference between two correlated proportions.
 
 
 \subsection{Results and Findings}
