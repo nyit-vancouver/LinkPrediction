@@ -1,7 +1,11 @@
 \section{Problem Statement}
 
 \begin{definition}[Dynamic heterogeneous information network]
-A dynamic heterogeneous information network (DHIN) is defined as a directed graph $G$ = ($V$, $E$), where $V$ and $E$ are set of nodes and edges of different types, and edges have timestamps. $\Box$ \amin{double check with HIN defiition}
+A dynamic heterogeneous information network (DHIN) is defined as a directed graph $G$ = ($V$, $E$), where $V$ and $E$ are set of nodes and edges of different types, and edges have timestamps. $\Box$ 
+
+
+with an object type mapping function $\phi: V \rightarrow A$ and a link type mapping function $\psi: E \rightarrow R$, where each object $v \in V$ belongs to one particular object type $\phi(v) \in A$, and each link $e \in E$ belongs to a particular relation $\phi(e) \in R$
+
 \end{definition}
 
 %\begin{example}
@@ -33,9 +37,9 @@ In this paper, we refer to different types of nodes in the DBLP bibliographic ne
 
 \subsection{Meta path-based topology}
 
-Similar to the notion of network schema that provides a meta structure for the network, a \textit{meta path} \cite{sun2011pathsim} provides a meta structure for paths between different nodes in the network. 
+Similar to the notion of network schema that provides a meta structure for the network, a \textit{meta path} provides a meta structure for paths between different nodes in the network. 
 
-\begin{definition}[Meta path]
+\begin{definition}[Meta path \cite{sun2011pathsim}]
 A meta path $\mathcal{P}$ is a path in the network schema graph $S_G = (\mathcal{A,R})$, denoted in the form of $\mathcal{P} = A_1 \xrightarrow{R_1} A_2... \xrightarrow{R_n} A_{n+1}$, as a sequence of links between node types, which defines a composite relationship between a node of type $A_1$ and one of type $A_{n+1}$. $\Box$
 \end{definition}
 

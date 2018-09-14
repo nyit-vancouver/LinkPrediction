@@ -7,13 +7,10 @@ The goal of link prediction in a social network graph \cite{liben2007link} is to
 
 % challenges in heterogeneous link prediction, what is not covered? temporal and hero?
 
-Traditional link prediction techniques \cite{liben2007link}\amin{more citations} consider social networks to be homogeneous, i.e., graphs with only one type of edges and nodes. However, most real-world social networks, such as Twitter, Facebook, and DBLP, are heterogeneous, i.e., they have multiple relation and node types. For example, in a bibliographic network there are different types of nodes such as authors, papers, and venues, and different types of edges such as write, cite and publish. There are limited number of works that focused on this problem. For example, the probabilistic latent tensor factorization model... Recent works, such as \cite{sun2011pathsim}, investigated this problem. However, such techniques do not consider the dynamics of social networks and ignore sequence of network snapshots. 
-\amin{make sure about these citations}
-\cite{Zhu2016} \cite{sun2011pathsim} \cite{Sun:2012:HRP:2124295.2124373}  \cite{huang2016meta} \cite{wang2016relsim} \cite{sun2013pathselclus} \cite{sun2011ASONAM} \cite{Yang2012} \cite{liben2007link}
+Traditional link prediction techniques \cite{liben2007link}\amin{more citations} consider networks to be homogeneous, i.e., graphs with only one type of edges and nodes. However, most real-world information networks, such as Twitter, Facebook, and DBLP, are heterogeneous and have multiple relation and node types. For example, in a bibliographic network there are nodes of types authors, papers, and venues, and edges of types write, cite and publish. There are limited number of works that focused on 
+link prediction in heterogeneous information networks (HINs) such as \cite{sun2011pathsim}. However, those techniques do not consider the dynamics of social networks and ignore sequence of network snapshots. \amin{make sure about these citations} \cite{Zhu2016} \cite{sun2011pathsim} \cite{Sun:2012:HRP:2124295.2124373}  \cite{huang2016meta} \cite{wang2016relsim} \cite{sun2013pathselclus} \cite{sun2011ASONAM} \cite{Yang2012} \cite{liben2007link}
 
-
-In this work we study the problem of temporal and heterogeneous relashionship prediction that is stated as follows: \textit{Given a dynamic heterogeneous information network graph G (i.e., G has different types of nodes and links, attached with timestamps), how can we predict the future graph structure?}
-
+In this work we study the problem of predicting relationships in a dynamic heterogeneous information network (DHIN) i.e., a network with different types of nodes and links associated with timestamps, which is stated as follows: \textit{Given a DHIN graph G, how can we predict the future structure of G?}
 
 
 \subsection{Motivation}
@@ -22,6 +19,7 @@ In this work we study the problem of temporal and heterogeneous relashionship pr
 
 The link prediction problem for homogeneous networks has been studied in the past \cite{liben2007link}\amin{more citations}. However most real social networks are heterogeneous and relations between different entities have different semantic meanings. Thus techniques for homogeneous networks can not be directly applied on heterogeneous ones. A few works, such as \cite{sun2011pathsim,sun2011ASONAM}, investigated this problem, however, they do not consider the dynamics of social networks and ignore ignore sequence of network snapshots. On the other hand, it has ben shown that for homogenous network link prediction, incorporating temporal changes helps in a more accurate prediction \cite{Zhu2016}. Previous work on temporal link prediction scarcely studied heterogeneousness of social networks and to the best of our knowledge, the problem of relationship prediction for dynamic heterogeneous networks was not studied before.
 
+%Large and complex databases, such as YAGO and DBLP, can be modeled as HINs. A fundamental problem in HINs is the computation of closeness, or relevance, between two HIN objects.
 
 \subsection{Contributions}
 
