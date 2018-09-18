@@ -1,13 +1,13 @@
 \section{Relationship Prediction Approach}
 
-Given a DHIN graph $G=(V,E)$, and number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ heterogeneous graphs ${G_1, .., G_t}$ based on links with associated timestamps. We then apply our techniques to predict $G_{t+1}$. As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target relation) between two nodes in a heterogeneous network. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
+Given a DHIN graph $G=(V,E)$, and the number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ HIN graphs ${G_1, .., G_t}$ based on links with associated timestamps. We then apply our techniques to predict $G_{t+1}$. As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target meta path) between two given nodes. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
 
 \begin{definition}[Augmented reduced graph]\label{def:ARG}
-Given a heterogeneous graph $G=(V,E)$ and a target relation meta path $P(a,b)$ between nodes of type $a$ and $b$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $a$ and $b$, and edges in $E^P$ indicates relationships of type $P$ in $G$. $\Box$
+Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, and edges in $E^P$ indicates relationships of type $P$ in $G$. $\Box$
 \end{definition}
 
 %\begin{example}
-An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target relation meta path $P(Author,Author)$=\textit{A--P--V--P--A} is a graph with nodes of type \textit{Author} and edges that represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider another meta path $P(Author,Author)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship} relationship.  
+An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target meta path $P(A,A)$=\textit{A--P--V--P--A} is a graph with nodes of type \textit{Author} and edges that represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider meta path $P(A,A)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship}.  
 %$\Box$
 %\end{example}
 
@@ -17,7 +17,7 @@ An augmented reduced graph for the network in Figure \ref{sampleNetwork} and tar
 \subsection{Homogenize link prediction}
 % We refer to this approach as \texttt{HomoTemp}.
 
-Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (BCGD) technique that for each $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space representation matrix $Z_\tau$ that minimizes the quadratic loss with temporal regularization
+Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization (MF) with block-coordinate gradient descent technique that for each $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space representation matrix $Z_\tau$ that minimizes the quadratic loss with temporal regularization
 \begin{equation}\label{latentOrigEqu}
     \begin{array}{l}
 \argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
@@ -26,9 +26,9 @@ Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the
     \end{array}
 \end{equation}
 where $\lambda$ is a regularization parameter, and  $(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)$ penalizes node $u$ for suddenly changing its latent position. %Note that when computing the quadratic loss $\left \| G^R_\tau-Z_{\tau}BZ_{\tau}^T \right \|^2_F$, we ignore all of the diagonal entries.
-$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,c)$ indicates the position of $u$ in the $c$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. Thus it needs $Z_{t+1}$ to predict the future graph $G_{t+1}$. They assume $Z_{t+1}$ can be approximated by $Z_1, ..., Z_t$. Finally they use $Z_tZ_t^T$ to predict $G_{t+1}$. \amin{However, the authors mentioned that the predicted graph at t + 1 can be formulated as $\Phi(f(Z_1,...Z_t))$, where Phi is the link function and f is the temporal function. Learning or selecting the best link function Phi and temporal function f is beyond the scope of this work. For example, we could apply nonparametric approaches [25] to automatically learn the link function F.}
+$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,i)$ indicates the position of $u$ in the $i$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. The authors used $Z_tZ_t^T$ to predict $G_{t+1}$ in their work, however, they mentioned that $G_{t+1}$ can be formulated as $\Phi(f(Z_1,...Z_t))$, where $\Phi$ is the link function and $f$ is the temporal function and one may apply techniques such as nonparametric approaches \cite{Sarkar:2012} to automatically learn these functions.
 
-An immediate adaptation of the above BCGD technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target relationship type with edges between them if the target relation exists in the original graph $G_i$. This changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
+An immediate adaptation of the above MF technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target meta path with edges between them if the target meta path exists in $G_i$. This changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
 
 
 %to the following
@@ -40,10 +40,10 @@ An immediate adaptation of the above BCGD technique is to consider a sequence of
 %    \end{array}
 %\end{equation}
 
-%Their BCGD technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
+%Their MF technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
 
 
-Algorithm \ref{alg1} gets as an input a DHIN graph $G$, number of graph snapshots $t$, a target relation meta path $P(a,b)$, and latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the BCGD technique in \cite{Zhu2016} is applied (lines 9-10) to infer $k$-dimensional temporal latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
+Algorithm \ref{alg1} gets as an input a DHIN graph $G$, number of graph snapshots $t$, a target relation meta path $P(a,b)$, and latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the MF technique in \cite{Zhu2016} is applied (lines 9-10) to infer $k$-dimensional temporal latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
 \amin{How $Z_{t+1}$ depends on $Z_1, ..., Z_t$ from the algorithm? Explain assumptions in \cite{Zhu2016}.}
 
 
@@ -66,8 +66,8 @@ Algorithm \ref{alg1} gets as an input a DHIN graph $G$, number of graph snapshot
 \ENDFOR
 
 \ENDFOR
-%\STATE $G^R_{t+1} \leftarrow BCGD(G^R,k)$ \cite{Zhu2016}
-\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{BCGD}%by optimizing Eq. \ref{latentReducedEqu}
+%\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
+\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
 
 \STATE $G^P_{t+1} \leftarrow Z_tZ^T_t$ 
 
@@ -110,8 +110,8 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 
 \ENDFOR
 
-%\STATE $G^R_{t+1} \leftarrow BCGD(G^R,k)$ \cite{Zhu2016}
-\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{BCGD}%by optimizing Eq. \ref{latentReducedEqu}
+%\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
+\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
 \STATE $G^{P_j}_{t+1} \leftarrow Z_tZ^T_t$ 
 
 \ENDFOR
@@ -131,7 +131,7 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 
 
  Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight between 0 and 1, based on a similarity measure. For example PathCount\cite{sun2011pathsim}, PathSim \cite{sun2011pathsim}, or random walk are measures for the relation of two nodes given link type and meta path, such as co-authorship.
-\amin{Note that values of $G^P_i$ depends on meta-path $P$}. Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization with the BCGD technique \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$.
+\amin{Note that values of $G^P_i$ depends on meta-path $P$}. Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization with the MF technique \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$.
 
 % \begin{equation}\label{latentEqu}
 %     \begin{array}{l}
@@ -168,10 +168,10 @@ In the training phase, for each pair of nodes $(a,b)$ in $G^{P^*}_{t}$, where $b
 
 \amin{ISSUES TO DISCUSS}
 
-Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (BCGD) 
+Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (MF) 
 
 
-Although the gradient descent algorithm used in the BCGD technique to infer latent space matrices is fast, we cannot apply it to meta paths efficiently since computing meta path values for all pairs is not scalable. Thus we restrict it to those links that make new connections in future or negative samples and use logistic regression. 
+Although the gradient descent algorithm used in the MF technique to infer latent space matrices is fast, we cannot apply it to meta paths efficiently since computing meta path values for all pairs is not scalable. Thus we restrict it to those links that make new connections in future or negative samples and use logistic regression. 
 
 - After $p$-value analysis some latent features might be correlated with meta paths. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
@@ -228,7 +228,7 @@ We performed 5-fold cross validation for the training phase.
 
     
 % \ENDFOR
-% %\STATE $G^R_{t+1} \leftarrow BCGD(G^R,k)$ \cite{Zhu2016}
+% %\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
 % \STATE Infer temporal latent spaces $Z_1, .., Z_t$ by optimizing Eq. \ref{latentEqu}
 
 % \STATE $G^R_{t+1} \leftarrow Z_tZ^T_t$ 

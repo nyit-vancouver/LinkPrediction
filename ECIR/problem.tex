@@ -3,7 +3,7 @@
 The following definition is an extended version of HIN \cite{sun2011pathsim} for the dynamic network case.
 
 \begin{definition}[Dynamic heterogeneous information network]
-A dynamic heterogeneous information network (DHIN) is a directed graph $G$ = ($V$, $E$) with a node type mapping function $\phi: V \rightarrow \mathcal{A}$ and a link type mapping function $\psi: E \rightarrow \mathcal{R}$, where $V$, $E$, $\mathcal{A}$, and $\mathcal{R}$ denote sets of nodes, links, node types, and relation types. Each node $v \in V$ belongs to a node type $\phi(v) \in \mathcal{A}$, and each link $e \in E$ belongs to a relation $\psi(e) \in \mathcal{R}$, and $|\mathcal{A}| > 1$ and $|\mathcal{R}| > 1$.  Also each edge $e = (u, v, t)$ is a temporal edge from a vertex $u$ to a vertex $v$ at time $t$. 
+A dynamic heterogeneous information network (DHIN) is a directed graph $G$ = ($V$, $E$) with a node type mapping function $\phi: V \rightarrow \mathcal{A}$ and a link type mapping function $\psi: E \rightarrow \mathcal{R}$, where $V$, $E$, $\mathcal{A}$, and $\mathcal{R}$ denote sets of nodes, links, node types, and relation types. Each node $v \in V$ belongs to a node type $\phi(v) \in \mathcal{A}$, each link $e \in E$ belongs to a relation $\psi(e) \in \mathcal{R}$, and $|\mathcal{A}| > 1$ and $|\mathcal{R}| > 1$.  Also each edge $e = (u, v, t)$ is a temporal edge from a vertex $u$ to a vertex $v$ at time $t$. 
 $\Box$ 
 
 \end{definition}
@@ -39,12 +39,11 @@ Similar to the notion of network schema that provides a meta structure for the n
 A meta path $\mathcal{P}$ is a path in the network schema graph $S_G = (\mathcal{A,R})$, denoted in the form of $\mathcal{P} = A_1 \xrightarrow{R_1} A_2... \xrightarrow{R_n} A_{n+1}$, as a sequence of links between node types, which defines a composite relationship between a node of type $A_1$ and one of type $A_{n+1}$, where $A_i \subseteq \mathcal{A}$ and $R_i \subseteq \mathcal{R}$. $\Box$
 \end{definition}
 
-
-
+The length of $\mathcal{P}$ is the number of relations in $\mathcal{P}$. Note that given two node types $A_i$ and $A_j$, there may exist multiple meta paths of different lengths between them.
 %\begin{example}
-In the DBLP network, the co-author relationphip can be described with the meta path $A\xrightarrow{write}P\xrightarrow{write^{-1}}A$ or in short form \textit{A--P--A}. Paths in thick solid lines in Figure \ref{sampleNetwork} correspond to \textit{A--P--V--P--A} meta paths between \textit{Max} and \textit{Ada}, indicating they published in the same venue, such as \textit{Max--P1--KDD--P3--Ada}. %$\Box$
+The co-author relationship in DBLP can be described with the meta path $A\xrightarrow{write}P\xrightarrow{write^{-1}}A$ or in short \textit{A--P--A}. Paths in thick solid lines in Figure \ref{sampleNetwork} correspond to \textit{A--P--V--P--A} meta paths between \textit{Max} and \textit{Ada}, indicating they published in the same venue, such as \textit{Max--P1--KDD--P3--Ada}. %$\Box$
 %\end{example}
-Each meta path indicates a different semantic for a path connecting two nodes, and defines a unique topology representing a special relation. For instance the relationship between two authors are different in meaning when they are co-authors (\textit{A--P--A}) versus one citing another's paper (\textit{A--P--P--A}).
+Each meta path indicates a different semantic and defines a unique topology representing a special relation. The relationship between two authors are different in meaning when they are co-authors (\textit{A--P--A}) versus one citing another's paper (\textit{A--P--P--A}).
 
 \begin{figure}[t]
   \centering
@@ -53,32 +52,29 @@ Each meta path indicates a different semantic for a path connecting two nodes, a
 \end{figure}
 
 
-
 %By checking the existing topological features defined in homogeneous networks, we can find that both the neighbor set-based features and path-based features can be generalized in heterogeneous information networks, by considering paths following different meta paths. For example, if we treat each type of neighbors separately and extend the immediate neighbors to n-hop neighbors (i.e., the distance between one object and its neighbors are n), the common neighbor feature between two authors is then becoming the count of paths between the two authors following different meta paths. For path-based features, such as Katz, it can be extended as a combination of paths following different meta paths. 
 
 
-\begin{table*}[h]
-\centering
-\caption{Notations and their description.\amin{may remove for space limit.}}
-\scriptsize
-\label{table_notations}
-\begin{tabular}{|c|l|} \hline
-\textbf{Notation} & \textbf{Description} \\ \hline
-
-$\mathcal{A}, \mathcal{R}$  &  Types of objects and relations \\ \hline
-$\mathcal{P}$, $p$  & Meta path and path \\ \hline
-$k$ & The dimension of latent features \\ \hline
-$G_\tau$ & Graph $G$ at time $\tau$  \\ \hline
-$\hat{G}_\tau$ & Predicted graph $G$ at time $\tau$  \\ \hline
-$Z_\tau$ & low rank $k$-dimensional latent space representation matrix for $G_\tau$ \\ \hline
-
-%We will use capital variables (e.g. X) to denote matrices and lower-case variables (e.g. x) to denote vectors.We will use xi to mean the ith row of the matrix X. The Frobenius norm of the matrix X is denoted by ||X||2F = i||xi||22.
-
-\end{tabular}
-\end{table*}
+%\begin{table*}[h]
+%\centering
+%\caption{Notations and their description.\amin{may remove for space limit.}}
+%\scriptsize
+%\label{table_notations}
+%\begin{tabular}{|c|l|} \hline
+%\textbf{Notation} & \textbf{Description} \\ \hline
+%
+%$\mathcal{A}, \mathcal{R}$  &  Types of objects and relations \\ \hline
+%$\mathcal{P}$, $p$  & Meta path and path \\ \hline
+%$k$ & The dimension of latent features \\ \hline
+%$G_\tau$ & Graph $G$ at time $\tau$  \\ \hline
+%$\hat{G}_\tau$ & Predicted graph $G$ at time $\tau$  \\ \hline
+%$Z_\tau$ & low rank $k$-dimensional latent space representation matrix for $G_\tau$ \\ \hline
+%
+%\end{tabular}
+%\end{table*}
 
 
 \begin{definition}[\textbf{Relationship prediction problem}]\label{problemdef}
-Given a DHIN graph $G$ at time $t$, and a target relation type $R$, we aim to predict the existence of a relation of type $R$ between two given nodes at time $t+1$. $\Box$
+Given a DHIN graph $G$ at time $t$, and a target relation meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, we aim to predict the existence of a meta path $P$ between two given nodes of types $A_i$ and $A_j$ at time $t+1$. $\Box$
  \end{definition}
 

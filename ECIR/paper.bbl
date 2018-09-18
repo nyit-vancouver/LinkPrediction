@@ -43,6 +43,11 @@ Ou, M., Cui, P., Pei, J., Zhang, Z., Zhu, W.: Asymmetric transitivity
   international conference on Knowledge discovery and data mining. pp.
   1105--1114. ACM (2016)
 
+\bibitem{Sarkar:2012}
+Sarkar, P., Chakrabarti, D., Jordan, M.I.: Nonparametric link prediction in
+  dynamic networks. In: Proceedings of the 29th International Conference on
+  Machine Learning. pp. 1897--1904. ICML'12, Omnipress, USA (2012)
+
 \bibitem{sarkar2005dynamic}
 Sarkar, P., Moore, A.W.: Dynamic social network analysis using latent space
   models. ACM SIGKDD Explorations Newsletter  \textbf{7}(2),  31--40 (2005)
