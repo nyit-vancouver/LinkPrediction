@@ -1,10 +1,10 @@
 \section{Problem Statement}
 
+The following definition is an extended version of HIN \cite{sun2011pathsim} for the dynamic network case.
+
 \begin{definition}[Dynamic heterogeneous information network]
-A dynamic heterogeneous information network (DHIN) is defined as a directed graph $G$ = ($V$, $E$), where $V$ and $E$ are set of nodes and edges of different types, and edges have timestamps. $\Box$ 
-
-
-with an object type mapping function $\phi: V \rightarrow A$ and a link type mapping function $\psi: E \rightarrow R$, where each object $v \in V$ belongs to one particular object type $\phi(v) \in A$, and each link $e \in E$ belongs to a particular relation $\phi(e) \in R$
+A dynamic heterogeneous information network (DHIN) is a directed graph $G$ = ($V$, $E$) with a node type mapping function $\phi: V \rightarrow \mathcal{A}$ and a link type mapping function $\psi: E \rightarrow \mathcal{R}$, where $V$, $E$, $\mathcal{A}$, and $\mathcal{R}$ denote sets of nodes, links, node types, and relation types. Each node $v \in V$ belongs to a node type $\phi(v) \in \mathcal{A}$, and each link $e \in E$ belongs to a relation $\psi(e) \in \mathcal{R}$, and $|\mathcal{A}| > 1$ and $|\mathcal{R}| > 1$.  Also each edge $e = (u, v, t)$ is a temporal edge from a vertex $u$ to a vertex $v$ at time $t$. 
+$\Box$ 
 
 \end{definition}
 
@@ -12,13 +12,9 @@ with an object type mapping function $\phi: V \rightarrow A$ and a link type map
 The DBLP bibliographic network\footnote{\url{http://dblp.uni-trier.de/db/}} is an example of a DHIN, containing different types of nodes such as papers, authors, topics, and publication venues, with publication links associated with date. Another example is the Twitter social network with nodes of types posted tweets, users, topics, and hashtags and time window associated with these tweets. %$\Box$
 %\end{example}
 
-In the context of a heterogenous network, a \textit{relation} can be in the form of a \textit{direct link} or an \textit{indirect link}, where an indirect link is a sequence of direct links in the network. Thus, two nodes might not be directly connected, however they might be connected considering the semantic of a sequence of links of different types. In this work, we use the terms \textit{relationship prediction} and \textit{link prediction} interchangeably referring to predicting whether two nodes will be connected in future via a sequence of relations in the graph. Note that the length of a sequence can be greater than or equal to one. For instance in a bibliographic network a direct link exist between an author and a paper he wrote, and an indirect link exist between him and his co-authors through the paper, which they wrote together.
+In the context of a heterogenous network, a \textit{relation} can be in the form of a \textit{direct link} or an \textit{indirect link}, where an indirect link is a sequence of direct links in the network. Thus, two nodes might not be directly connected, however they might be connected considering the semantic of a sequence of links of different types. In this work, we use the terms \textit{relationship prediction} and \textit{link prediction} interchangeably referring to predicting whether two nodes will be connected in future via a \textit{sequence of relations} in the graph, where the \textit{length} of a sequence is greater than or equal to one. For instance in a bibliographic network a direct link exist between an author and a paper he wrote, and an indirect link exist between him and his co-authors through the paper, which they wrote together.
 
-\begin{definition}[\textbf{Relationship prediction problem}]\label{problemdef}
-Given a DHIN graph $G$ at time $t$, and a target relation type $R$, we aim to predict the existence of a relation of type $R$ between two given nodes at time $t+1$. $\Box$
- \end{definition}
-
-In order to better understand different types of nodes and their relation in a network, the concept of \textit{network schema} \cite{sun2011pathsim} is used. The network schema is a meta structure graph that summarizes a heterogeneous information network and is formally defined as bellow.
+In order to better understand different types of nodes and their relation in a network, the concept of \textit{network schema} \cite{sun2011pathsim} is used. A network schema is a meta structure graph that summarizes a HIN and is formally defined as bellow.
 
 \begin{definition}[Network schema]
 For a heterogeneous network $G=(V,E)$, the network schema $S_G=\mathcal{(A,R)}$ is a directed meta graph where $\mathcal{A}$ is the set of node types in $V$ and $\mathcal{R}$ is the set of relation types in $E$.  $\Box$
@@ -35,12 +31,12 @@ In this paper, we refer to different types of nodes in the DBLP bibliographic ne
   \caption{Network schema for DBLP network.}\label{schema}
 \end{figure}
 
-\subsection{Meta path-based topology}
+%\subsection{Meta path-based topology}
 
-Similar to the notion of network schema that provides a meta structure for the network, a \textit{meta path} provides a meta structure for paths between different nodes in the network. 
+Similar to the notion of network schema that provides a meta structure for the network, a \textit{meta path} \cite{sun2011pathsim} provides a meta structure for paths between different nodes in the network. 
 
-\begin{definition}[Meta path \cite{sun2011pathsim}]
-A meta path $\mathcal{P}$ is a path in the network schema graph $S_G = (\mathcal{A,R})$, denoted in the form of $\mathcal{P} = A_1 \xrightarrow{R_1} A_2... \xrightarrow{R_n} A_{n+1}$, as a sequence of links between node types, which defines a composite relationship between a node of type $A_1$ and one of type $A_{n+1}$. $\Box$
+\begin{definition}[Meta path]
+A meta path $\mathcal{P}$ is a path in the network schema graph $S_G = (\mathcal{A,R})$, denoted in the form of $\mathcal{P} = A_1 \xrightarrow{R_1} A_2... \xrightarrow{R_n} A_{n+1}$, as a sequence of links between node types, which defines a composite relationship between a node of type $A_1$ and one of type $A_{n+1}$, where $A_i \subseteq \mathcal{A}$ and $R_i \subseteq \mathcal{R}$. $\Box$
 \end{definition}
 
 
@@ -63,11 +59,13 @@ Each meta path indicates a different semantic for a path connecting two nodes, a
 
 \begin{table*}[h]
 \centering
-\caption{Notations and their description.\amin{update w.r.t the latest version.}\amin{This table will be later removed to to page space limit.}}
+\caption{Notations and their description.\amin{may remove for space limit.}}
 \scriptsize
 \label{table_notations}
 \begin{tabular}{|c|l|} \hline
 \textbf{Notation} & \textbf{Description} \\ \hline
+
+$\mathcal{A}, \mathcal{R}$  &  Types of objects and relations \\ \hline
 $\mathcal{P}$, $p$  & Meta path and path \\ \hline
 $k$ & The dimension of latent features \\ \hline
 $G_\tau$ & Graph $G$ at time $\tau$  \\ \hline
@@ -78,4 +76,9 @@ $Z_\tau$ & low rank $k$-dimensional latent space representation matrix for $G_\t
 
 \end{tabular}
 \end{table*}
+
+
+\begin{definition}[\textbf{Relationship prediction problem}]\label{problemdef}
+Given a DHIN graph $G$ at time $t$, and a target relation type $R$, we aim to predict the existence of a relation of type $R$ between two given nodes at time $t+1$. $\Box$
+ \end{definition}
 

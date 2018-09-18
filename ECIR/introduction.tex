@@ -2,26 +2,24 @@
 \label{Sec:Introduction}
 
 % what is link prediction problem? what is the usages of link prediction?
-
-The goal of link prediction in a social network graph \cite{liben2007link} is to estimate the likelihood of the relationship between two nodes in future, based on the observed network. Predicting such connections in a network have multiple applications such as friend/item/ad recommending, network completion, or biological applications such as predicting protein-protein interactions.\amin{more citations} 
-
 % challenges in heterogeneous link prediction, what is not covered? temporal and hero?
 
-Traditional link prediction techniques \cite{liben2007link}\amin{more citations} consider networks to be homogeneous, i.e., graphs with only one type of edges and nodes. However, most real-world information networks, such as Twitter, Facebook, and DBLP, are heterogeneous and have multiple relation and node types. For example, in a bibliographic network there are nodes of types authors, papers, and venues, and edges of types write, cite and publish. There are limited number of works that focused on 
-link prediction in heterogeneous information networks (HINs) such as \cite{sun2011pathsim}. However, those techniques do not consider the dynamics of social networks and ignore sequence of network snapshots. \amin{make sure about these citations} \cite{Zhu2016} \cite{sun2011pathsim} \cite{Sun:2012:HRP:2124295.2124373}  \cite{huang2016meta} \cite{wang2016relsim} \cite{sun2013pathselclus} \cite{sun2011ASONAM} \cite{Yang2012} \cite{liben2007link}
+The goal of link prediction in a network graph \cite{liben2007link} is to estimate the likelihood of the relationship between two nodes in future, based on the observed graph. Predicting such connections in a network have multiple applications such as friend/item/ad recommending, network completion, or biological applications such as predicting protein-protein interactions. Traditional link prediction techniques, such as \cite{liben2007link}, consider networks to be homogeneous, i.e., graphs with only one type of edges and nodes. However, most real-world networks, such as social networks, scholar networks, patient networks \cite{denny2012mining} and knowledge graphs \cite{wang2015incorporating} are heterogeneous information networks (HINs) \cite{shi2017survey} and have multiple node and relation types. For example, in a bibliographic network there are nodes of types authors, papers, and venues, and edges of types write, cite and publish.%Research on HINs involves building a network schema and computing the semantic relatedness /similarities between two nodes along meta-paths \cite{sun2011pathsim}.
+
+In a HIN relations between different entities have different semantic meanings. Thus techniques for homogeneous networks can not be directly applied on heterogeneous ones. A few works such as \cite{sun2011pathsim,sun2011ASONAM} investigated the problem of link/relationship prediction in HINs, however, they do not consider the dynamics of social networks and ignore analysis of sequence of network snapshots. On the other hand, it has been shown that for link prediction in homogenous networks incorporating temporal changes helps in a more accurate prediction \cite{Zhu2016}. Previous work on temporal link prediction scarcely studied HINs and to the best of our knowledge, the problem of relationship prediction for dynamic heterogeneous networks was not studied before.
 
 In this work we study the problem of predicting relationships in a dynamic heterogeneous information network (DHIN) i.e., a network with different types of nodes and links associated with timestamps, which is stated as follows: \textit{Given a DHIN graph G, how can we predict the future structure of G?}
 
 
-\subsection{Motivation}
+\cite{Zhu2016} \cite{sun2011pathsim} \cite{Sun:2012:HRP:2124295.2124373}  \cite{huang2016meta} \cite{wang2016relsim} \cite{sun2013pathselclus} \cite{sun2011ASONAM} \cite{Yang2012} \cite{liben2007link}
 
-\amin{Motivate the problem by a real example and show the points made in this para.}
 
-The link prediction problem for homogeneous networks has been studied in the past \cite{liben2007link}\amin{more citations}. However most real social networks are heterogeneous and relations between different entities have different semantic meanings. Thus techniques for homogeneous networks can not be directly applied on heterogeneous ones. A few works, such as \cite{sun2011pathsim,sun2011ASONAM}, investigated this problem, however, they do not consider the dynamics of social networks and ignore ignore sequence of network snapshots. On the other hand, it has ben shown that for homogenous network link prediction, incorporating temporal changes helps in a more accurate prediction \cite{Zhu2016}. Previous work on temporal link prediction scarcely studied heterogeneousness of social networks and to the best of our knowledge, the problem of relationship prediction for dynamic heterogeneous networks was not studied before.
+%\subsection{Motivation}
 
-%Large and complex databases, such as YAGO and DBLP, can be modeled as HINs. A fundamental problem in HINs is the computation of closeness, or relevance, between two HIN objects.
+%\subsection{Contributions}
 
-\subsection{Contributions}
+% what are the challenges in directly applying the current techniques?
+% To address the above challenges, we propose a new ... First, , we introduce the concept of augmented graph, which allows us to incorporate more complex semantics into our prediction problem. Second, instead of computing the ...., we use all of the latent features of all meta-graphs. ...
 
 The main contributions of our work include:
 

@@ -14,6 +14,10 @@ Davis, J., Goadrich, M.: The relationship between precision-recall and roc
   curves. In: Proceedings of the 23rd international conference on Machine
   learning. pp. 233--240. ACM (2006)
 
+\bibitem{denny2012mining}
+Denny, J.C.: Mining electronic health records in the genomics era. PLoS
+  computational biology  \textbf{8}(12),  e1002823 (2012)
+
 \bibitem{fan2008liblinear}
 Fan, R.E., Chang, K.W., Hsieh, C.J., Wang, X.R., Lin, C.J.: Liblinear: A
   library for large linear classification. Journal of machine learning research
@@ -43,6 +47,11 @@ Ou, M., Cui, P., Pei, J., Zhang, Z., Zhu, W.: Asymmetric transitivity
 Sarkar, P., Moore, A.W.: Dynamic social network analysis using latent space
   models. ACM SIGKDD Explorations Newsletter  \textbf{7}(2),  31--40 (2005)
 
+\bibitem{shi2017survey}
+Shi, C., Li, Y., Zhang, J., Sun, Y., Philip, S.Y.: A survey of heterogeneous
+  information network analysis. IEEE Transactions on Knowledge and Data
+  Engineering  \textbf{29}(1),  17--37 (2017)
+
 \bibitem{sun2011ASONAM}
 Sun, Y., Barber, R., Gupta, M., Aggarwal, C.C., Han, J.: Co-author relationship
   prediction in heterogeneous bibliographic networks. In: 2011 International
@@ -67,6 +76,12 @@ Sun, Y., Norick, B., Han, J., Yan, X., Yu, P.S., Yu, X.: Pathselclus:
   Integrating meta-path selection with user-guided object clustering in
   heterogeneous information networks. ACM Transactions on Knowledge Discovery
   from Data (TKDD)  \textbf{7}(3), ~11 (2013)
+
+\bibitem{wang2015incorporating}
+Wang, C., Song, Y., El-Kishky, A., Roth, D., Zhang, M., Han, J.: Incorporating
+  world knowledge to document clustering via heterogeneous information
+  networks. In: Proceedings of the 21th ACM SIGKDD International Conference on
+  Knowledge Discovery and Data Mining. pp. 1215--1224. ACM (2015)
 
 \bibitem{wang2016relsim}
 Wang, C., Sun, Y., Song, Y., Han, J., Song, Y., Wang, L., Zhang, M.: Relsim:

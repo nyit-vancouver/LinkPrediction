@@ -1,6 +1,6 @@
 \section{Relationship Prediction Approach}
 
-Given a DHIN graph $G=(V,E)$, and number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ heterogeneous graphs ${G_1, .., G_t}$ with respect to its associated timestamps. We then apply our techniques to predict $G_{t+1}$. As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target relation) between two nodes in a heterogeneous network. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
+Given a DHIN graph $G=(V,E)$, and number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ heterogeneous graphs ${G_1, .., G_t}$ based on links with associated timestamps. We then apply our techniques to predict $G_{t+1}$. As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target relation) between two nodes in a heterogeneous network. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
 
 \begin{definition}[Augmented reduced graph]\label{def:ARG}
 Given a heterogeneous graph $G=(V,E)$ and a target relation meta path $P(a,b)$ between nodes of type $a$ and $b$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $a$ and $b$, and edges in $E^P$ indicates relationships of type $P$ in $G$. $\Box$
@@ -149,9 +149,9 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 \subsubsection{The predictive model.} Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features by apply logistic regression. We define the probability of existence of a link between nodes $a$ and $b$ as 
 $Pr(label = 1|a, b; \boldsymbol{\theta}) = \frac{e^{z}}{e^{z}+1}$
 where $z=\sum\limits_{i=1}^{n}\theta_i.w_i$ for $n$ meta paths, and $\theta_i$ is a normalized weight value for $w_i$ (meta path-based feature). We use logistic regression with $L_2$ regularization to estimate the optimal $\theta$. 
-$\boldsymbol{\hat{\theta}} = 
-\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
-$
+%$\boldsymbol{\hat{\theta}} = 
+%\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
+%$
 
 \begin{equation*}
 \boldsymbol{\hat{\theta}} = 
@@ -189,7 +189,8 @@ As a final remark, we note that the linear combination of latent and explicit fe
 
 We use the implementation of temporal latent space inference for a sequence of dynamic graph snapshots \footnote{\url{https://github.com/linhongseba/Temporal-Network-Embedding}}\cite{Zhu2016}.
 % Self note: The hetrec-2011 dataset (MovieLense-IMDB) have missing user and movie ids as they only consider users with both rating and tags, thus we assign new ids to be able to use the TKDE code.
- For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package\footnote{\url{https://github.com/cjlin1/liblinear}} and set the type of solver to L2-regularized logistic regression (primal) that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise. We performed 5-fold cross validation for the training phase.
+ For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package\footnote{\url{https://github.com/cjlin1/liblinear}} and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
+We performed 5-fold cross validation for the training phase.
 
 
 
