@@ -17,7 +17,7 @@ An augmented reduced graph for the network in Figure \ref{sampleNetwork} and tar
 \subsection{Homogenize link prediction}
 % We refer to this approach as \texttt{HomoTemp}.
 
-Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization (MF) with block-coordinate gradient descent technique that for each $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space representation matrix $Z_\tau$ that minimizes the quadratic loss with temporal regularization
+Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. They present a matrix factorization (MF) with block-coordinate gradient descent technique that for each $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space representation matrix $Z_\tau$ that minimizes %the quadratic loss with temporal regularization
 \begin{equation}\label{latentOrigEqu}
     \begin{array}{l}
 \argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
@@ -26,11 +26,9 @@ Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the
     \end{array}
 \end{equation}
 where $\lambda$ is a regularization parameter, and  $(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)$ penalizes node $u$ for suddenly changing its latent position. %Note that when computing the quadratic loss $\left \| G^R_\tau-Z_{\tau}BZ_{\tau}^T \right \|^2_F$, we ignore all of the diagonal entries.
-$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,i)$ indicates the position of $u$ in the $i$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. The authors used $Z_tZ_t^T$ to predict $G_{t+1}$ in their work, however, they mentioned that $G_{t+1}$ can be formulated as $\Phi(f(Z_1,...Z_t))$, where $\Phi$ is the link function and $f$ is the temporal function and one may apply techniques such as nonparametric approaches \cite{Sarkar:2012} to automatically learn these functions.
+$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,i)$ indicates the position of $u$ in the $i$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. To predict $G_{t+1}$ they used $Z_tZ_t^T$, however, they mentioned that $G_{t+1}$ can be formulated as $\Phi(f(Z_1,...Z_t))$, where $\Phi$ and $f$ are the link and the temporal functions that one may apply techniques such as nonparametric approaches \cite{Sarkar:2012} to learn them.
 
-An immediate adaptation of the above MF technique is to consider a sequence of augmented reduced graphs $G^P_i$ as input, i.e., graphs with source and destination of a target meta path with edges between them if the target meta path exists in $G_i$. This changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
-
-
+Algorithm \ref{alg1} is an adaptation of the above MF technique applied on a sequence of augmented reduced graphs $G^P_i$ (Definition \ref{def:ARG}) given a target meta path $P$, which changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
 %to the following
 %\begin{equation}\label{latentReducedEqu}
 %    \begin{array}{l}
@@ -39,35 +37,33 @@ An immediate adaptation of the above MF technique is to consider a sequence of a
 %\text{subject to :} \forall u,\tau,Z_{\tau}\geq 0, Z_{\tau}(u)Z_{\tau}(u)^T=1
 %    \end{array}
 %\end{equation}
-
 %Their MF technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
-
-
-Algorithm \ref{alg1} gets as an input a DHIN graph $G$, number of graph snapshots $t$, a target relation meta path $P(a,b)$, and latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the MF technique in \cite{Zhu2016} is applied (lines 9-10) to infer $k$-dimensional temporal latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
+The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(a,b)$, and the latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the MF technique in \cite{Zhu2016} is applied (lines 9-10) to infer $k$-dimensional temporal latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
 \amin{How $Z_{t+1}$ depends on $Z_1, ..., Z_t$ from the algorithm? Explain assumptions in \cite{Zhu2016}.}
 
 
 \begin{algorithm}[t]
 \caption{Homogenize Link Prediction}\label{alg1}
 \begin{algorithmic}[1]\scriptsize
-\REQUIRE A DHIN graph $G$, number of graph snapshots $t$, a target relation meta path $P(a,b)$, latent space dimension $k$
-\ENSURE The predicted graph $G^P$ at time $t+1$ based on the given target relation meta path $P$
+\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a target meta path $P(a,b)$, the latent space dimension $k$
+\ENSURE The predicted graph $G^P$ at time $t+1$ based on the target relation $P$
 
 \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
 
-\FOR {each graph $G_i$}
+\FOR {each graph $G_i=(V_i,E_i)$}
     %\STATE $G^R_i \leftarrow AugmentedReducedGraph(G_i,P,S)$
     \STATE Let $a$ and $b$ be the node types of beginning and end of $P$
     
     %\FOR {each path $p$ between nodes of type $a$ and $b$ in $S$}
-    \FOR {each node $x \in V_i$ of type $a$ in $G_i$}
-        \STATE follow $P$ to reach a node $y$ of type $b$ in $G_i$ 
-        \STATE add edge $(x,y)$ to augmented reduced graph $G_i^P$ 
+    \FOR {each node $x \in V_i$ that $\phi(x)=a$}%of type $a$}
+        \STATE follow $P$ to reach a node $y\in V_i$ that $\phi(y)=b$%of type $b$ 
+        \STATE add nodes x and y, and edge $(x,y)$ to the augmented reduced graph $G_i^P$ 
 \ENDFOR
 
 \ENDFOR
 %\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
-\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
+%\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
+\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G_1, .., G_t, k)$
 
 \STATE $G^P_{t+1} \leftarrow Z_tZ^T_t$ 
 
@@ -86,10 +82,10 @@ We define a set of meta paths \cite{sun2011pathsim} on a given network schema an
 Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshots $t$, a network schema $S$, target relation meta path $P(a,b)$ between node types $a$ and $b$, maximum length of a meta path $l$, and latent space dimension $k$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). It then produces the set of all meta paths between a node type $a$ and type $b$ defined in the given target relation $P(a,b)$ (line 2). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with maximum length of $l$ .
 
 \begin{algorithm}[t]
-\caption{Meta path-based Link Prediction}\label{alg2}
+\caption{Meta path-based Relationship Prediction}\label{alg2}
 \begin{algorithmic}[1]\scriptsize
-\REQUIRE A dynamic heterogeneous graph $G$, number of graph snapshots $t$, network schema $S$, a target relation meta path $P^*(a,b)$, maximum length of a meta path $l$, latent space dimension $k$
-\ENSURE The predicted graph $G^{P^*}$ at time $t+1$ based on the given target relation $P^*$
+\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a network schema $S$, a target meta path $P^*(a,b)$, the maximum length of a meta path $l$, the latent space dimension $k$
+\ENSURE The predicted graph $G^{P^*}$ at time $t+1$ based on the target relation $P^*$
 
 \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
 
@@ -97,13 +93,13 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 
 \FOR {each meta path $P_j(a,b)$}
 
-\FOR {each graph $G_i$}
+\FOR {each graph $G_i=(V_i,E_i)$}
     %\STATE $G^R_i \leftarrow AugmentedReducedGraph(G_i,R,S)$
     %\STATE Let $a$ and $b$ be the node types of beginning and end of $P_j$
     
     %\FOR {each path $p$ between nodes of type $a$ and $b$ in $S$}
-    \FOR {each node $x \in V_i$ of type $a$ in $G_i$}
-        \STATE follow $P_j$ to reach a node $y$ of type $b$ in $G_i$ 
+    \FOR {each node $x \in V_i$ that $\phi(x)=a$}%of type $a$}
+        \STATE follow $P_j$ to reach a node $y$ that $\phi(y)=b$%of type $b$}
         \STATE $w_{xy} \leftarrow MeasureSimilarity(x,y, G_i)$
         \STATE add edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
 \ENDFOR
@@ -111,7 +107,8 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 \ENDFOR
 
 %\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
-\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
+%\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
+\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G_1, .., G_t, k)$
 \STATE $G^{P_j}_{t+1} \leftarrow Z_tZ^T_t$ 
 
 \ENDFOR
