@@ -3,18 +3,13 @@
 \cite{Zhu2016} \cite{sun2011pathsim} \cite{Sun:2012:HRP:2124295.2124373} \cite{huang2016meta}
 \cite{wang2016relsim} \cite{sun2013pathselclus} \cite{sun2011ASONAM} \cite{Yang2012} \cite{liben2007link}
 
+Sun et al. proposed PathSelClus \cite{sun2013pathselclus} that uses limited guidance from users in the form of seeds in some of the clusters and automatically learn the best weights for each meta-path in the clustering process.
 
-PathSelClus [22] utilizes limited guidance from users in the form of seeds in some of the clusters and automatically learn the best weights for each meta-path in the clustering process.
-[22] Y. Sun, B. Norick, J. Han, X. Yan, P. Yu, X. Yu. Integrating Meta-Path Selection with User-Guided Object Clustering in
-Heterogeneous Information Networks. In KDD, 2012.
-
-
-Some earlier works have used temporal smoothness for evolutionary clustering [36] and link prediction in a dynamic network \cite{Zhu2016}.
+The concept of temporal smoothness has been used in evolutionary clustering [36] and link prediction in a dynamic network \cite{Zhu2016}.
 
 There exist many embedding methods for static networks, however very few considered dynamic networks. Zhu et al. \cite{Zhu2016} attempt dynamic link prediction by adding a temporal-smoothing regularization term to a non-negative matrix factorization objective. Their goal is to reconstruct the adjacency matrix of different time-stamps of a graph. They use a Block-Coordinate Gradient Descent (BCGD) algorithm to perform non-negative factorization. Their formulation is almost identical to the algorithm of Chi et al. [36], who perform evolutionary spectral clustering that captures temporal smoothness. Because matrix factorization provides embedding vectors of the nodes for each time-stamp, the factorization by-product from this work can be considered as dynamic network embeddings.
 
 [36] Y. Chi, X. Song, D. Zhou, K. Hino, and B. L. Tseng, ?Evolutionary spectral clustering by incorporating temporal smoothness,? in Proceedings of the International Conference on Knowledge Discovery and Data Mining (KDD), 2007, pp. 153?162.
-
 
 
 

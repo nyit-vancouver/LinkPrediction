@@ -59,17 +59,15 @@ Shi, C., Li, Y., Zhang, J., Sun, Y., Philip, S.Y.: A survey of heterogeneous
 
 \bibitem{sun2011ASONAM}
 Sun, Y., Barber, R., Gupta, M., Aggarwal, C.C., Han, J.: Co-author relationship
-  prediction in heterogeneous bibliographic networks. In: 2011 International
-  Conference on Advances in Social Networks Analysis and Mining. pp. 121--128
-  (July 2011). \doi{10.1109/ASONAM.2011.112}
+  prediction in heterogeneous bibliographic networks. In: Proceedings of the
+  2011 International Conference on Advances in Social Networks Analysis and
+  Mining. pp. 121--128. ASONAM '11, IEEE Computer Society (2011)
 
 \bibitem{Sun:2012:HRP:2124295.2124373}
 Sun, Y., Han, J., Aggarwal, C.C., Chawla, N.V.: When will it happen?:
   Relationship prediction in heterogeneous information networks. In:
   Proceedings of the Fifth ACM International Conference on Web Search and Data
-  Mining. pp. 663--672. WSDM '12, ACM, New York, NY, USA (2012).
-  \doi{10.1145/2124295.2124373},
-  \url{http://doi.acm.org/10.1145/2124295.2124373}
+  Mining. pp. 663--672. WSDM '12, ACM, New York, NY, USA (2012)
 
 \bibitem{sun2011pathsim}
 Sun, Y., Han, J., Yan, X., Yu, P.S., Wu, T.: Pathsim: Meta path-based top-k
@@ -96,7 +94,7 @@ Wang, C., Sun, Y., Song, Y., Han, J., Song, Y., Wang, L., Zhang, M.: Relsim:
 \bibitem{Yang2012}
 Yang, Y., Chawla, N., Sun, Y., Hani, J.: Predicting links in multi-relational
   and heterogeneous networks. In: 2012 IEEE 12th International Conference on
-  Data Mining. pp. 755--764 (Dec 2012). \doi{10.1109/ICDM.2012.144}
+  Data Mining. pp. 755--764 (Dec 2012)
 
 \bibitem{zhang2014inferring}
 Zhang, J., Wang, C., Wang, J., Yu, J.X.: Inferring continuous dynamic social
@@ -107,6 +105,6 @@ Zhang, J., Wang, C., Wang, J., Yu, J.X.: Inferring continuous dynamic social
 Zhu, L., Guo, D., Yin, J., Steeg, G.V., Galstyan, A.: Scalable temporal latent
   space inference for link prediction in dynamic social networks. IEEE
   Transactions on Knowledge and Data Engineering (TKDE)  \textbf{28}(10),
-  2765--2777 (Oct 2016). \doi{10.1109/TKDE.2016.2591009}
+  2765--2777 (Oct 2016)
 
 \end{thebibliography}

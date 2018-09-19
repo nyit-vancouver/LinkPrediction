@@ -38,8 +38,8 @@ Algorithm \ref{alg1} is an adaptation of the above MF technique applied on a seq
 %    \end{array}
 %\end{equation}
 %Their MF technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
-The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(a,b)$, and the latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the MF technique in \cite{Zhu2016} is applied (lines 9-10) to infer $k$-dimensional temporal latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
-\amin{How $Z_{t+1}$ depends on $Z_1, ..., Z_t$ from the algorithm? Explain assumptions in \cite{Zhu2016}.}
+The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(a,b)$, and the latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the MF technique in \cite{Zhu2016} is applied (lines 9-10) to infer latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
+Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularization term in equation (\ref{latentOrigEqu}).
 
 
 \begin{algorithm}[t]
@@ -75,7 +75,9 @@ The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $
 
 \subsection{Meta path-based relationship prediction}
 
-The homogenize approach, however, does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also consider meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features \cite{sun2011pathsim} helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with topological meta path-based features.
+The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also include meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features, as in \cite{sun2011ASONAM}, helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with topological meta path-based features.
+
+\cite{sun2011ASONAM}
 
 We define a set of meta paths \cite{sun2011pathsim} on a given network schema and a target relation meta path $P$, such as co-authorship, to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
 
