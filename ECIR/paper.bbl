@@ -9,6 +9,14 @@ Cantador, I., Brusilovsky, P., Kuflik, T.: 2nd workshop on information
   Proceedings of the 5th ACM conference on Recommender systems. RecSys 2011,
   ACM, New York, NY, USA (2011)
 
+\bibitem{Chi:2007}
+Chi, Y., Song, X., Zhou, D., Hino, K., Tseng, B.L.: Evolutionary spectral
+  clustering by incorporating temporal smoothness. In: Proceedings of the 13th
+  ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
+  pp. 153--162. KDD '07, ACM, New York, NY, USA (2007).
+  \doi{10.1145/1281192.1281212},
+  \url{http://doi.acm.org/10.1145/1281192.1281212}
+
 \bibitem{davis2006relationship}
 Davis, J., Goadrich, M.: The relationship between precision-recall and roc
   curves. In: Proceedings of the 23rd international conference on Machine

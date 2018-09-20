@@ -75,23 +75,25 @@ Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularizatio
 
 \subsection{Meta path-based relationship prediction}
 
-The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also include meta path-based features in our prediction model. Our intuition is that leveraging meta path-based features, as in \cite{sun2011ASONAM}, helps to boost prediction accuracy besides using latent space feature space. In other word, we combine latent space features with topological meta path-based features.
+The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also include meta path-based features in our prediction model. Our intuition is that along with latent space features leveraging meta path-based features, as in \cite{sun2011ASONAM}, helps to boost the prediction accuracy. In other word, we combine latent space features with topological meta path-based features.
+
+Weighted augmented graph... is the weighted version as described in Definition \ref{def:ARG}....
 
 \cite{sun2011ASONAM}
 
-We define a set of meta paths \cite{sun2011pathsim} on a given network schema and a target relation meta path $P$, such as co-authorship, to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
+We define a set of meta paths \cite{sun2011pathsim} on a given network schema and a target relation meta path $P$ to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
 
 Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshots $t$, a network schema $S$, target relation meta path $P(a,b)$ between node types $a$ and $b$, maximum length of a meta path $l$, and latent space dimension $k$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). It then produces the set of all meta paths between a node type $a$ and type $b$ defined in the given target relation $P(a,b)$ (line 2). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with maximum length of $l$ .
 
 \begin{algorithm}[t]
 \caption{Meta path-based Relationship Prediction}\label{alg2}
 \begin{algorithmic}[1]\scriptsize
-\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a network schema $S$, a target meta path $P^*(a,b)$, the maximum length of a meta path $l$, the latent space dimension $k$
-\ENSURE The predicted graph $G^{P^*}$ at time $t+1$ based on the target relation $P^*$
+\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a network schema $S$, a target meta path $P(a,b)$, the maximum length of a meta path $l$, the latent space dimension $k$
+\ENSURE The predicted graph $G^{P}$ at time $t+1$ based on the target relation $P$
 
 \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
 
-\STATE $\{P_1, .., P_n\} \leftarrow GenerateMetaPaths(S, P^*(a,b), l)$
+\STATE $\{P_1, .., P_n\} \leftarrow GenerateMetaPaths(S, P(a,b), l)$
 
 \FOR {each meta path $P_j(a,b)$}
 
@@ -102,8 +104,8 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
     %\FOR {each path $p$ between nodes of type $a$ and $b$ in $S$}
     \FOR {each node $x \in V_i$ that $\phi(x)=a$}%of type $a$}
         \STATE follow $P_j$ to reach a node $y$ that $\phi(y)=b$%of type $b$}
-        \STATE $w_{xy} \leftarrow MeasureSimilarity(x,y, G_i)$
-        \STATE add edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
+        \STATE $w_{xy} \leftarrow Similarity(x,y, G_i)$
+        \STATE add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
 \ENDFOR
 
 \ENDFOR
@@ -115,19 +117,18 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 
 \ENDFOR
 
-\STATE $G^{P^*}_{t} \leftarrow LastKnownTargetGraph(G, P^*(a,b), t)$
+\STATE $G^{P}_{t} \leftarrow LastKnownTargetGraph(G, P(a,b), t)$
 
 
-\STATE $\forall (a,b\in N(a)) \in G^{P^*}_{t}$, add a feature vector to the training set with $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and label with 1 if $(a,b) \in E^{P^*}_{t}$ otherwise 0.
+\STATE $\forall (a,b\in N(a)) \in G^{P}_{t}$, add a feature vector to the training set with $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and label with 1 if $(a,b) \in E^{P}_{t}$ otherwise 0.
 
 \STATE Learn the model and apply it to the feature vector of $G^{P_j}_{t+1}$ with different meta path $P_j$.
 
-\STATE Build $G^{P^*}_{t+1}$ based on the cut-off values for the output of prediction model.
+\STATE Build $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
 
-\STATE return $G^{P^*}_{t+1}$
+\STATE return $G^{P}_{t+1}$
 \end{algorithmic}
 \end{algorithm}
-
 
  Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight between 0 and 1, based on a similarity measure. For example PathCount\cite{sun2011pathsim}, PathSim \cite{sun2011pathsim}, or random walk are measures for the relation of two nodes given link type and meta path, such as co-authorship.
 \amin{Note that values of $G^P_i$ depends on meta-path $P$}. Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization with the MF technique \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$.
@@ -165,12 +166,10 @@ In the training phase, for each pair of nodes $(a,b)$ in $G^{P^*}_{t}$, where $b
 
 \subsection{Combining latent and meta path-based features}
 
-\amin{ISSUES TO DISCUSS}
 
-Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (MF) 
+%Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (MF) 
 
-
-Although the gradient descent algorithm used in the MF technique to infer latent space matrices is fast, we cannot apply it to meta paths efficiently since computing meta path values for all pairs is not scalable. Thus we restrict it to those links that make new connections in future or negative samples and use logistic regression. 
+Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, we cannot apply it to meta paths efficiently since computing meta path values for all possible pairs of nodes is not scalable. Thus we restrict it only to those links that make new connections in the next time intyerval or negative samples and use logistic regression. 
 
 - After $p$-value analysis some latent features might be correlated with meta paths. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
@@ -186,6 +185,7 @@ As a final remark, we note that the linear combination of latent and explicit fe
 
 \subsection{Implementation}
 
+\amin{add system and OS spec}
 We use the implementation of temporal latent space inference for a sequence of dynamic graph snapshots \footnote{\url{https://github.com/linhongseba/Temporal-Network-Embedding}}\cite{Zhu2016}.
 % Self note: The hetrec-2011 dataset (MovieLense-IMDB) have missing user and movie ids as they only consider users with both rating and tags, thus we assign new ids to be able to use the TKDE code.
  For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package\footnote{\url{https://github.com/cjlin1/liblinear}} and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
