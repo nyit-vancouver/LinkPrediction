@@ -3,13 +3,17 @@
 Given a DHIN graph $G=(V,E)$, and the number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ HIN graphs ${G_1, .., G_t}$ based on links with associated timestamps. We then apply our techniques to predict $G_{t+1}$. As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target meta path) between two given nodes. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
 
 \begin{definition}[Augmented reduced graph]\label{def:ARG}
-Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, and edges in $E^P$ indicates relationships of type $P$ in $G$. $\Box$
+Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a weighted graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, edges in $E^P$ indicates relationships of type $P$ in $G$, and each edge $e^P = (u, v, w)$ is a weighted edge from a vertex $u$ to a vertex $v$ with a weight $w=Sim(u,v)$ indicating a similarity measure between $u$ and $v$. $\Box$
 \end{definition}
 
 %\begin{example}
+
+Examples of relation similarity measure between two nodes in a HIN are path count \cite{sun2011pathsim,sun2011ASONAM}, PathSim \cite{sun2011pathsim} or normalized path count \cite{sun2011ASONAM}, random walk and symmetric random walk \cite{sun2011ASONAM}, and HeteSim \cite{shi2014hetesim}. Path count measures the number of path instances between the source and target nodes of a given meta path, and can be calculated by multiplying adjacency matrices of relations in the meta path \cite{sun2011ASONAM}. Random walk measures the probability of the random walk from source to target nodes. HeteSim evaluates relevance of heterogeneous nodes given an arbitrary path, while PathSim[5] evaluate similarity of same-typed nodes based on a symmetric path.
+
 An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target meta path $P(A,A)$=\textit{A--P--V--P--A} is a graph with nodes of type \textit{Author} and edges that represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider meta path $P(A,A)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship}.  
 %$\Box$
 %\end{example}
+
 
 
 %\subsection{Algorithm}
@@ -77,13 +81,11 @@ Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularizatio
 
 The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also include meta path-based features in our prediction model. Our intuition is that along with latent space features leveraging meta path-based features, as in \cite{sun2011ASONAM}, helps to boost the prediction accuracy. In other word, we combine latent space features with topological meta path-based features.
 
-Weighted augmented graph... is the weighted version as described in Definition \ref{def:ARG}....
 
 \cite{sun2011ASONAM}
 
 We define a set of meta paths \cite{sun2011pathsim} on a given network schema and a target relation meta path $P$ to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
 
-Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshots $t$, a network schema $S$, target relation meta path $P(a,b)$ between node types $a$ and $b$, maximum length of a meta path $l$, and latent space dimension $k$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). It then produces the set of all meta paths between a node type $a$ and type $b$ defined in the given target relation $P(a,b)$ (line 2). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with maximum length of $l$ .
 
 \begin{algorithm}[t]
 \caption{Meta path-based Relationship Prediction}\label{alg2}
@@ -130,8 +132,7 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 \end{algorithmic}
 \end{algorithm}
 
- Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight between 0 and 1, based on a similarity measure. For example PathCount\cite{sun2011pathsim}, PathSim \cite{sun2011pathsim}, or random walk are measures for the relation of two nodes given link type and meta path, such as co-authorship.
-\amin{Note that values of $G^P_i$ depends on meta-path $P$}. Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization with the MF technique \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$.
+Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a network schema $S$, a target relation meta path $P(a,b)$ between node types $a$ and $b$, the maximum length of a meta path $l$, and the latent space dimension $k$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). It then produces the set of all meta paths between nodes of type $a$ and type $b$ defined in the given target relation $P(a,b)$ (line 2). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with the maximum length of $l$. Next from each graph snapshot $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 3-9) for which nodes are of type $a$ and $b$ (beginning and end of meta path $P$) and edges have weight based on a relation similarity measure, such as path count, between $a$ and $b$. Once the sequence of augmented reduced graphs \{$G^P_1, ..., G^P_t$\} are generated, we apply the matrix factorization technique in \cite{Zhu2016} to find a low rank $k$-dimensional latent space representation matrix $Z_\tau$ for nodes at time $\tau$.
 
 % \begin{equation}\label{latentEqu}
 %     \begin{array}{l}
@@ -146,19 +147,22 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, number of graph snapshot
 
 %* Restrict pathSim to 3-hops and not beyond
 
-\subsubsection{The predictive model.} Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features by apply logistic regression. We define the probability of existence of a link between nodes $a$ and $b$ as 
-$Pr(label = 1|a, b; \boldsymbol{\theta}) = \frac{e^{z}}{e^{z}+1}$
-where $z=\sum\limits_{i=1}^{n}\theta_i.w_i$ for $n$ meta paths, and $\theta_i$ is a normalized weight value for $w_i$ (meta path-based feature). We use logistic regression with $L_2$ regularization to estimate the optimal $\theta$. 
+\subsubsection{The predictive model.} Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features by apply logistic regression. We define the probability of link from node $a$ to $b$ as 
+$Pr(\exists(a,b)|a, b; \boldsymbol{\theta}) = \frac{e^{z}}{e^{z}+1}$
+where $z=\sum\limits_{i=1}^{n}\theta_i.f_i$ for $n$ meta paths, $f_i$ is a topological meta path-based feature between $a$ and $b$, and $\theta_i$ is its associated weight. We use logistic regression with $L_2$ regularization to estimate the optimal $\theta$. 
 %$\boldsymbol{\hat{\theta}} = 
 %\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
 %$
 
 \begin{equation*}
 \boldsymbol{\hat{\theta}} = 
-\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
+\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(\exists(a_i,b_i)|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
 \end{equation*}
 
 We derive \textbf{$\hat{\theta}$} which maximizes the likelihood of all the training pairs, using maximum likelihood estimation.
+
+We use maximum likelihood estimation in our experiments to derive which maximizes the likelihood of all the training pairs.
+
 
 
 In the training phase, for each pair of nodes $(a,b)$ in $G^{P^*}_{t}$, where $b \in N(a)$, we add a feature vector to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label 1 if $(a,b) \in E^{P^*}_{t}$ otherwise label 0. We then perform logestic regression to learn the model. Finally we apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P^*}_{t+1}$ based on the cut-off values for the output of prediction model.

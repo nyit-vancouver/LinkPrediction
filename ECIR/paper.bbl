@@ -60,6 +60,11 @@ Sarkar, P., Chakrabarti, D., Jordan, M.I.: Nonparametric link prediction in
 Sarkar, P., Moore, A.W.: Dynamic social network analysis using latent space
   models. ACM SIGKDD Explorations Newsletter  \textbf{7}(2),  31--40 (2005)
 
+\bibitem{shi2014hetesim}
+Shi, C., Kong, X., Huang, Y., Philip, S.Y., Wu, B.: Hetesim: A general
+  framework for relevance measure in heterogeneous networks. IEEE Trans. Knowl.
+  Data Eng.  \textbf{26}(10),  2479--2492 (2014)
+
 \bibitem{shi2017survey}
 Shi, C., Li, Y., Zhang, J., Sun, Y., Philip, S.Y.: A survey of heterogeneous
   information network analysis. IEEE Transactions on Knowledge and Data
