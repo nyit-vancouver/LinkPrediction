@@ -21,7 +21,7 @@ An augmented reduced graph for the network in Figure \ref{sampleNetwork} and tar
 \subsection{Homogenize link prediction}
 % We refer to this approach as \texttt{HomoTemp}.
 
-Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. They present a matrix factorization (MF) with block-coordinate gradient descent technique that for each $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space representation matrix $Z_\tau$ that minimizes %the quadratic loss with temporal regularization
+Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. They present a matrix factorization (MF) with block-coordinate gradient descent technique that for each adjacency matrix $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space representation matrix $Z_\tau$ that minimizes %the quadratic loss with temporal regularization
 \begin{equation}\label{latentOrigEqu}
     \begin{array}{l}
 \argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
@@ -30,7 +30,7 @@ Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the
     \end{array}
 \end{equation}
 where $\lambda$ is a regularization parameter, and  $(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)$ penalizes node $u$ for suddenly changing its latent position. %Note that when computing the quadratic loss $\left \| G^R_\tau-Z_{\tau}BZ_{\tau}^T \right \|^2_F$, we ignore all of the diagonal entries.
-$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,i)$ indicates the position of $u$ in the $i$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. To predict $G_{t+1}$ they used $Z_tZ_t^T$, however, they mentioned that $G_{t+1}$ can be formulated as $\Phi(f(Z_1,...Z_t))$, where $\Phi$ and $f$ are the link and the temporal functions that one may apply techniques such as nonparametric approaches \cite{Sarkar:2012} to learn them.
+$Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,i)$ indicates the position of $u$ in the $i$-th dimension at $Z$. The intuition behind their prediction model is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. To predict adjacency matrix $G_{t+1}$ they used $Z_tZ_t^T$, however, they mentioned that $G_{t+1}$ can be formulated as $\Phi(f(Z_1,...Z_t))$, where $\Phi$ and $f$ are the link and the temporal functions that one may apply techniques such as nonparametric approaches \cite{Sarkar:2012} to learn them.
 
 Algorithm \ref{alg1} is an adaptation of the above MF technique applied on a sequence of augmented reduced graphs $G^P_i$ (Definition \ref{def:ARG}) given a target meta path $P$, which changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
 %to the following
@@ -60,18 +60,18 @@ Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularizatio
     
     %\FOR {each path $p$ between nodes of type $a$ and $b$ in $S$}
     \FOR {each node $x \in V_i$ that $\phi(x)=a$}%of type $a$}
-        \STATE follow $P$ to reach a node $y\in V_i$ that $\phi(y)=b$%of type $b$ 
-        \STATE add nodes x and y, and edge $(x,y)$ to the augmented reduced graph $G_i^P$ 
+        \STATE Follow $P$ to reach a node $y\in V_i$ that $\phi(y)=b$%of type $b$ 
+        \STATE Add nodes x and y, and edge $(x,y)$ to the augmented reduced graph $G_i^P$ 
 \ENDFOR
 
 \ENDFOR
 %\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
 %\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
-\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G_1, .., G_t, k)$
+\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^P_1, .., G^P_t, k)$
 
 \STATE $G^P_{t+1} \leftarrow Z_tZ^T_t$ 
 
-\STATE return $G^P_{t+1}$
+\STATE Return $G^P_{t+1}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -79,10 +79,8 @@ Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularizatio
 
 \subsection{Meta path-based relationship prediction}
 
-The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also include meta path-based features in our prediction model. Our intuition is that along with latent space features leveraging meta path-based features, as in \cite{sun2011ASONAM}, helps to boost the prediction accuracy. In other word, we combine latent space features with topological meta path-based features.
+The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also include meta path-based features in our prediction model. Our intuition is that along with latent space features leveraging meta path-based features, as in \cite{sun2011ASONAM}, helps to boost the prediction accuracy. In other word, we combine latent space features with topological meta path-based features. Sun et al. \cite{sun2011ASONAM} proposed a supervised learning framework, called \textit{PathPredict}, that uses the meta path-based features in a past time interval to predict the relationship building in a future time interval. Their model learns coefficients associated with each feature by maximizing the likelihood of new relationship formation.
 
-
-\cite{sun2011ASONAM}
 
 We define a set of meta paths \cite{sun2011pathsim} on a given network schema and a target relation meta path $P$ to generate an augmented reduced graph (Definition \ref{def:ARG}) $G^P_i$ from $G_i$ based on $P$.  We then leverage the technique in \cite{Zhu2016} to predict $G^P_{t+1}$ given $G^P_1, ..., G^P_t$, by inferring the temporal latent space representation for nodes at time $t+1$.\amin{this para seems wrong!!!}
 
@@ -94,41 +92,38 @@ We define a set of meta paths \cite{sun2011pathsim} on a given network schema an
 \ENSURE The predicted graph $G^{P}$ at time $t+1$ based on the target relation $P$
 
 \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
+%\STATE  $\{G^P_1, .., G^P_t\} \leftarrow BuildTargetAugmentedReducedGraph(G_1, .., G_t, P(a,b))$
+\STATE  Generate target augmented reduced graphs $G^P_1, .., G^P_t$ following Algorithm 1 lines 2-8
 
 \STATE $\{P_1, .., P_n\} \leftarrow GenerateMetaPaths(S, P(a,b), l)$
 
-\FOR {each meta path $P_j(a,b)$}
-
 \FOR {each graph $G_i=(V_i,E_i)$}
-    %\STATE $G^R_i \leftarrow AugmentedReducedGraph(G_i,R,S)$
-    %\STATE Let $a$ and $b$ be the node types of beginning and end of $P_j$
-    
-    %\FOR {each path $p$ between nodes of type $a$ and $b$ in $S$}
+
     \FOR {each node $x \in V_i$ that $\phi(x)=a$}%of type $a$}
-        \STATE follow $P_j$ to reach a node $y$ that $\phi(y)=b$%of type $b$}
+	\FOR {each meta path $P_j$}
+
+        \STATE Follow $P_j$ to reach a node $y$ that $\phi(y)=b$%of type $b$}
         \STATE $w_{xy} \leftarrow Similarity(x,y, G_i)$
-        \STATE add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
+        \STATE Add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
 \ENDFOR
 
 \ENDFOR
 
 %\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
 %\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
-\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G_1, .., G_t, k)$
+\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^{P_j}_1, .., G^{P_j}_t, k)$
 \STATE $G^{P_j}_{t+1} \leftarrow Z_tZ^T_t$ 
 
 \ENDFOR
 
-\STATE $G^{P}_{t} \leftarrow LastKnownTargetGraph(G, P(a,b), t)$
 
-
-\STATE $\forall (a,b\in N(a)) \in G^{P}_{t}$, add a feature vector to the training set with $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and label with 1 if $(a,b) \in E^{P}_{t}$ otherwise 0.
+\STATE $\forall (a,b\in N(a)) \in G^{P}_{t}$, add a feature vector to the training set with $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and label=1 if $(a,b) \in E^{P}_{t}$ otherwise label=0.
 
 \STATE Learn the model and apply it to the feature vector of $G^{P_j}_{t+1}$ with different meta path $P_j$.
 
 \STATE Build $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
 
-\STATE return $G^{P}_{t+1}$
+\STATE Return $G^{P}_{t+1}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -165,7 +160,7 @@ In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$
 
 %We use maximum likelihood estimation in our experiments to derive which maximizes the likelihood of all the training pairs.
 
-In the training phase, for each pair of nodes $(a,b)$ in $G^{P}_{t}$, where $b \in N(a)$, we add a feature vector to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label 1 if $(a,b) \in E^{P}_{t}$ otherwise label 0. We then perform logistic regression to learn the model. Finally we apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
+In the training phase, for each pair of nodes $(a,b)$ in $G^{P}_{t}$, where $b \in N(a)$, we add a feature vector $\boldsymbol{f}_t(a,b)$ to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label=1 if $(a,b) \in E^{P}_{t}$ otherwise label=0. We then perform logistic regression to learn the model. Finally we apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
 
 
 \subsection{Combining latent and meta path-based features}
@@ -175,14 +170,19 @@ In the training phase, for each pair of nodes $(a,b)$ in $G^{P}_{t}$, where $b \
 
 Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, we cannot apply it to meta paths efficiently since computing meta path values for all possible pairs of nodes is not scalable. Thus we restrict it only to those links that make new connections in the next time interval or negative samples and use logistic regression. 
 
-- After $p$-value analysis some latent features might be correlated with meta paths. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
-- $G_{ij} \approx  \sum_{l=1}^{m} \theta_l f_l(i,j) + \sum_{l=1}^{k} \theta_l Z_{il}Z_{jl}$
-
-$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};f) \right \|^2_F $
+\cite{Zhu2016} approximated $G_{ij}$ with $\sum_{l=1}^{k} Z_{il}Z_{jl}$ and \cite{sun2011pathsim} with $\sum_{l=1}^{n} \theta_l f_l(i,j)$
 
 
-- Augmenting latent with explicit features helps to combine latent features with the results of any other link prediction model. Let $f(i,j)$ be the meta path feature between nodes $i$ and $j$. Then, we can treat this as being a dyadic feature $z_ij$ in the above framework, and learn latent features that fit the residual of $f$. In general then, the latent feature approach has a natural mechanism by which any predictive signal can be incorporated, whether it is an explicit feature vector or model predictions. Our hypothesis is that combining latent features with meta path-based features will improve performance on the test data. However, if the latent features learn similar structure to the meta path features, then combining the two may not be beneficial. We only consider the linear combination of latent and meta path features, however, these can be combined in different ways that is beyond the scope of this work.
+- $G_{ij} \approx  \sum_{l=1}^{n} \theta_l f_l(i,j) + \sum_{l=1}^{k} \beta_l Z_{il}Z_{jl}$
+
+
+
+$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + \theta^Tf(i,j)) \right \|^2_F $
+
+, where $\Phi$ and is the link function.
+
+- Augmenting latent with explicit features helps to combine latent features with the results of any other link prediction model. Let $f(i,j)$ be the meta path feature between nodes $i$ and $j$. Then, we can learn latent features that fit the residual of $f$. In general then, the latent feature approach has a natural mechanism by which any predictive signal can be incorporated, whether it is an explicit feature vector or model predictions. Our hypothesis is that combining latent features with meta path-based features will improve performance on the test data. However, if the latent features learn similar structure to the meta path features, then combining the two may not be beneficial. We only consider the linear combination of latent and meta path features, however, these can be combined in different ways that is beyond the scope of this work.
 
 \subsection{Implementation}
 

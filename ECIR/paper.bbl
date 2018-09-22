@@ -41,6 +41,11 @@ Liben-Nowell, D., Kleinberg, J.: The link-prediction problem for social
   networks. journal of the Association for Information Science and Technology
   \textbf{58}(7),  1019--1031 (2007)
 
+\bibitem{menon2011link}
+Menon, A.K., Elkan, C.: Link prediction via matrix factorization. In: Joint
+  european conference on machine learning and knowledge discovery in databases.
+  pp. 437--452. Springer (2011)
+
 \bibitem{amin:wwwj}
 Milani~Fard, A., Wang, K.: Neighborhood randomization for link privacy in
   social network analysis. World Wide Web  \textbf{18}(1),  9--32 (2015)

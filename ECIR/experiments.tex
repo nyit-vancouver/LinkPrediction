@@ -59,6 +59,7 @@ Similarly we only calculated the PC for these meta paths. Note that the goal of 
 Table \ref{table_publications} shows meta paths between authors under length 4 for the publications dataset.
 
 
+
 \begin{table}[h]
 \centering
 \caption{Publications Dataset Meta Paths (\textit{A} = author, \textit{P} = paper, \textit{A} = venue).}
@@ -73,6 +74,8 @@ Table \ref{table_publications} shows meta paths between authors under length 4 f
 \textit{A--P--P--P--A} & Authors cite the same papers \\ \hline
 
 \end{tabular}
+
+
 \end{table}
 
 Unlike the \textit{A--P--A} target relation for the publication dataset for which both ends of the relation is of the same kind, we consider \textit{U--M} as the target meta path for the movie dataset to show the effectiveness of our proposed methods in predicting such relationships.
@@ -111,8 +114,10 @@ Unlike the \textit{A--P--A} target relation for the publication dataset for whic
 
 \amin{One reason that \textit{A--P--V--P--A} is better with intervals is that one may publish in KDD but there are so many publishing there....}
 
+
 \subsection{Discussion}
 
+%Increasing accuracy.... We do not claim that the linear combination is the best ... After $p$-value analysis some latent features might be correlated with meta paths. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
 
 Our proposed technique can also be used in other applications. For example link recommendation 
@@ -123,13 +128,12 @@ predicting missing edges in graphs.
 Vertex Recommendation similar to \cite{ou2016asymmetric} 
 
 
-In this work we modelled the predicted graph $ \hat{G}_\tau(i,j)$ as a combination of meta path features and latent features $\Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w))$. As explained in \cite{*}, one may also augment the model by incorporating some information regarding node affinities using implicit/explicit attributes and define node features $x_i$, which makes the model $\hat{G}_\tau(i,j) = \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w)$
+In this work we modelled the predicted graph $ \hat{G}_\tau(i,j)$ as a combination of meta path features and latent features $\Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w))$. As explained in \cite{menon2011link}, one may also augment the model by incorporating some information regarding node affinities using implicit/explicit attributes and define node features $x_i$, which makes the model $\hat{G}_\tau(i,j) = \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w)$
 
-As shown in \cite{*} and \cite{Zhu2016}, latent features are more predictive of linking behaviour compared to unsupervised scoring techniques such as Katz, PrefferentailAttachemnet, and Adamic.
+As shown in \cite{menon2011link} and \cite{Zhu2016}, latent features are more predictive of linking behaviour compared to unsupervised scoring techniques such as Katz, PrefferentailAttachemnet, and Adamic.
 
-Experiments in \cite{*} shows that although we cannot certainly infer that latent structure are more predictive than side-information, combining the two increases the prediction accuracy.
+Experiments in \cite{menon2011link} shows combining the latent structure and side-information increases the prediction accuracy.
 
-* Link prediction via matrix factorization
 
 Connection to link privacy research such as \cite{amin:wwwj}
 
