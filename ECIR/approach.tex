@@ -147,25 +147,25 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snap
 
 %* Restrict pathSim to 3-hops and not beyond
 
-\subsubsection{The predictive model.} Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features by apply logistic regression. We define the probability of link from node $a$ to $b$ as 
-$Pr(\exists(a,b)|a, b; \boldsymbol{\theta}) = \frac{e^{z}}{e^{z}+1}$
-where $z=\sum\limits_{i=1}^{n}\theta_i.f_i$ for $n$ meta paths, $f_i$ is a topological meta path-based feature between $a$ and $b$, and $\theta_i$ is its associated weight. We use logistic regression with $L_2$ regularization to estimate the optimal $\theta$. 
+\subsubsection{The predictive model.} Given the training pairs of nodes and their corresponding meta path-based features (similarity weights $w$), we build a prediction model to learn the weights associated with these features by apply logistic regression. We define the probability of forming a \textit{new link in the future} from node $a$ to $b$ as $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ and $\theta_i$ is the associated weight for $n$ topological meta path-based features $f_i$ at current time between $a$ and $b$. We use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$, given a training dataset with $l$ instance-label pairs, where $\alpha \sum_{j=1}^n \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
+
 %$\boldsymbol{\hat{\theta}} = 
 %\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
 %$
 
-\begin{equation*}
+\begin{equation}
 \boldsymbol{\hat{\theta}} = 
-\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(\exists(a_i,b_i)|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
-\end{equation*}
-
-We derive \textbf{$\hat{\theta}$} which maximizes the likelihood of all the training pairs, using maximum likelihood estimation.
-
-We use maximum likelihood estimation in our experiments to derive which maximizes the likelihood of all the training pairs.
+\argmin\limits_{\boldsymbol{\theta}}C\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \alpha \sum_{j=1}^n \theta_j^2
+\end{equation}
+  
+In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$, and negative otherwise.
 
 
+%We derive \textbf{$\hat{\theta}$} which which maximizes the likelihood of all the training pairs.
 
-In the training phase, for each pair of nodes $(a,b)$ in $G^{P^*}_{t}$, where $b \in N(a)$, we add a feature vector to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label 1 if $(a,b) \in E^{P^*}_{t}$ otherwise label 0. We then perform logestic regression to learn the model. Finally we apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P^*}_{t+1}$ based on the cut-off values for the output of prediction model.
+%We use maximum likelihood estimation in our experiments to derive which maximizes the likelihood of all the training pairs.
+
+In the training phase, for each pair of nodes $(a,b)$ in $G^{P}_{t}$, where $b \in N(a)$, we add a feature vector to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label 1 if $(a,b) \in E^{P}_{t}$ otherwise label 0. We then perform logistic regression to learn the model. Finally we apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
 
 
 \subsection{Combining latent and meta path-based features}
@@ -173,19 +173,16 @@ In the training phase, for each pair of nodes $(a,b)$ in $G^{P^*}_{t}$, where $b
 
 %Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (MF) 
 
-Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, we cannot apply it to meta paths efficiently since computing meta path values for all possible pairs of nodes is not scalable. Thus we restrict it only to those links that make new connections in the next time intyerval or negative samples and use logistic regression. 
+Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, we cannot apply it to meta paths efficiently since computing meta path values for all possible pairs of nodes is not scalable. Thus we restrict it only to those links that make new connections in the next time interval or negative samples and use logistic regression. 
 
 - After $p$-value analysis some latent features might be correlated with meta paths. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
-- $G_{ij} \approx  \sum_{l=1}^{m} \theta_l w_l(i,j) + \sum_{l=1}^{k} \theta_l Z_{il}Z_{jl}$
+- $G_{ij} \approx  \sum_{l=1}^{m} \theta_l f_l(i,j) + \sum_{l=1}^{k} \theta_l Z_{il}Z_{jl}$
 
-$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w) \right \|^2_F $
+$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};f) \right \|^2_F $
 
 
-- Augmenting latent with explicit features helps to combine latent features with the results of any other link prediction model. Suppose scores $w_{ij}$ is the meta path feature between nodes $i$ and $j$. Then, we can treat this as being a dyadic feature $z_ij$ in the above framework, and learn latent features that fit the residual of these scores. In general then, the latent feature approach has a natural mechanism by which any predictive signal can be incorporated, whether it is an explicit feature vector or model predictions. However, a caveat is in order: it is not necessary that combining latent features with another model will improve performance on test data. If the latent features learn similar structure to the other model, then combining the two cannot be expected to yield better results.
-
-As a final remark, we note that the linear combination of latent and explicit features is not the only way to incorporate side information. This issue has been studied in the context of the cold-start problem [29] in collaborative filtering. Recent advances in this literature are based on inferring reasonable values of latent features by falling back to the side information as a prior [2,12]. However, unlike most collaborative filtering applications, in link prediction we are mostly interested in using side information to improve predictions, rather than dealing with cold-start nodes. Therefore, we expect it to be most useful to directly augment the latent feature prediction with one based on side information.
-
+- Augmenting latent with explicit features helps to combine latent features with the results of any other link prediction model. Let $f(i,j)$ be the meta path feature between nodes $i$ and $j$. Then, we can treat this as being a dyadic feature $z_ij$ in the above framework, and learn latent features that fit the residual of $f$. In general then, the latent feature approach has a natural mechanism by which any predictive signal can be incorporated, whether it is an explicit feature vector or model predictions. Our hypothesis is that combining latent features with meta path-based features will improve performance on the test data. However, if the latent features learn similar structure to the meta path features, then combining the two may not be beneficial. We only consider the linear combination of latent and meta path features, however, these can be combined in different ways that is beyond the scope of this work.
 
 \subsection{Implementation}
 
