@@ -155,7 +155,12 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snap
 
 %\subsubsection{The predictive model.}
 \subsubsection{Combining latent and meta path-based features.}
- Given the training pairs of nodes and their corresponding meta path-based features, we build a prediction model to learn the weights associated with these features by apply logistic regression. We define the probability of forming a \textit{new link} in the future from node $a$ to $b$ as $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ and $\theta_i$ is the associated weight for $n$ meta path-based features $f_i$ at current time between $a$ and $b$. We use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$, given a training dataset with $l$ instance-label pairs, where $\alpha \sum_{j=1}^n \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
+Our hypothesis is that combining latent with topological features results is a better predictive model. The intuition is that we can learn latent features that fit the residual of meta path-based feature. However, if the latent features learn similar structure to the meta path features, then combining the two may not be beneficial. One way to do so is to change the Equation (\ref{latentOrigEqu}) with $\argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G_\tau - \Phi(Z_{\tau}Z_{\tau}^T + \theta^Tf_\tau) \right \|^2_F$, where $\Phi$ and is a link function. Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, it cannot be efficiently applied to the changed objective function with meta paths since computing meta path values for all possible pairs of nodes is not scalable. %Thus we restrict it only to those links that make new connections in the next time interval or negative samples and use logistic regression.
+Instead we consider the linear combination of latent and meta path features, however, these can be combined in different ways that is beyond the scope of this work. 
+
+ Given the training pairs of nodes and their corresponding meta path-based features, we build a prediction model to learn the weights associated with these features by apply logistic regression. We define the probability of forming a \textit{new link} in the future from node $a$ to $b$ as %$Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ 
+ $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b) + \sum\limits_{j=1}^{k} \theta_{n+j} Z(a,j)Z(b,j)$ 
+ and $\theta_i$ is the associated weight for $n$ meta path-based features $f_i$ and $k$ latent features $z_i.z_i$ at current time between $a$ and $b$. We use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$, given a training dataset with $l$ instance-label pairs, where $\alpha \sum_{j=1}^{n+k} \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
 
 %$\boldsymbol{\hat{\theta}} = 
 %\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
@@ -163,7 +168,7 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snap
 
 \begin{equation}
 \boldsymbol{\hat{\theta}} = 
-\argmin\limits_{\boldsymbol{\theta}}C\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \alpha \sum_{j=1}^n \theta_j^2
+\argmin\limits_{\boldsymbol{\theta}}C\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \alpha \sum_{j=1}^{n+k} \theta_j^2
 \end{equation}
  
 \amin{Done to here! rest needs clean up} 
@@ -177,22 +182,14 @@ In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$
 In the training phase, for each pair of nodes $(a,b)$ in $G^{P}_{t}$, where $b \in N(a)$, we add a feature vector $\boldsymbol{f}_t(a,b)$ to the training set with corresponding $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and with label=1 if $(a,b) \in E^{P}_{t}$ otherwise label=0. We then perform logistic regression to learn the model. Finally we apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
 
 
-%Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. The authors presented a matrix factorization with block-coordinate gradient descent (MF) 
-Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, we cannot apply it to meta paths efficiently since computing meta path values for all possible pairs of nodes is not scalable. Thus we restrict it only to those links that make new connections in the next time interval or negative samples and use logistic regression. 
 
 
-\cite{Zhu2016} approximated $G_{ij}$ with $\sum_{l=1}^{k} Z_{il}Z_{jl}$ and \cite{sun2011pathsim} with $\sum_{l=1}^{n} \theta_l f_l(i,j)$
-
-
-- $G_{ij} \approx  \sum_{l=1}^{n} \theta_l f_l(i,j) + \sum_{l=1}^{k} \beta_l Z_{il}Z_{jl}$
+%\cite{Zhu2016} approximated $G_{ij}$ with $\sum_{l=1}^{k} Z_{il}Z_{jl}$ and \cite{sun2011pathsim} with $\sum_{l=1}^{n} \theta_l f_l(i,j)$
+%- $G_{ij} \approx  \sum_{l=1}^{n} \theta_l f_l(i,j) + \sum_{l=1}^{k} \beta_l Z_{il}Z_{jl}$
+%$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + \theta^Tf_\tau(i,j)) \right \|^2_F $
 
 
 
-$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + \theta^Tf_\tau(i,j)) \right \|^2_F $
-
-, where $\Phi$ and is the link function.
-
-- Augmenting latent with explicit features helps to combine latent features with the results of any other link prediction model. Let $f(i,j)$ be the meta path feature between nodes $i$ and $j$. Then, we can learn latent features that fit the residual of $f$. In general the latent feature approach has a natural mechanism by which any predictive signal can be incorporated, whether it is an explicit feature vector or model predictions. Our hypothesis is that combining latent features with meta path-based features will improve performance on the test data. However, if the latent features learn similar structure to the meta path features, then combining the two may not be beneficial. We only consider the linear combination of latent and meta path features, however, these can be combined in different ways that is beyond the scope of this work.
 
 \subsection{Implementation}
 
