@@ -42,25 +42,26 @@ Algorithm \ref{alg1} is an adaptation of the above MF technique applied on a seq
 %    \end{array}
 %\end{equation}
 %Their MF technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
-The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(a,b)$, and the latent space dimension $k$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-8) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). Finally the MF technique in \cite{Zhu2016} is applied (lines 9-10) to infer latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$.
-Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularization term in equation (\ref{latentOrigEqu}).
+The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(A,B)$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-7) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). For example given $P(A,A)$=\textit{A--P--A}, each $G^P_i$ represents the co-authorship graph at time t. Finally the matrix factorization technique in \cite{Zhu2016} is applied (line 8) to infer latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$ (line 9). Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularization term in equation (\ref{latentOrigEqu}).
+
 
 
 \begin{algorithm}[t]
 \caption{Homogenize Link Prediction}\label{alg1}
 \begin{algorithmic}[1]\scriptsize
-\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a target meta path $P(a,b)$, the latent space dimension $k$
-\ENSURE The predicted graph $G^P$ at time $t+1$ based on the target relation $P$
+\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a target meta path $P(A,B)$, the latent space dimension $k$, the link to predict $(a,b)$ at $t+1$
+%\ENSURE The predicted graph $G^P$ at time $t+1$ based on the target relation $P$
+\ENSURE The probability of existence of link $(a,b)$ in $G^P_{t+1}$
 
 \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
 
 \FOR {each graph $G_i=(V_i,E_i)$}
     %\STATE $G^R_i \leftarrow AugmentedReducedGraph(G_i,P,S)$
-    \STATE Let $a$ and $b$ be the node types of beginning and end of $P$
+    %\STATE Let $a$ and $b$ be the node types of beginning and end of $P$
     
     %\FOR {each path $p$ between nodes of type $a$ and $b$ in $S$}
-    \FOR {each node $x \in V_i$ that $\phi(x)=a$}%of type $a$}
-        \STATE Follow $P$ to reach a node $y\in V_i$ that $\phi(y)=b$%of type $b$ 
+    \FOR {each node $x \in V_i$ that $\phi(x)=A$}%of type $a$}
+        \STATE Follow $P$ to reach a node $y\in V_i$ that $\phi(y)=B$%of type $b$ 
         \STATE Add nodes x and y, and edge $(x,y)$ to the augmented reduced graph $G_i^P$ 
 \ENDFOR
 
@@ -69,9 +70,11 @@ Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularizatio
 %\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
 \STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^P_1, .., G^P_t, k)$
 
-\STATE $G^P_{t+1} \leftarrow Z_tZ^T_t$ 
+\STATE Return $Pr((a,b)\in E^P_{t+1}) \leftarrow \sum_{i=1}^{k} Z_t(a,i)\times Z_t(b,i)$
 
-\STATE Return $G^P_{t+1}$
+
+%\STATE $G^P_{t+1} \leftarrow Z_tZ^T_t$ 
+%\STATE Return $G^P_{t+1}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -88,21 +91,22 @@ We define a set of meta paths \cite{sun2011pathsim} on a given network schema an
 \begin{algorithm}[t]
 \caption{Meta path-based Relationship Prediction}\label{alg2}
 \begin{algorithmic}[1]\scriptsize
-\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a network schema $S$, a target meta path $P(a,b)$, the maximum length of a meta path $l$, the latent space dimension $k$
-\ENSURE The predicted graph $G^{P}$ at time $t+1$ based on the target relation $P$
+\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a network schema $S$, a target meta path $P(A,B)$, the maximum length of a meta path $l$, the latent space dimension $k$, the link to predict $(a,b)$ at $t+1$
+%\ENSURE The predicted graph $G^{P}$ at time $t+1$ based on the target relation $P$
+\ENSURE The probability of existence of link $(a,b)$ in $G^P_{t+1}$
 
 \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
 %\STATE  $\{G^P_1, .., G^P_t\} \leftarrow BuildTargetAugmentedReducedGraph(G_1, .., G_t, P(a,b))$
-\STATE  Generate target augmented reduced graphs $G^P_1, .., G^P_t$ following Algorithm 1 lines 2-8
+\STATE  Generate target augmented reduced graphs $G^P_1, .., G^P_t$ following Algorithm 1 lines 2-7
 
-\STATE $\{P_1, .., P_n\} \leftarrow GenerateMetaPaths(S, P(a,b), l)$
+\STATE $\{P_1, .., P_n\} \leftarrow GenerateMetaPaths(S, P(A,B), l)$
 
 \FOR {each graph $G_i=(V_i,E_i)$}
 
-    \FOR {each node $x \in V_i$ that $\phi(x)=a$}%of type $a$}
+    \FOR {each node $x \in V_i$ that $\phi(x)=A$}%of type $a$}
 	\FOR {each meta path $P_j$}
 
-        \STATE Follow $P_j$ to reach a node $y$ that $\phi(y)=b$%of type $b$}
+        \STATE Follow $P_j$ to reach a node $y$ that $\phi(y)=B$%of type $b$}
         \STATE $w_{xy} \leftarrow Similarity(x,y, G_i)$
         \STATE Add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
 \ENDFOR
