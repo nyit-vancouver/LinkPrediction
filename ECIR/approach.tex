@@ -151,15 +151,22 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snap
 
 %* Restrict pathSim to 3-hops and not beyond
 
+
+%\begin{equation}\label{latentAndTopologicalEqu}
+%    \begin{array}{l}
+%\argmin\limits_{\boldsymbol{\theta},Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G_\tau - (Z_{\tau}Z_{\tau}^T + \sum\limits_{i=1}^{n}\theta_{i_\tau}\mathcal{F}_{i_\tau}) \right \|^2_F + \lambda (\sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)  + \sum\limits_{\tau=1}^{t} \sum\limits_{i=1}^{n} \theta_{i_\tau}^2)\\
+%    \end{array}
+%\end{equation}
+
+
 %\subsubsection{The predictive model.}
 \subsubsection{Combining latent and meta path-based features.}
-Our hypothesis is that combining latent with topological features increases the prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing the two may not be beneficial. One way to do so is to change the quadratic loss in Equation (\ref{latentOrigEqu}) as $\argmin\limits_{\boldsymbol{\theta},Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G_\tau - \Phi(Z_{\tau}Z_{\tau}^T + \sum\limits_{i=1}^{n}\theta_i\cdot \mathcal{F}_{i_\tau}) \right \|^2_F$, where $n$ is the number of meta-path features, $\mathcal{F}_i$ is the $i$-th meta path adjacency matrix, and $\Phi$ is a link function. Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, it cannot be efficiently applied to the changed loss function. This is because it requires computing meta paths for all possible pairs of nodes in $\mathcal{F}_i$, which is not scalable as calculating similarity measures such as PathCount or PathSim is costly. 
+Our hypothesis is that combining latent with topological features can increase the prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. One way to do so is by changing the loss function in Equation (\ref{latentOrigEqu}) to $\sum\limits_{\tau=1}^{t}\left \| G_\tau - (Z_{\tau}Z_{\tau}^T + \sum\limits_{i=1}^{n}\theta_{i_\tau} \mathcal{F}_{i_\tau}) \right \|^2_F$ and add another regularization term $\lambda \sum\limits_{\tau=1}^{t} \sum\limits_{i=1}^{n} \theta_{i_\tau}^2$, where $n$ is the number of meta path-based features, $\mathcal{F}_i$ is the $i$-th meta path-based feature space defined on $G_i$, and $\theta_i$ is weight value for feature $f_i$. Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, it cannot be efficiently applied to the changed loss function. This is because it requires computing meta paths for all possible pairs of nodes in $\mathcal{F}_i$ for all snapshots, which is not scalable as calculating similarity measures such as PathCount or PathSim can be very costly due to matrix multiplication. 
 
-Since it is sparse not many existing licks (positive samples) and ... $\mathcal{F}_i$ only a subset of links...
 
 %Thus we restrict it only to those links that make new connections in the next time interval or negative samples and use logistic regression.
-As an alternative solution we build a predictive model that considers a linear combination of topological and latent features. These features, however, can be combined in different ways that is beyond the scope of our work. Given the training pairs of nodes and their corresponding meta path-based and latent features, we apply logistic regression to learn the weights associated with these features. We define the probability of forming a \textit{new link} in the future from node $a$ to $b$ as %$Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ 
- $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i\cdot f_i(a,b) + \sum\limits_{j=1}^{k} \theta_{n+j}\cdot Z(a,j)\cdot Z(b,j)$, and $\theta_1,\theta_2,..., \theta_n$ and and $\theta_{n+1},\theta_{n+2},..., \theta_{n+k}$ are associated weights for meta path-based features $f_1(a,b), f_2(a,b), ..., f_n(a,b)$ and latent features $Z(a,1)\cdot Z(b,1), Z(a,2)\cdot Z(b,2), ..., Z(a,k)\cdot Z(b,k)$ at current time between $a$ and $b$. We use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$, given a training dataset with $l$ instance-label pairs, where $\alpha \sum_{j=1}^{n+k} \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
+As an alternative solution we build a predictive model that considers a linear combination of topological and latent features. These features, however, can be combined in different ways that is beyond the scope of our work. Given the training pairs of nodes and their corresponding meta path-based and latent features, we apply logistic regression to learn the weights associated with these features. We define the probability of forming a \textit{new link} in future from node $a$ to $b$ as %$Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ 
+ $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i f_i(a,b) + \sum\limits_{j=1}^{k} \theta_{n+j}Z(a,j)Z(b,j)$, and $\theta_1,\theta_2,..., \theta_n$ and $\theta_{n+1},\theta_{n+2},..., \theta_{n+k}$ are associated weights for features $f_1(a,b)$, $f_2(a,b)$, ..., $f_n(a,b)$ and $Z(a,1)Z(b,1)$, $Z(a,2)Z(b,2)$, ..., $Z(a,k)Z(b,k)$ at current time between $a$ and $b$. We use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$, given a training dataset with $l$ instance-label pairs, where $\lambda \sum_{j=1}^{n+k} \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
 
 %$\boldsymbol{\hat{\theta}} = 
 %\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
@@ -167,10 +174,15 @@ As an alternative solution we build a predictive model that considers a linear c
 
 \begin{equation}
 \boldsymbol{\hat{\theta}} = 
-\argmin\limits_{\boldsymbol{\theta}}C\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \alpha \sum_{j=1}^{n+k} \theta_j^2
+\argmin\limits_{\boldsymbol{\theta}}C\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \lambda \sum_{j=1}^{n+k} \theta_j^2
 \end{equation}
  
-\amin{Done to here! rest needs clean up} 
+ 
+ Since $G_i$ and $\mathcal{F}_i$ are both sparse, not many existing links (positive samples) and ... $\mathcal{F}_i$ only a subset of links...
+
+
+Similar to \cite{sun2011ASONAM}, for a link $(a,b)$, we confine the target nodes that are relatively close to the source nodes, to avoid the excessive computing between nodes that are unrelated. The target nodes are selected if they are 2-hop or 3-hop connected to the source node. For each source node set under each target node constraint (2-hop or 3-hop co-authors), we first find all the source nodes that have new relationships building with existing nodes in the future time interval, and use these new relationships as positive training pairs. We also sample an equal sized set of negative pairs. Therefore, in the training dataset, the sizes of positive pairs and negative pairs are balanced.
+
 In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$, and negative otherwise.
 
 
