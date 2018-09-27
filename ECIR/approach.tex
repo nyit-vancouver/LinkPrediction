@@ -42,7 +42,7 @@ Algorithm \ref{alg1} is an adaptation of the above MF technique applied on a seq
 %    \end{array}
 %\end{equation}
 %Their MF technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
-The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(A,B)$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $\{G_1, .., G_t\}$ (line 1) by considering the associated timestamps on edges. Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-7) for which nodes are of type $a$ and $b$ (beginning and end of target relation meta path $P$). For example given $P(A,A)$=\textit{A--P--A}, each $G^P_i$ represents the co-authorship graph at time t. Finally the matrix factorization technique in \cite{Zhu2016} is applied (line 8) to infer latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$ (line 9). Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularization term in equation (\ref{latentOrigEqu}).
+The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(A,B)$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $G_1, .., G_t$ by considering the associated timestamps on edges (line 1). Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-7) for which nodes are of type $a$ and $b$ (beginning and end of target  meta path $P$). For example given $P(A,A)$=\textit{A--P--A}, each $G^P_i$ represents the co-authorship graph at time t. Finally the matrix factorization technique in \cite{Zhu2016} is applied (line 8) to infer latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$ (line 9). Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularization term in equation (\ref{latentOrigEqu}).
 
 
 
@@ -83,7 +83,7 @@ The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $
 %\subsection{Meta path-based relationship prediction}
 \subsection{Dynamic meta path-based relationship prediction}
 
-The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. However, we also include meta path-based features in our prediction model. Our intuition is that along with latent space features leveraging meta path-based features, as in \cite{sun2011ASONAM}, helps to boost the prediction accuracy. In other word, we combine latent space features with topological meta path-based features. Sun et al. \cite{sun2011ASONAM} proposed a supervised learning framework, called \textit{PathPredict}, that uses the meta path-based features in a past time interval to predict the relationship building in a future time interval. Their model learns coefficients associated with each feature by maximizing the likelihood of new relationship formation. However, they predictive model is learned based on one past interval and does not consider changes across time as in \cite{Zhu2016}.
+The above homogenize approach does not consider different semantics of meta paths between the source and destination nodes. In fact, Zhu et al. \cite{Zhu2016} assume that the probability of a link between nodes depends only on their latent positions. On the other hand, Sun et al. \cite{sun2011ASONAM} proposed a supervised learning framework, called \textit{PathPredict}, that uses meta path-based features in a past time interval to predict the relationship building in a future time interval. It learns coefficients associated with features by maximizing the likelihood of new relationship formation. However, their model is learned based on one past interval and does not consider temporal changes as in \cite{Zhu2016}. Our intuition is that leveraging meta path-based features along with latent space features can help to boost the prediction accuracy. In other word, we combine latent space features with topological meta path-based features in our predictive model.
 
 
 \begin{algorithm}[t]
@@ -119,9 +119,9 @@ The above homogenize approach does not consider different semantics of meta path
 \STATE $\hat{G}^{P}_{t} \leftarrow Z_{t-1}Z^T_{t-1}$ and  $\hat{G}^{P}_{t+1} \leftarrow Z_tZ^T_t$
 
 
-\FOR {each pair $(x,y)$, where $x\in V^{P}_{t-1}$ and $y\in N(x)$ is a close neighbour of $x$ in $G^{P}_{t-1}$}
+\FOR {each pair $(x,y)$, where $x\in V^{P}_{t-1}$ and $y\in N(x)$ is a nearby neighbor of $x$ in $G^{P}_{t-1}$}
 
-\STATE Add the feature vector $\langle f^{P_1}_{t-1}(x,y), f^{P_2}_{t-1}(x,y), ..., f^{P_n}_{t-1}(x,y), \hat{G}^{P}_{t}(x,y)\rangle$ to the training set $T$ with label=1 if $(x,y) \in E^{P}_{t}$ otherwise label=0.
+\STATE Add the feature vector $\langle f^{P_1}_{t-1}(x,y), f^{P_2}_{t-1}(x,y), ..., f^{P_n}_{t-1}(x,y), \hat{G}^{P}_{t}(x,y)\rangle$ to the training set $T$ with \textit{label}=1 if $(x,y)$ is a new link in $E^{P}_{t}$ otherwise \textit{label}=0.
 
 \ENDFOR
 
@@ -137,10 +137,7 @@ The above homogenize approach does not consider different semantics of meta path
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a network schema $S$, a target relation meta path $P(A,B)$, the maximum length of a meta path $l$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). Next it generates augmented reduced graphs $G^P_i$s from $G_i$s based on $P$ for which nodes are of type $A$ and $B$ (beginning and end of meta path $P$)(line 2) as explained in Algorithm 1. It then produces the set of all meta paths between nodes of type $A$ and type $B$ defined in $P(A,B)$ (line 3). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with the maximum length of $l$. It then applies the MF technique \cite{Zhu2016} to find latent space representation matrices $Z_i$ (line 4) and using them calculates the estimated augmented reduced graph $\hat{G}^{P}$ at times $t$ and $t+1$ (line 5). The last steps are creating a training dataset with sample pairs $(x,y)$ using $\hat{G}^{P}_{t}$, $\hat{G}^{P}_{t+1}$, and meta path-based feature measures $f^{P_i}_t(x,y)$ based on meta path $P_i$ at time $t$ (lines 6-8), training the predictive model (line 9), generating features for the given pair $(a,b)$ and testing it using the trained model (line 10). In the following we explain our learning technique in detail.
-
-on a relation similarity measure, such as path count, between $A$ and $B$.  
-
+Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a network schema $S$, a target relation meta path $P(A,B)$, the maximum length of a meta path $l$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). Next it generates augmented reduced graphs $G^P_i$s from $G_i$s based on $P$ for which nodes are of type $A$ and $B$ (beginning and end of meta path $P$)(line 2) as explained in Algorithm 1. It then produces the set of all meta paths between nodes of type $A$ and type $B$ defined in $P(A,B)$ (line 3). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with the maximum length of $l$. It then applies the MF technique \cite{Zhu2016} to find latent space matrices $Z_i$ (line 4) and using them calculates the estimated augmented reduced graph $\hat{G}^{P}$ at times $t$ and $t+1$ (line 5). The last steps are creating a training dataset with sample pairs $(x,y)$ with feature set containing $\hat{G}^{P}_{t}(x,y)$, and meta path-based feature measures $f^{P_i}_t(x,y)$ based on meta path $P_i$ at time $t$, and \textit{label}=1 if $(x,y)$ is a new link in $G^{P}_{t+1}$ otherwise \textit{label}=0 (lines 6-8), training the predictive model (line 9), generating features for the given pair $(a,b)$ and testing it using the trained model (line 10). In the following section we explain our learning technique in detail.
 
 % \begin{equation}\label{latentEqu}
 %     \begin{array}{l}
@@ -179,28 +176,15 @@ As an alternative solution we build a predictive model that considers a linear c
 \argmin\limits_{\boldsymbol{\theta}}\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \lambda \sum_{j=1}^{n+k} \theta_j^2
 \end{equation}
  
-Since $G_i$ and $\mathcal{F}_i$ are both sparse, not many existing links (positive samples) and ... $\mathcal{F}_i$ only a subset of links...
-
-To avoid excessive computing for meta path-based features between nodes that are unrelated, similar to \cite{sun2011ASONAM}, we confine the target nodes that are in a nearby neighborhood of the source nodes, i.e. target nodes within 2-hop or 3-hop connected to the source node. 
-
-For each source node set under each target node constraint (2-hop or 3-hop co-authors), we first find all the source nodes that have new relationships building with existing nodes in the future time interval, and use these new relationships as positive training pairs. We sample an equal number of negative pairs as positive ones to balance our training set.
+We preferred combining features in this learning framework since $G_i$ is very sparse and thus the number of newly formed links are much less compared to all possible links. Consequently calculating meta path-based features for training dataset is scalable compared to the MF technique. Moreover, similar to \cite{sun2011ASONAM}, in order to avoid excessive computing of meta path-based measures between nodes that might not be related, we confine samples to pairs that are located in a nearby neighborhood. More specifically, for each source node $x$ in $G^{P}_{i}$, we choose target nodes that are within 3-hop of $x$ but not in 1-hop, i.e, are not connected to $x$ in $G^{P}_{i}$. We first find all target nodes that make a new relationship with $x$  in $G^{P}_{i+1}$ and label respective samples as positive. Next we sample an equal number of negative pairs, i.e., those targets that do not make new connection, to balance our training set. Once the dataset is built, we perform logistic regression to learn the model and then apply the predictive model to the feature vector  $\langle f^{P_1}_{t}(a,b), f^{P_2}_{t}(a,b), ..., f^{P_n}_{t}(a,b), \hat{G}^{P}_{t+1}(a,b)\rangle$. The output probability can be later interpreted as a binary value based on a user defined cut-off.
 
 %In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$, and negative otherwise.
 
-
 %We derive \textbf{$\hat{\theta}$} which which maximizes the likelihood of all the training pairs.
-
-%We use maximum likelihood estimation in our experiments to derive which maximizes the likelihood of all the training pairs.
-
-In the training phase, for each pair of nodes $(a,b)$ in $G^{P}_{t}$, where $b \in N(a)$, we add a feature vector $\boldsymbol{f}^{P_j}_t(a,b)$ to the training set for each meta paths $P_j$, and with \textit{label}=1 if $(a,b) \in E^{P}_{t}$ otherwise \textit{label}=0. We then perform logistic regression to learn the model. Finally we apply the model to the feature vector of predicted graphs $G^{P_j}_{t+1}$ with different meta path $P_j$. Finally it builds $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
-
-
-
 
 %\cite{Zhu2016} approximated $G_{ij}$ with $\sum_{l=1}^{k} Z_{il}Z_{jl}$ and \cite{sun2011pathsim} with $\sum_{l=1}^{n} \theta_l f_l(i,j)$
 %- $G_{ij} \approx  \sum_{l=1}^{n} \theta_l f_l(i,j) + \sum_{l=1}^{k} \beta_l Z_{il}Z_{jl}$
 %$ \argmin\limits_{Z} \sum\limits_{(i,j)\in O} \left \| G_\tau(i,j) - \Phi(z_{i}^Tz_{j} + \theta^Tf_\tau(i,j)) \right \|^2_F $
-
 
 
 
