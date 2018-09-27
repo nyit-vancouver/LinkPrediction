@@ -2,17 +2,19 @@
 
 Given a DHIN graph $G=(V,E)$, and the number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ HIN graphs ${G_1, .., G_t}$ based on links with associated timestamps. We then apply our techniques to predict $G_{t+1}$. As mentioned in Definition \ref{problemdef}, in this work we intend to predict \textit{existence of a given type of relationship} (target meta path) between two given nodes. Therefore we define a new type of graph, called \textit{augmented reduced graph}, that is generated based on a given heterogeneous graph and a target relation meta path. 
 
+%\begin{definition}[Augmented reduced graph]\label{def:ARG}
+%Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a weighted graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, edges in $E^P$ indicates relationships of type $P$ in $G$, and each edge $e^P = (u, v, w)$ is a weighted edge from a vertex $u$ to a vertex $v$ with a weight $w=Sim(u,v)$ indicating a similarity measure between $u$ and $v$. $\Box$
+%\end{definition}
+
 \begin{definition}[Augmented reduced graph]\label{def:ARG}
-Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a weighted graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, edges in $E^P$ indicates relationships of type $P$ in $G$, and each edge $e^P = (u, v, w)$ is a weighted edge from a vertex $u$ to a vertex $v$ with a weight $w=Sim(u,v)$ indicating a similarity measure between $u$ and $v$. $\Box$
+Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, and edges in $E^P$ indicates relationships of type $P$ in $G$. $\Box$
 \end{definition}
 
-%\begin{example}
 
 Examples of relation similarity measure between two nodes in a HIN are path count \cite{sun2011pathsim,sun2011ASONAM}, PathSim \cite{sun2011pathsim} or normalized path count \cite{sun2011ASONAM}, random walk and symmetric random walk \cite{sun2011ASONAM}, and HeteSim \cite{shi2014hetesim}. Path count measures the number of path instances between the source and target nodes of a given meta path, and can be calculated by multiplying adjacency matrices of relations in the meta path \cite{sun2011ASONAM}. Random walk measures the probability of the random walk from source to target nodes. HeteSim evaluates relevance of heterogeneous nodes given an arbitrary path, while PathSim[5] evaluate similarity of same-typed nodes based on a symmetric path.
 
 An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target meta path $P(A,A)$=\textit{A--P--V--P--A} is a graph with nodes of type \textit{Author} and edges that represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider meta path $P(A,A)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship}.  
-%$\Box$
-%\end{example}
+
 
 
 
@@ -99,22 +101,21 @@ The above homogenize approach does not consider different semantics of meta path
 
 \STATE $\{P_1, .., P_n\} \leftarrow GenerateMetaPaths(S, P(A,B), l)$
 
-\FOR {each graph $G_i=(V_i,E_i)$}
-
-    \FOR {each node $x \in V_i$ that $\phi(x)=A$}%of type $a$}
-	\FOR {each meta path $P_j$}
-
-        \STATE Follow $P_j$ to reach a node $y$ that $\phi(y)=B$%of type $b$}
-        \STATE $w_{xy} \leftarrow Similarity(x,y, G_i)$
-        \STATE Add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
-\ENDFOR
-
-\ENDFOR
+%\FOR {each graph $G_i=(V_i,E_i)$}
+%
+%    \FOR {each node $x \in V_i$ that $\phi(x)=A$}%of type $a$}
+%	\FOR {each meta path $P_j$}
+%
+%        \STATE Follow $P_j$ to reach a node $y$ that $\phi(y)=B$%of type $b$}
+%        \STATE $w_{xy} \leftarrow Similarity(x,y, G_i)$
+%        \STATE Add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
+%\ENDFOR
+%\ENDFOR
 
 %\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^{P_j}_1, .., G^{P_j}_t, k)$
 %\STATE $G^{P_j}_{t+1} \leftarrow Z_tZ^T_t$ 
 
-\ENDFOR
+%\ENDFOR
 
 \STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^{P}_1, .., G^{P}_t, k)$
 \STATE $\hat{G}^{P}_{t} \leftarrow Z_{t-1}Z^T_{t-1}$ and  $\hat{G}^{P}_{t+1} \leftarrow Z_tZ^T_t$
@@ -122,7 +123,7 @@ The above homogenize approach does not consider different semantics of meta path
 
 \FOR {each pair $(x,y)$, where $x\in V^{P}_{t-1}$ and $y\in N(x)$ is a close neighbour of $x$ in $G^{P}_{t-1}$}
 
-\STATE Add the feature vector $\langle G^{P_1}_{t-1}(x,y), G^{P_2}_{t-1}(x,y), ..., G^{P_n}_{t-1}(x,y), \hat{G}^{P}_{t}(x,y)\rangle$ to the training set $T$ with label=1 if $(x,y) \in E^{P}_{t}$ otherwise label=0.
+\STATE Add the feature vector $\langle f^{P_1}_{t-1}(x,y), f^{P_2}_{t-1}(x,y), ..., f^{P_n}_{t-1}(x,y), \hat{G}^{P}_{t}(x,y)\rangle$ to the training set $T$ with label=1 if $(x,y) \in E^{P}_{t}$ otherwise label=0.
 
 \ENDFOR
 
@@ -131,7 +132,7 @@ The above homogenize approach does not consider different semantics of meta path
 %\STATE Learn the model and apply it to the feature vector of $G^{P_j}_{t+1}$ with different meta path $P_j$.
 
 \STATE $model \leftarrow Train(T)$
-\STATE Return $Pr((a,b)\in E^P_{t+1}) \leftarrow Test(model, \langle G^{P_1}_{t}(a,b), G^{P_2}_{t}(a,b), ..., G^{P_n}_{t}(a,b), \hat{G}^{P}_{t+1}(a,b)\rangle)$
+\STATE Return $Pr((a,b)\in E^P_{t+1}) \leftarrow Test(model, \langle f^{P_1}_{t}(a,b), f^{P_2}_{t}(a,b), ..., f^{P_n}_{t}(a,b), \hat{G}^{P}_{t+1}(a,b)\rangle)$
 
 %\STATE Build $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
 %\STATE Return $G^{P}_{t+1}$
@@ -161,12 +162,12 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snap
 
 %\subsubsection{The predictive model.}
 \subsubsection{Combining latent and meta path-based features.}
-Our hypothesis is that combining latent with topological features can increase the prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. One way to do so is by changing the loss function in Equation (\ref{latentOrigEqu}) to $\sum\limits_{\tau=1}^{t}\left \| G_\tau - (Z_{\tau}Z_{\tau}^T + \sum\limits_{i=1}^{n}\theta_{i_\tau} \mathcal{F}_{i_\tau}) \right \|^2_F$ and add another regularization term $\lambda \sum\limits_{\tau=1}^{t} \sum\limits_{i=1}^{n} \theta_{i_\tau}^2$, where $n$ is the number of meta path-based features, $\mathcal{F}_i$ is the $i$-th meta path-based feature space defined on $G_i$, and $\theta_i$ is weight value for feature $f_i$. Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, it cannot be efficiently applied to the changed loss function. This is because it requires computing meta paths for all possible pairs of nodes in $\mathcal{F}_i$ for all snapshots, which is not scalable as calculating similarity measures such as PathCount or PathSim can be very costly due to matrix multiplication. 
+Our hypothesis is that combining latent with topological features can increase the prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. One way to do so is by changing the loss function in Equation (\ref{latentOrigEqu}) to $\argmin\limits_{\boldsymbol{\theta_\tau},Z_\tau}\sum\limits_{\tau=1}^{t}\left \| G^P_\tau - (Z_{\tau}Z_{\tau}^T + \sum\limits_{i=1}^{n}\theta_{i_{\tau-1}} \mathcal{F}^{P_i}_{\tau-1}) \right \|^2_F$ and add another regularization term $\lambda \sum\limits_{\tau=1}^{t} \sum\limits_{i=1}^{n} \theta_{i_\tau}^2$, where $n$ is the number of meta path-based features, $\mathcal{F}^{P_i}$ is the $i$-th meta path-based feature matrix defined on $G_i$, and $\theta_i$ is weights for feature $f_i$. Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, it cannot be efficiently applied to the changed loss function. This is because it requires computing meta paths for all possible pairs of nodes in $\mathcal{F}^{P_i}$ for all snapshots, which is not scalable as calculating similarity measures such as PathCount or PathSim can be very costly. For example computing path counts for \textit{A--P--V--P--A} meta path, can be done by multiply adjacency matrices $AP\times PV\times VP\times PA$. 
 
 
 %Thus we restrict it only to those links that make new connections in the next time interval or negative samples and use logistic regression.
-As an alternative solution we build a predictive model that considers a linear combination of topological and latent features. These features, however, can be combined in different ways that is beyond the scope of our work. Given the training pairs of nodes and their corresponding meta path-based and latent features, we apply logistic regression to learn the weights associated with these features. We define the probability of forming a \textit{new link} in future from node $a$ to $b$ as %$Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ 
- $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i f_i(a,b) + \sum\limits_{j=1}^{k} \theta_{n+j}Z(a,j)Z(b,j)$, and $\theta_1,\theta_2,..., \theta_n$ and $\theta_{n+1},\theta_{n+2},..., \theta_{n+k}$ are associated weights for features $f_1(a,b)$, $f_2(a,b)$, ..., $f_n(a,b)$ and $Z(a,1)Z(b,1)$, $Z(a,2)Z(b,2)$, ..., $Z(a,k)Z(b,k)$ at current time between $a$ and $b$. We use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$, given a training dataset with $l$ instance-label pairs, where $\lambda \sum_{j=1}^{n+k} \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
+As an alternative solution we build a predictive model that considers a linear combination of topological and latent features. These features, however, can be combined in different ways that is beyond the scope of this work. Given the training pairs of nodes and their corresponding meta path-based and latent features, we apply logistic regression to learn the weights associated with these features. We define the probability of forming a \textit{new link} in future from node $a$ to $b$ as %$Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ 
+ $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i f^{P_i}(a,b) + \sum\limits_{j=1}^{k} \theta_{n+j}Z(a,j)Z(b,j)$, and $\theta_1,\theta_2,..., \theta_n$ and $\theta_{n+1},\theta_{n+2},..., \theta_{n+k}$ are associated weights for features $f^{P_1}(a,b)$, $f^{P_2}(a,b)$, ..., $f^{P_n}(a,b)$ and $Z(a,1)Z(b,1)$, $Z(a,2)Z(b,2)$, ..., $Z(a,k)Z(b,k)$ at current time between $a$ and $b$. Given a training dataset with $l$ instance-label pairs, we use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$ as%where $\lambda \sum_{j=1}^{n+k} \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
 
 %$\boldsymbol{\hat{\theta}} = 
 %\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
@@ -174,16 +175,17 @@ As an alternative solution we build a predictive model that considers a linear c
 
 \begin{equation}
 \boldsymbol{\hat{\theta}} = 
-\argmin\limits_{\boldsymbol{\theta}}C\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \lambda \sum_{j=1}^{n+k} \theta_j^2
+\argmin\limits_{\boldsymbol{\theta}}\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \lambda \sum_{j=1}^{n+k} \theta_j^2
 \end{equation}
  
  
- Since $G_i$ and $\mathcal{F}_i$ are both sparse, not many existing links (positive samples) and ... $\mathcal{F}_i$ only a subset of links...
+Since $G_i$ and $\mathcal{F}_i$ are both sparse, not many existing links (positive samples) and ... $\mathcal{F}_i$ only a subset of links...
 
+To avoid excessive computing for meta path-based features between nodes that are unrelated, similar to \cite{sun2011ASONAM}, we confine the target nodes that are in a nearby neighborhood of the source nodes, i.e. target nodes within 2-hop or 3-hop connected to the source node. 
 
-Similar to \cite{sun2011ASONAM}, for a link $(a,b)$, we confine the target nodes that are relatively close to the source nodes, to avoid the excessive computing between nodes that are unrelated. The target nodes are selected if they are 2-hop or 3-hop connected to the source node. For each source node set under each target node constraint (2-hop or 3-hop co-authors), we first find all the source nodes that have new relationships building with existing nodes in the future time interval, and use these new relationships as positive training pairs. We also sample an equal sized set of negative pairs. Therefore, in the training dataset, the sizes of positive pairs and negative pairs are balanced.
+For each source node set under each target node constraint (2-hop or 3-hop co-authors), we first find all the source nodes that have new relationships building with existing nodes in the future time interval, and use these new relationships as positive training pairs. We also sample an equal sized set of negative pairs. Therefore, in the training dataset, the sizes of positive pairs and negative pairs are balanced.
 
-In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$, and negative otherwise.
+%In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$, and negative otherwise.
 
 
 %We derive \textbf{$\hat{\theta}$} which which maximizes the likelihood of all the training pairs.
