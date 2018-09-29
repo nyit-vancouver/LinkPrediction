@@ -3,25 +3,22 @@
 Given a DHIN graph $G=(V,E)$, and the number of graph snapshots $t$, we first decompose $G$ to a sequence of $t$ HIN graphs ${G_1, .., G_t}$ based on links with associated timestamps. We then apply our techniques to predict relationships in $G_{t+1}$. As mentioned in Definition \ref{problemdef}, we intend to predict existence of a given type of relationship (target meta path) between two given nodes. Thus we define a new type of graph, called \textit{augmented reduced graph}, that is generated according to a given heterogeneous network and a target relation meta path. 
 
 %\begin{definition}[Augmented reduced graph]\label{def:ARG}
-%Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a weighted graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, edges in $E^P$ indicates relationships of type $P$ in $G$, and each edge $e^P = (u, v, w)$ is a weighted edge from a vertex $u$ to a vertex $v$ with a weight $w=Sim(u,v)$ indicating a similarity measure between $u$ and $v$. $\Box$
+%Given a HIN graph $G=(V,E)$ and a target meta path $\mathcal{P}(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^\mathcal{P}=(V^\mathcal{P},E^\mathcal{P})$ is a weighted graph, where $V^\mathcal{P} \subseteq V$ and nodes in $V^\mathcal{P}$ are of type $A_i$ and $A_j$, edges in $E^\mathcal{P}$ indicates relationships of type $\mathcal{P}$ in $G$, and each edge $e^\mathcal{P} = (u, v, w)$ is a weighted edge from a vertex $u$ to a vertex $v$ with a weight $w=Sim(u,v)$ indicating a similarity measure between $u$ and $v$. $\Box$
 %\end{definition}
 
-\begin{definition}[Augmented reduced graph]\label{def:ARG}
-Given a HIN graph $G=(V,E)$ and a target meta path $P(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^P=(V^P,E^P)$ is a graph, where $V^P \subseteq V$ and nodes in $V^P$ are of type $A_i$ and $A_j$, and edges in $E^P$ indicates relationships of type $P$ in $G$. $\Box$
+\begin{definition}[\textbf{Augmented reduced graph}]\label{def:ARG}
+Given a HIN graph $G=(V,E)$ and a target meta path $\mathcal{P}(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, an \textit{augmented reduced graph} $G^\mathcal{P}=(V^\mathcal{P},E^\mathcal{P})$ is a graph, where $V^\mathcal{P} \subseteq V$ and nodes in $V^\mathcal{P}$ are of type $A_i$ and $A_j$, and edges in $E^\mathcal{P}$ indicates relationships of type $\mathcal{P}$ in $G$. $\Box$
 \end{definition}
 
 
-An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target meta path $P(A,A)$=\textit{A--P--V--P--A} is a graph with nodes of type \textit{Author} and edges that represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider meta path $P(A,A)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship}.  
-
-
+An augmented reduced graph for the network in Figure \ref{sampleNetwork} and target meta path $\mathcal{P}(A,A)$=\textit{A--P--V--P--A} is a graph with nodes of type \textit{Author} and edges that represent relationship of \textit{publishing in the same venue}. For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider meta path $\mathcal{P}(A,A)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship}.  
 
 
 %\subsection{Algorithm}
 
 \subsection{Homogenize link prediction}
-% We refer to this approach as \texttt{HomoTemp}.
 
-Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. They present a matrix factorization (MF) with block-coordinate gradient descent technique that for each adjacency matrix $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space matrix $Z_\tau$ that minimizes %the quadratic loss with temporal regularization
+Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the context of homogeneous networks, where the input is a sequence of graphs $G_1, ..., G_t$ and the output is the estimated $G_{t+1}$. They present a matrix factorization (MF) with block-coordinate gradient descent technique that for each adjacency matrix $G_\tau$ at time $\tau$ infers a low rank $k$-dimensional latent space matrix $Z_\tau$ that minimizes the quadratic loss with temporal regularization
 \begin{equation}\label{latentOrigEqu}
     \begin{array}{l}
 \argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
@@ -32,49 +29,49 @@ Zhu et al. \cite{Zhu2016} studied the problem of temporal link prediction in the
 , where $\lambda$ is a regularization parameter, and  $(1-Z_{\tau}(u)Z_{\tau-1}(u)^T)$ penalizes node $u$ for suddenly changing its latent position. %Note that when computing the quadratic loss $\left \| G^R_\tau-Z_{\tau}BZ_{\tau}^T \right \|^2_F$, we ignore all of the diagonal entries.
 $Z_\tau(u)$ is a row vector denoting $u$'s temporal latent space representation at time $\tau$, and $Z_\tau(u,i)$ indicates the position of $u$ in the $i$-th dimension at $Z$. The intuition behind their technique is that 1) nodes move smoothly in the latent space over time and it is less likely to have large moves \cite{sarkar2005dynamic,zhang2014inferring}, and 2) user interactions are more likely to occur between similar users in a latent space representation. To predict adjacency matrix $G_{t+1}$ they used $Z_tZ_t^T$, however, they mentioned that $G_{t+1}$ can be formulated as $\Phi(f(Z_1,...Z_t))$, where $\Phi$ and $f$ are link and temporal functions that one may apply techniques such as nonparametric approaches \cite{Sarkar:2012} to learn them.
 
-Algorithm \ref{alg1} is an adaptation of the above MF technique applied on a sequence of augmented reduced graphs $G^P_i$ (Definition \ref{def:ARG}) given a target meta path $P$, which changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^{P}_\tau$.
+Algorithm \ref{alg1} is an adaptation of the above MF technique applied on a sequence of augmented reduced graphs $G^\mathcal{P}_i$ (Definition \ref{def:ARG}) given a target meta path $\mathcal{P}$, which changes equation (\ref{latentOrigEqu}) by replacing $G_\tau$ with $G^\mathcal{P}_\tau$.
 %to the following
 %\begin{equation}\label{latentReducedEqu}
 %    \begin{array}{l}
-%\argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G^{P}_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
+%\argmin\limits_{Z_1, .., Z_t}\sum\limits_{\tau=1}^{t}\left \| G^\mathcal{P}_\tau-Z_{\tau}Z_{\tau}^T \right \|^2_F+\lambda \sum\limits_{\tau=1}^{t}\sum\limits_{u}(1-Z_{\tau}(u)Z_{\tau-1}(u)^T) 
 %\\
 %\text{subject to :} \forall u,\tau,Z_{\tau}\geq 0, Z_{\tau}(u)Z_{\tau}(u)^T=1
 %    \end{array}
 %\end{equation}
 %Their MF technique \cite{Zhu2016} to infer $Z_t$ and estimate $G_{t+1}^R$. We refer to this approach as \texttt{HomoTemp}.
-The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $P(A,B)$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $G_1, .., G_t$ by considering the associated timestamps on edges (line 1). Next from each graph $G_i$, a corresponding augmented reduced graph $G^P_i$ is generated (lines 2-7) for which nodes are of type $a$ and $b$ (beginning and end of target  meta path $P$). For example given $P(A,A)$=\textit{A--P--A}, each $G^P_i$ represents the co-authorship graph at time t. Finally the matrix factorization technique in \cite{Zhu2016} is applied (line 8) to infer latent spaces $Z_1, ...,Z_t$ and estimate $G^P_{t+1}$ by $Z_tZ_t^T$ (line 9). Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularization term in equation (\ref{latentOrigEqu}).
+The algorithm gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $\mathcal{P}(A,B)$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. The algorithm first decomposes $G$ into a sequence of $t$ graphs $G_1, .., G_t$ by considering the associated timestamps on edges (line 1). Next from each graph $G_i$, a corresponding augmented reduced graph $G^\mathcal{P}_i$ is generated (lines 2-7) for which nodes are of type $a$ and $b$ (beginning and end of target  meta path $\mathcal{P}$). For example given $\mathcal{P}(A,A)$=\textit{A--P--A}, each $G^\mathcal{P}_i$ represents the co-authorship graph at time t. Finally the matrix factorization technique in \cite{Zhu2016} is applied (line 8) to infer latent spaces $Z_1, ...,Z_t$ and estimate $G^\mathcal{P}_{t+1}$ by $Z_tZ_t^T$ (line 9). Note that $Z_\tau$ depends on $Z_{\tau-1}$ as used in the temporal regularization term in equation (\ref{latentOrigEqu}).
 
 
 
 \begin{algorithm}[t]
 \caption{Homogenize Link Prediction}\label{alg1}
 \begin{algorithmic}[1]%\scriptsize
-\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a target meta path $P(A,B)$, the latent space dimension $k$, the link to predict $(a,b)$ at $t+1$
-%\ENSURE The predicted graph $G^P$ at time $t+1$ based on the target relation $P$
-\ENSURE The probability of existence of link $(a,b)$ in $G^P_{t+1}$
+\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a target meta path $\mathcal{P}(A,B)$, the latent space dimension $k$, the link to predict $(a,b)$ at $t+1$
+%\ENSURE The predicted graph $G^\mathcal{P}$ at time $t+1$ based on the target relation $\mathcal{P}$
+\ENSURE The probability of existence of link $(a,b)$ in $G^\mathcal{P}_{t+1}$
 
 \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
 
 \FOR {each graph $G_i=(V_i,E_i)$}
     %\STATE $G^R_i \leftarrow AugmentedReducedGraph(G_i,P,S)$
-    %\STATE Let $a$ and $b$ be the node types of beginning and end of $P$
+    %\STATE Let $a$ and $b$ be the node types of beginning and end of $\mathcal{P}$
     
     %\FOR {each path $p$ between nodes of type $a$ and $b$ in $S$}
     \FOR {each node $x \in V_i$ that $\phi(x)=A$}%of type $a$}
-        \STATE Follow $P$ to reach a node $y\in V_i$ that $\phi(y)=B$%of type $b$ 
-        \STATE Add nodes x and y, and edge $(x,y)$ to the augmented reduced graph $G_i^P$ 
+        \STATE Follow $\mathcal{P}$ to reach a node $y\in V_i$ that $\phi(y)=B$%of type $b$ 
+        \STATE Add nodes x and y, and edge $(x,y)$ to the augmented reduced graph $G_i^\mathcal{P}$ 
 \ENDFOR
 
 \ENDFOR
 %\STATE $G^R_{t+1} \leftarrow MF(G^R,k)$ \cite{Zhu2016}
 %\STATE Infer temporal latent spaces $Z_1, .., Z_t$ using \textit{MF}%by optimizing Eq. \ref{latentReducedEqu}
-\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^P_1, .., G^P_t, k)$
+\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^\mathcal{P}_1, .., G^\mathcal{P}_t, k)$
 
-\STATE Return $Pr((a,b)\in E^P_{t+1}) \leftarrow \sum_{i=1}^{k} Z_t(a,i)Z_t(b,i)$
+\STATE Return $Pr((a,b)\in E^\mathcal{P}_{t+1}) \leftarrow \sum_{i=1}^{k} Z_t(a,i)Z_t(b,i)$
 
 
-%\STATE $G^P_{t+1} \leftarrow Z_tZ^T_t$ 
-%\STATE Return $G^P_{t+1}$
+%\STATE $G^\mathcal{P}_{t+1} \leftarrow Z_tZ^T_t$ 
+%\STATE Return $G^\mathcal{P}_{t+1}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -89,55 +86,55 @@ The above homogenize approach does not consider different semantics of meta path
 \begin{algorithm}[t]
 \caption{Dynamic Meta path-based Relationship Prediction}\label{alg2}
 \begin{algorithmic}[1]%\scriptsize
-\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a network schema $S$, a target meta path $P(A,B)$, the maximum length of a meta path $l$, the latent space dimension $k$, the link to predict $(a,b)$ at $t+1$
-%\ENSURE The predicted graph $G^{P}$ at time $t+1$ based on the target relation $P$
-\ENSURE The probability of existence of link $(a,b)$ in $G^P_{t+1}$
+\REQUIRE A DHIN graph $G$, the number of snapshots $t$, a network schema $S$, a target meta path $\mathcal{P}(A,B)$, the maximum length of a meta path $l$, the latent space dimension $k$, the link to predict $(a,b)$ at $t+1$
+%\ENSURE The predicted graph $G^\mathcal{P}$ at time $t+1$ based on the target relation $\mathcal{P}$
+\ENSURE The probability of existence of link $(a,b)$ in $G^\mathcal{P}_{t+1}$
 
 \STATE $\{G_1, .., G_t\} \leftarrow$ \textit{DecomposeGraph}$(G, t)$
-%\STATE  $\{G^P_1, .., G^P_t\} \leftarrow BuildTargetAugmentedReducedGraph(G_1, .., G_t, P(a,b))$
-\STATE  Generate target augmented reduced graphs $G^P_1, .., G^P_t$ following Algorithm 1 lines 2-7
+%\STATE  $\{G^\mathcal{P}_1, .., G^\mathcal{P}_t\} \leftarrow BuildTargetAugmentedReducedGraph(G_1, .., G_t, \mathcal{P}(a,b))$
+\STATE  Generate target augmented reduced graphs $G^\mathcal{P}_1, .., G^\mathcal{P}_t$ following Algorithm 1 lines 2-7
 
-\STATE $\{P_1, .., P_n\} \leftarrow$ \textit{GenerateMetaPaths}$(S, P(A,B), l)$
+\STATE $\{\mathcal{P}_1, .., \mathcal{P}_n\} \leftarrow$ \textit{GenerateMetaPaths}$(S, \mathcal{P}(A,B), l)$
 
 %\FOR {each graph $G_i=(V_i,E_i)$}
 %
 %    \FOR {each node $x \in V_i$ that $\phi(x)=A$}%of type $a$}
-%	\FOR {each meta path $P_j$}
+%	\FOR {each meta path $\mathcal{P}_j$}
 %
-%        \STATE Follow $P_j$ to reach a node $y$ that $\phi(y)=B$%of type $b$}
+%        \STATE Follow $\mathcal{P}_j$ to reach a node $y$ that $\phi(y)=B$%of type $b$}
 %        \STATE $w_{xy} \leftarrow Similarity(x,y, G_i)$
-%        \STATE Add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{P_j}$ 
+%        \STATE Add nodes x and y, and edge $(x,y)$ with weight $w_{xy}$ to augmented reduced graph $G_i^{\mathcal{P}_j}$ 
 %\ENDFOR
 %\ENDFOR
 
-%\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^{P_j}_1, .., G^{P_j}_t, k)$
-%\STATE $G^{P_j}_{t+1} \leftarrow Z_tZ^T_t$ 
+%\STATE $\{Z_1, .., Z_t\} \leftarrow MatrixFactorization(G^{\mathcal{P}_j}_1, .., G^{\mathcal{P}_j}_t, k)$
+%\STATE $G^{\mathcal{P}_j}_{t+1} \leftarrow Z_tZ^T_t$ 
 
 %\ENDFOR
 
-\STATE $\{Z_1, .., Z_t\} \leftarrow$ \textit{MatrixFactorization}$(G^{P}_1, .., G^{P}_t, k)$
-\STATE $\hat{G}^{P}_{t} \leftarrow Z_{t-1}Z^T_{t-1}$ and  $\hat{G}^{P}_{t+1} \leftarrow Z_tZ^T_t$
+\STATE $\{Z_1, .., Z_t\} \leftarrow$ \textit{MatrixFactorization}$(G^\mathcal{P}_1, .., G^\mathcal{P}_t, k)$
+\STATE $\hat{G}^\mathcal{P}_{t} \leftarrow Z_{t-1}Z^T_{t-1}$ and  $\hat{G}^\mathcal{P}_{t+1} \leftarrow Z_tZ^T_t$
 
 
-\FOR {each pair $(x,y)$, where $x\in V^{P}_{t-1}$ and $y\in N(x)$ is a nearby neighbor of $x$ in $G^{P}_{t-1}$}
+\FOR {each pair $(x,y)$, where $x\in V^\mathcal{P}_{t-1}$ and $y\in N(x)$ is a nearby neighbor of $x$ in $G^\mathcal{P}_{t-1}$}
 
-\STATE Add the feature vector $\langle f^{P_1}_{t-1}(x,y), f^{P_2}_{t-1}(x,y), ..., f^{P_n}_{t-1}(x,y), \hat{G}^{P}_{t}(x,y)\rangle$ to the training set $T$ with \textit{label}=1 if $(x,y)$ is a new link in $E^{P}_{t}$ otherwise \textit{label}=0.
+\STATE Add the feature vector $\langle$ $f^{\mathcal{P}_1}_{t-1}(x,y)$, $f^{\mathcal{P}_2}_{t-1}(x,y)$, ..., $f^{\mathcal{P}_n}_{t-1}(x,y)$, $\hat{G}^\mathcal{P}_{t}(x,y)\rangle$ to the training set $T$ with \textit{label}=1 if $(x,y)$ is a new link in $E^\mathcal{P}_{t}$ otherwise \textit{label}=0.
 
 \ENDFOR
 
-%\STATE $\forall (a,b\in N(a)) \in G^{P}_{t}$, add a feature vector to the training set with $w_{ab}$ in $G^{P_j}_{t-1}$ for each meta paths $P_j$, and label=1 if $(a,b) \in E^{P}_{t}$ otherwise label=0.
+%\STATE $\forall (a,b\in N(a)) \in G^\mathcal{P}_{t}$, add a feature vector to the training set with $w_{ab}$ in $G^{\mathcal{P}_j}_{t-1}$ for each meta paths $\mathcal{P}_j$, and label=1 if $(a,b) \in E^\mathcal{P}_{t}$ otherwise label=0.
 
-%\STATE Learn the model and apply it to the feature vector of $G^{P_j}_{t+1}$ with different meta path $P_j$.
+%\STATE Learn the model and apply it to the feature vector of $G^{\mathcal{P}_j}_{t+1}$ with different meta path $\mathcal{P}_j$.
 
 \STATE $model \leftarrow$ \textit{Train}$(T)$
-\STATE Return $Pr((a,b)\in E^P_{t+1})$ $\leftarrow$ \textit{Test}($model$, $\langle$ $f^{P_1}_{t}(a,b)$, $f^{P_2}_{t}(a,b)$, ..., $f^{P_n}_{t}(a,b)$, $\hat{G}^{P}_{t+1}(a,b)\rangle)$
+\STATE Return $Pr((a,b)\in E^\mathcal{P}_{t+1})$ $\leftarrow$ \textit{Test}($model$, $\langle$ $f^{\mathcal{P}_1}_{t}(a,b)$, $f^{\mathcal{P}_2}_{t}(a,b)$, ..., $f^{\mathcal{P}_n}_{t}(a,b)$, $\hat{G}^\mathcal{P}_{t+1}(a,b)\rangle)$
 
-%\STATE Build $G^{P}_{t+1}$ based on the cut-off values for the output of prediction model.
-%\STATE Return $G^{P}_{t+1}$
+%\STATE Build $G^\mathcal{P}_{t+1}$ based on the cut-off values for the output of prediction model.
+%\STATE Return $G^\mathcal{P}_{t+1}$
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a network schema $S$, a target relation meta path $P(A,B)$, the maximum length of a meta path $l$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). Next it generates augmented reduced graphs $G^P_i$s from $G_i$s based on $P$ for which nodes are of type $A$ and $B$ (beginning and end of meta path $P$)(line 2) as explained in Algorithm 1. It then produces the set of all meta paths between nodes of type $A$ and type $B$ defined in $P(A,B)$ (line 3). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with the maximum length of $l$. It then applies the MF technique \cite{Zhu2016} to find latent space matrices $Z_i$ (line 4) and using them calculates the estimated augmented reduced graph $\hat{G}^{P}$ at times $t$ and $t+1$ (line 5). The last steps are creating a training dataset with sample pairs $(x,y)$ with feature set containing $\hat{G}^{P}_{t}(x,y)$, and meta path-based feature measures $f^{P_i}_t(x,y)$ based on meta path $P_i$ at time $t$, and \textit{label}=1 if $(x,y)$ is a new link in $G^{P}_{t+1}$ otherwise \textit{label}=0 (lines 6-8), training the predictive model (line 9), generating features for the given pair $(a,b)$ and testing it using the trained model (line 10). In the following section we explain our learning technique in detail.
+Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snapshots $t$, a network schema $S$, a target relation meta path $\mathcal{P}(A,B)$, the maximum length of a meta path $l$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. Same as Algorithm \ref{alg1}, it decomposes $G$ into a sequence of graphs (line 1). Next it generates augmented reduced graphs $G^\mathcal{P}_i$s from $G_i$s based on $\mathcal{P}$ for which nodes are of type $A$ and $B$ (beginning and end of meta path $\mathcal{P}$) (line 2) as explained in Algorithm 1. It then produces the set of all meta paths between nodes of type $A$ and type $B$ defined in $\mathcal{P}(A,B)$ (line 3). This is done by traversing the network schema $S$ (for instance through a BFS traversal) and generating meta paths with the maximum length of $l$. It then applies the MF technique \cite{Zhu2016} to find latent space matrices $Z_i$ (line 4) and using them calculates the estimated augmented reduced graph $\hat{G}^\mathcal{P}$ at times $t$ and $t+1$ (line 5). The last steps are creating a training dataset with sample pairs $(x,y)$ with feature set containing $\hat{G}^\mathcal{P}_{t}(x,y)$, and meta path-based feature measures $f^{\mathcal{P}_i}_t(x,y)$ based on meta path $\mathcal{P}_i$ at time $t$, and \textit{label}=1 if $(x,y)$ is a new link in $G^\mathcal{P}_{t+1}$ otherwise \textit{label}=0 (lines 6-8), training the predictive model (line 9), generating features for the given pair $(a,b)$ and testing it using the trained model (line 10). In the following section we explain our learning technique in detail.
 
 % \begin{equation}\label{latentEqu}
 %     \begin{array}{l}
@@ -160,12 +157,12 @@ Algorithm \ref{alg2} gets as an input a DHIN graph $G$, the number of graph snap
 
 %\subsubsection{The predictive model.}
 \subsubsection{Combining latent and meta path-based features.}
-Our hypothesis is that combining latent with topological features can increase the prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. One way to do so is by changing the loss function in Equation (\ref{latentOrigEqu}) to $\argmin\limits_{\boldsymbol{\theta_\tau},Z_\tau}\sum\limits_{\tau=1}^{t}\left \| G^P_\tau - \Phi(Z_{\tau}Z_{\tau}^T + \sum\limits_{i=1}^{n}\theta_{i_{\tau-1}} \mathcal{F}^{P_i}_{\tau-1}) \right \|^2_F$ and add another regularization term $\lambda \sum\limits_{\tau=1}^{t} \sum\limits_{i=1}^{n} \theta_{i_\tau}^2$, where $n$ is the number of meta path-based features, $\mathcal{F}^{P_i}$ is the $i$-th meta path-based feature matrix defined on $G_i$, and $\theta_i$ is weights for feature $f_i$. Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, it cannot be efficiently applied to the changed loss function. This is because it requires computing meta paths for all possible pairs of nodes in $\mathcal{F}^{P_i}$ for all snapshots, which is not scalable as calculating similarity measures such as PathCount or PathSim can be very costly. For example computing path counts for \textit{A--P--V--P--A} meta path, can be done by multiply adjacency matrices $AP\times PV\times VP\times PA$. 
+Our hypothesis is that combining latent with topological features can increase the prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. One way to do so is by changing the loss function in Equation (\ref{latentOrigEqu}) to $\argmin\limits_{\boldsymbol{\theta_\tau},Z_\tau}\sum\limits_{\tau=1}^{t}\left \| G^\mathcal{P}_\tau - \Phi(Z_{\tau}Z_{\tau}^T + \sum\limits_{i=1}^{n}\theta_{i_{\tau-1}} \mathcal{F}^{\mathcal{P}_i}_{\tau-1}) \right \|^2_F$ and add another regularization term $\lambda \sum\limits_{\tau=1}^{t} \sum\limits_{i=1}^{n} \theta_{i_\tau}^2$, where $n$ is the number of meta path-based features, $\mathcal{F}^{\mathcal{P}_i}$ is the $i$-th meta path-based feature matrix defined on $G_i$, and $\theta_i$ is weights for feature $f_i$. Although the gradient descent algorithm used in the MF technique to infer latent space matrices in \cite{Zhu2016} is fast, it cannot be efficiently applied to the changed loss function. This is because it requires computing meta paths for all possible pairs of nodes in $\mathcal{F}^{\mathcal{P}_i}$ for all snapshots, which is not scalable as calculating similarity measures such as PathCount or PathSim can be very costly. For example computing path counts for \textit{A--P--V--P--A} meta path, can be done by multiply adjacency matrices $AP\times PV\times VP\times PA$. 
 
 
 %Thus we restrict it only to those links that make new connections in the next time interval or negative samples and use logistic regression.
 As an alternative solution we build a predictive model that considers a linear combination of topological and latent features. These features, however, can be combined in different ways that is beyond the scope of this work. Given the training pairs of nodes and their corresponding meta path-based and latent features, we apply logistic regression to learn the weights associated with these features. We define the probability of forming a \textit{new link} in future from node $a$ to $b$ as %$Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i.f_i(a,b)$ 
- $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i f^{P_i}(a,b) + \sum\limits_{j=1}^{k} \theta_{n+j}Z(a,j)Z(b,j)$, and $\theta_1,\theta_2,..., \theta_n$ and $\theta_{n+1},\theta_{n+2},..., \theta_{n+k}$ are associated weights for meta path-based features and latent features at current time between $a$ and $b$. Given a training dataset with $l$ instance-label pairs, we use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$ as%where $\lambda \sum_{j=1}^{n+k} \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
+ $Pr(label=1|a, b; \boldsymbol{\theta}) = \frac{1}{e^{-z}+1}$, where $z=\sum\limits_{i=1}^{n}\theta_i f^{\mathcal{P}_i}(a,b) + \sum\limits_{j=1}^{k} \theta_{n+j}Z(a,j)Z(b,j)$, and $\theta_1,\theta_2,..., \theta_n$ and $\theta_{n+1},\theta_{n+2},..., \theta_{n+k}$ are associated weights for meta path-based features and latent features at current time between $a$ and $b$. Given a training dataset with $l$ instance-label pairs, we use logistic regression with $L_2$ regularization to estimate the optimal $\boldsymbol{\theta}$ as%where $\lambda \sum_{j=1}^{n+k} \theta_j^2$ is the regularization term, and $C>0$ is a penalty parameter. 
 
 %$\boldsymbol{\hat{\theta}} = 
 %\operatorname*{arg\,max}_{\boldsymbol{\theta}}\sum_i log Pr(y_i = 1|a_i, b_i; \boldsymbol{\theta}) - \alpha \sum_{j=1}^N \theta_j^2
@@ -176,7 +173,7 @@ As an alternative solution we build a predictive model that considers a linear c
 \argmin\limits_{\boldsymbol{\theta}}\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \lambda \sum_{j=1}^{n+k} \theta_j^2
 \end{equation}
  
-We preferred combining features in this learning framework since $G_i$ is very sparse and thus the number of newly formed links are much less compared to all possible links. Consequently calculating meta path-based features for training dataset is scalable compared to the MF technique. Moreover, similar to \cite{sun2011ASONAM}, in order to avoid excessive computing of meta path-based measures between nodes that might not be related, we confine samples to pairs that are located in a nearby neighborhood. More specifically, for each source node $x$ in $G^{P}_{i}$, we choose target nodes that are within 3-hop of $x$ but not in 1-hop, i.e, are not connected to $x$ in $G^{P}_{i}$. We first find all target nodes that make a new relationship with $x$  in $G^{P}_{i+1}$ and label respective samples as positive. Next we sample an equal number of negative pairs, i.e., those targets that do not make new connection, to balance our training set. Once the dataset is built, we perform logistic regression to learn the model and then apply the predictive model to the feature vector  $\langle f^{P_1}_{t}(a,b), f^{P_2}_{t}(a,b), ..., f^{P_n}_{t}(a,b), \hat{G}^{P}_{t+1}(a,b)\rangle$. The output probability can be later interpreted as a binary value based on a user defined cut-off.
+We preferred combining features in this learning framework since $G_i$ is very sparse and thus the number of newly formed links are much less compared to all possible links. Consequently calculating meta path-based features for training dataset is scalable compared to the MF technique. Moreover, similar to \cite{sun2011ASONAM}, in order to avoid excessive computing of meta path-based measures between nodes that might not be related, we confine samples to pairs that are located in a nearby neighborhood. More specifically, for each source node $x$ in $G^\mathcal{P}_{i}$, we choose target nodes that are within 3-hop of $x$ but not in 1-hop, i.e, are not connected to $x$ in $G^\mathcal{P}_{i}$. We first find all target nodes that make a new relationship with $x$  in $G^\mathcal{P}_{i+1}$ and label respective samples as positive. Next we sample an equal number of negative pairs, i.e., those targets that do not make new connection, to balance our training set. Once the dataset is built, we perform logistic regression to learn the model and then apply the predictive model to the feature vector  $\langle f^{\mathcal{P}_1}_{t}(a,b), f^{\mathcal{P}_2}_{t}(a,b), ..., f^{\mathcal{P}_n}_{t}(a,b), \hat{G}^\mathcal{P}_{t+1}(a,b)\rangle$. The output probability can be later interpreted as a binary value based on a user defined cut-off.
 
 %In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$, and negative otherwise.
 
@@ -217,7 +214,7 @@ We performed 5-fold cross validation for the training phase.
 
 % \STATE $\{G_1, .., G_t\} \leftarrow DecomposeGraph(G, t)$
 
-% \STATE $\{P_1, .., P_n\} \leftarrow GenerateMetaPaths(S,R,l)$
+% \STATE $\{\mathcal{P}_1, .., \mathcal{P}_n\} \leftarrow GenerateMetaPaths(S,R,l)$
 
 % \FOR {each heterogeneous graph $G_i$}
 %     %\STATE $G^R_i \leftarrow AugmentedReducedGraph(G_i,R,S)$
