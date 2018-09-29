@@ -104,6 +104,10 @@ Wang, C., Song, Y., El-Kishky, A., Roth, D., Zhang, M., Han, J.: Incorporating
   networks. In: Proceedings of the 21th ACM SIGKDD International Conference on
   Knowledge Discovery and Data Mining. pp. 1215--1224. ACM (2015)
 
+\bibitem{wang2016text}
+Wang, C., Song, Y., Li, H., Zhang, M., Han, J.: Text classification with
+  heterogeneous information network kernels. In: AAAI. pp. 2130--2136 (2016)
+
 \bibitem{wang2016relsim}
 Wang, C., Sun, Y., Song, Y., Han, J., Song, Y., Wang, L., Zhang, M.: Relsim:
   Relation similarity search in schema-rich heterogeneous information networks
