@@ -8,8 +8,13 @@ The goal of link prediction in a network graph \cite{liben2007link} is to estima
 
 In a HIN relations between different entities carry different semantics. For instance the relationship between two authors are different in meaning when they are co-authors compared to the case that one cites another's paper. Thus techniques for homogeneous networks cannot be directly applied on heterogeneous ones. A few works such as \cite{sun2011pathsim,sun2011ASONAM} investigated the problem of link/relationship prediction in HINs, however, they do not consider the dynamism of networks and overlook the potential benefits of analyzing a heterogeneous graph as a sequence of network snapshots. To this end, existing work has already shown that in homogenous networks incorporating temporal changes improves link prediction accuracy \cite{Zhu2016}. Previous work on temporal link prediction scarcely studied HINs and to the best of our knowledge, the problem of relationship prediction for dynamic heterogeneous networks has not been studied before. A dynamic heterogeneous information network (DHIN) is a HIN, where links are associated with timestamps.
 
-\amin{For Ebrahim}
-In this work we study the problem of predicting relationships in a DHIN, which is stated as follows: \textit{Given a DHIN graph $G$ at time $t$, how can we predict the existence of a particular relationship/path between two given nodes at time $t+1$?}
+
+
+In this work we study the problem of predicting relationships in a DHIN, which can be formulated as: \textit{Given a DHIN graph $G$ at $t$ consecutive time intervals, we predict the existence of a particular relationship/path between two given nodes at time t + 1}. To this end, the main contributions of our work include:
+
+\amin{I think it's better to present it as a question. "....Given a DHIN graph $G$ at $t$ consecutive time intervals, how can we predict the existence of a particular relationship/path between two given nodes at time $t+1$?"} %The main contributions of our work include:
+
+%\textit{Given a DHIN graph $G$ at time $t$, how can we predict the existence of a particular relationship/path between two given nodes at time $t+1$?"}
 
 
 %\cite{Zhu2016} \cite{sun2011pathsim} \cite{Sun:2012:HRP:2124295.2124373}  \cite{huang2016meta} \cite{wang2016relsim} \cite{sun2013pathselclus} \cite{sun2011ASONAM} \cite{Yang2012} \cite{liben2007link}
@@ -22,21 +27,23 @@ In this work we study the problem of predicting relationships in a DHIN, which i
 
 %In \cite{gu2018rare} authors presented SocialRank...
 
-The main contributions of our work include:
 
 %The main objective of this work is to examine possibility of using meta path-based features along with latent features ... To this end, we propose to ... by taking into account (i) nodes? interest built based on their explicit contribution towards the extracted topics, (ii) theory of Homophily [12], which refers to the tendency of users to connect to users with common interests or preferences; and (iii) relationship between emerging topics, based on their similar constituent contents and user contributions towards them. More specifically, the key contributions of our work are as follows:
 
+
 \begin{itemize}
 
-\item We propose the problem of relationship prediction in a DHIN, and analyze the differences between this problem and the related link prediction solutions for dynamic networks and for heterogeneous networks;
+\item We propose the problem of relationship prediction in a DHIN, and draw a contrast between between this problem and existing link prediction techniques that have been proposed for dynamic and heterogeneous networks;
 
-\item We present a simple yet effective technique that leverages topological meta path-based and latent features to predict a target relationships between two nodes in a DHIN;
+\item We present a simple yet effective technique that leverages topological meta path-based and latent features to predict a target relationship between two nodes in a DHIN;
 
-\item We define the \textit{augmented reduced graph} that is generated according to a given HIN and a target relation meta path and is used in our proposed algorithms: the homogenize link prediction, and the dynamic meta path-based relationship prediction;
+%\item We define the \textit{augmented reduced graph} that is generated according to a given HIN and a target relation meta path and is used in our proposed algorithms: the homogenize link prediction, and the dynamic meta path-based relationship prediction;
 
 %\item We implement our approach in a tool called ..., which is freely available
 
-\item We empirically evaluate the efficacy and accuracy of our proposed algorithms on on two real-world datasets, and the results show X\% to Y\% improvement in accuracy  compared to baseline techniques.
+\item We empirically evaluate the efficacy and accuracy of our proposed work on two real-world datasets, and the results show X\% to Y\% improvement compared to the state of the art baselines.
+
+%\item We empirically evaluate the efficacy and accuracy of our proposed algorithms on on two real-world datasets, and the results show X\% to Y\% improvement in accuracy compared to baseline techniques.
 
 \end{itemize}
 

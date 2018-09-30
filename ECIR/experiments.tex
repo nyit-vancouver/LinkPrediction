@@ -59,11 +59,34 @@ We also conduct our experiments on two variations of the DBLP, one with min 5pap
 \subsubsection{Experiment Settings.} 
 - Parameters
 
-- Baseline methods .Considering the effect of time-wise data decomposition. What if we shorten timespans of each $G_t$? The extreme is having only one graph or having it for each year. Can we find a trade-off?
+- Baseline methods . 
+
+
+
+Sun et al. \cite{sun2011ASONAM} showed that their proposed \textit{PathPredict} approach is superior to traditional link prediction techniques such as common neighbors, Jaccard?s coefficient, and Katz. Such methods are homogeneous and non-temporal. The number of common neighbors, preferential attachment [2], [9], Jaccard?s coefficient, and Katz [5], are amongst frequently used topological features defined in homogeneous networks.
+
+
+Since the path count results are not considerably different than PathSim, we consider comparing with path count due to efficiency in meta path-based feature calculation.
+
+ % Heterogeneous non-temporal (PathCount, PathSim, NormalPathCount, RandomWalk, SymmetricRandomWalk)
+
+
+%[2] A. L. Barabasi, H. Jeong, Z. Neda, E. Ravasz, A. Schubert, and T. Vicsek. Evolution of the social network of scientific collaborations. Physica A, 311:590?614, 2002.
+
+%[9] M. E. J. Newman. Clustering and preferential attachment in growing networks. Physical Review Letters E, 64, 2001.
+
+%[5] L. Katz. A new status index derived from sociometric analysis. Psychometrika, 18(1):39 ? 43, 1953.
+
+
+\cite{liben2007link}
+
+Therefore in this work we do not compare our proposed technique with such methods.
+
+We consider different number of snapshots ($t$) to evaluate the effect of time-wise data decomposition. The extreme case is having only one graph or having it for each year. Can we find a trade-off?
 
 \begin{itemize}
     \item  Heterogeneous non-temporal (PathCount, PathSim, NormalPathCount, RandomWalk, SymmetricRandomWalk)
-    \item  Homogeneous non-temporal (Katz, Jaccard)
+    %\item  Homogeneous non-temporal (Katz, Jaccard)
     \item  Homogeneous temporal (BCGD)
 \end{itemize}
 
@@ -168,7 +191,7 @@ classifier B if Ns f is larger than Nf s according to Table 3.
 
 \subsection{Results and Findings}
 
-\amin{One reason that \textit{A--P--V--P--A} is better with intervals is that one may publish in KDD but there are so many publishing there....}
+\amin{One reason that \textit{A--P--V--P--A} is better with intervals is that one may publish in ECIR but there are so many publishing there....}
 
 
 \subsection{Discussion}
