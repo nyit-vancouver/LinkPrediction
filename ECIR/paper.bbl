@@ -88,6 +88,10 @@ Liben-Nowell, D., Kleinberg, J.: The link-prediction problem for social
 L{\"u}, L., Medo, M., Yeung, C.H., Zhang, Y.C., Zhang, Z.K., Zhou, T.:
   Recommender systems. Physics Reports  \textbf{519}(1),  1--49 (2012)
 
+\bibitem{mcnemar1947note}
+McNemar, Q.: Note on the sampling error of the difference between correlated
+  proportions or percentages. Psychometrika  \textbf{12}(2),  153--157 (1947)
+
 \bibitem{menon2011link}
 Menon, A.K., Elkan, C.: Link prediction via matrix factorization. In: Joint
   european conference on machine learning and knowledge discovery in databases.
