@@ -3,6 +3,11 @@
 \providecommand{\urlprefix}{URL }
 \providecommand{\doi}[1]{https://doi.org/#1}
 
+\bibitem{al2006link}
+Al~Hasan, M., Chaoji, V., Salem, S., Zaki, M.: Link prediction using supervised
+  learning. In: SDM06: workshop on link analysis, counter-terrorism and
+  security (2006)
+
 \bibitem{Cantador:RecSys2011}
 Cantador, I., Brusilovsky, P., Kuflik, T.: 2nd workshop on information
   heterogeneity and fusion in recommender systems (hetrec 2011). In:
@@ -73,6 +78,11 @@ Lei, C., Ruan, J.: A novel link prediction algorithm for reconstructing
   protein--protein interaction networks by topological similarity.
   Bioinformatics  \textbf{29}(3),  355--364 (2012)
 
+\bibitem{leroy2010cold}
+Leroy, V., Cambazoglu, B.B., Bonchi, F.: Cold start link prediction. In:
+  Proceedings of the 16th ACM SIGKDD international conference on Knowledge
+  discovery and data mining. pp. 393--402. ACM (2010)
+
 \bibitem{li2013recommendation}
 Li, X., Chen, H.: Recommendation as link prediction in bipartite graphs: A
   graph kernel-based machine learning approach. Decision Support Systems
@@ -82,6 +92,11 @@ Li, X., Chen, H.: Recommendation as link prediction in bipartite graphs: A
 Liben-Nowell, D., Kleinberg, J.: The link-prediction problem for social
   networks. Journal of the American society for information science and
   technology  \textbf{58}(7),  1019--1031 (2007)
+
+\bibitem{lichtenwalter2010new}
+Lichtenwalter, R.N., Lussier, J.T., Chawla, N.V.: New perspectives and methods
+  in link prediction. In: Proceedings of the 16th ACM SIGKDD international
+  conference on Knowledge discovery and data mining. pp. 243--252. ACM (2010)
 
 \bibitem{lu2012recommender}
 L{\"u}, L., Medo, M., Yeung, C.H., Zhang, Y.C., Zhang, Z.K., Zhou, T.:
@@ -158,6 +173,10 @@ Sun, Y., Norick, B., Han, J., Yan, X., Yu, P.S., Yu, X.: Pathselclus:
 Tang, J., Zhang, J., Yao, L., Li, J., Zhang, L., Su, Z.: Arnetminer: Extraction
   and mining of academic social networks. In: KDD'08. pp. 990--998 (2008),
   \url{https://aminer.org/citation}
+
+\bibitem{wang2007local}
+Wang, C., Satuluri, V., Parthasarathy, S.: Local probabilistic models for link
+  prediction. In: icdm. pp. 322--331. IEEE (2007)
 
 \bibitem{wang2015incorporating}
 Wang, C., Song, Y., El-Kishky, A., Roth, D., Zhang, M., Han, J.: Incorporating
