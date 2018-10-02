@@ -6,7 +6,6 @@ To assess the efficacy of our proposed technique, we have conduct experiments to
 
 \subsection{Experiment Setup}
 
-%\subsubsection{Dataset.} We conduct our experiments on two real-world datasets, whose statistics are summarized in Table 2. These databases have different characteristics and evolution behaviour. We also consider different type of target relationship as discussed in subsection \ref{targetRelashipSection}.
 \subsubsection{Dataset.} We conduct our experiments on two real-world network datasets that have different characteristics and evolution behaviour. 
 
 \textit{Publications dataset:} The AMiner citation dataset \cite{Tang:08KDD} version 8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. Each paper is associated with abstract, authors, year, venue, and title. We confined our experiments on papers published since 1996, which includes 2,935,679 papers. From this dataset, we generate a second one by considering only authors with at least 5 papers\footnote{A similar dataset was used in \cite{sun2011ASONAM} considering authors with more than 5 publications.}.    
@@ -27,12 +26,13 @@ To assess the efficacy of our proposed technique, we have conduct experiments to
 
 \subsubsection{Experiment Settings.} We describe meta paths and target relationships, baseline methods, and different parameter settings.
 
-\textit{Baseline methods.} (1) \textit{PathPredict} considering only 3 intervals, (2) \textit{BCGD}, (3) regression with \textit{BCGD}, (4) temporal \textit{PathPredict}, (5) hybrid temporal \textit{PathPredict} and \textit{BCGD} (ours).
+\textit{Baseline methods.} The state-of-the-art link prediction methods which we compare with our proposed algorithm in these experiments are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} is superior to traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}. Their results also indicates that using the path count measure is not considerably different than PathSim or , we consider comparing with path count due to efficiency in meta path-based feature calculation.
 
-The state-of-the-art link prediction methods which we compare with our proposed algorithm in these experiments are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} is superior to traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}. Their results also indicates that using the path count measure is not considerably different than PathSim or , we consider comparing with path count due to efficiency in meta path-based feature calculation.
+
+(1) \textit{PathPredict} considering only 3 intervals, (2) \textit{BCGD}, (3) regression with \textit{BCGD}, (4) temporal \textit{PathPredict}, (5) hybrid temporal \textit{PathPredict} and \textit{BCGD} (ours).
+
 
  % Heterogeneous non-temporal (PathCount, PathSim, NormalPathCount, RandomWalk, SymmetricRandomWalk)
-
 
 For the heterogeneous topological features, we use path count measure for 9 meta paths (denoted as heterogeneous PC) listed in Table II (not including the target relation itself); for homogeneous topological features, we use (1) the number of common coauthors, (2) the rooted PageRank ([7]), and (3) the number of paths between two authors of length no longer than 4, disregarding their different meta paths (denoted as homogeneous PC).
 
@@ -56,22 +56,27 @@ We consider different number of snapshots ($t$) to evaluate the effect of time-w
 %    \item  Homogeneous temporal (BCGD)
 %\end{itemize}
 
-\textit{Meta paths and target relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic fro papers or tag for movies.
+\textit{Meta paths and target relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic for papers or tag for movies.
 
-Out of 12310, 10109 movies were rated movies
+%Publications
+We consider different type of target relationship.
 
-
-Movies once release, users can rate them but a paper is published once and new co-authorship is made only at that time... In Publications dataset co-authorship connections are new in Movies dataset new connections to an existing movie. This is a common problem with all rating datasets.
-
-We consider .... based on the work in ... we con
-
-%conducted Wald test in a case study and found that the $p$-value for the feature associated with each meta path and their significance level. From the results, we can see that the 
-
-Table \ref{table_publications} shows meta paths between authors under length 4 for the publications dataset.
 
 Authors in \cite{sun2011ASONAM} conducted a case study on a similar DBLP dataset and found that shared co-authors, shared venues, shared topics and co-cited papers for two authors play very significant roles in determining their future collaborations. Similarly we consider meta paths including \textit{A--P--A} (target meta path), \textit{A--P--V--P--A}, \textit{A--P--A--P--A}, and \textit{A--P--P--P--A}.
 
-We consider different type of target relationship.
+%conducted Wald test in a case study and found that the $p$-value for the feature associated with each meta path and their significance level. From the results, we can see that the 
+
+% Movies
+Out of 12310, 10109 movies were rated movies
+
+Movies once release, users can rate them but a paper is published once and new co-authorship is made only at that time... In Publications dataset co-authorship connections are new in Movies dataset new connections to an existing movie. This is a common problem with all rating datasets.
+
+We consider .... based on the work in ... 
+
+Similarly we only calculated the PC for these meta paths. Note that the goal of our paper is not to select the best features but to show the strength of using...
+
+Unlike the \textit{A--P--A} target relation for the publication dataset for which both ends of the relation is of the same kind, we consider \textit{U--M} as the target meta path for the movie dataset to show the effectiveness of our proposed methods in predicting such relationships.
+\amin{The issue with matrix factorization is that originally $G_{n*n}$ is for homogenous network with the same type of nodes. In our case $ZZ^T$ vs. $VU^T$ }
 
 
 \begin{figure}[t]
@@ -88,10 +93,7 @@ We consider different type of target relationship.
 \end{figure}
 
 
-Similarly we only calculated the PC for these meta paths. Note that the goal of our paper is not to select the best features but to show the strength of using...
-
-
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \caption{Publications dataset meta paths. $V$=\{Author, Paper, Venue\}.}
 \label{table_publications}\scriptsize
@@ -105,13 +107,10 @@ Similarly we only calculated the PC for these meta paths. Note that the goal of 
 
 \end{tabular}
 
-
 \end{table}
 
-Unlike the \textit{A--P--A} target relation for the publication dataset for which both ends of the relation is of the same kind, we consider \textit{U--M} as the target meta path for the movie dataset to show the effectiveness of our proposed methods in predicting such relationships.
-\amin{The issue with matrix factorization is that originally $G_{n*n}$ is for homogenous network with the same type of nodes. In our case $ZZ^T$ vs. $VU^T$ }
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \caption{Movies dataset meta paths. $V$=\{User, Movie, Actor, Director, Genre\}.}
 \label{table_movies}\scriptsize

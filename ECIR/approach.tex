@@ -14,7 +14,7 @@ Given a HIN graph $G=(V,E)$ and a target meta path $\mathcal{P}(A_i,A_j)$ betwee
 For example, an augmented reduced graph for the network in Figure \ref{sampleNetwork} and target meta path $\mathcal{P}(A,A)$=\textit{A--P--V--P--A} is a graph whose nodes are of type \textit{Author} and whose edges represent \textit{publishing in the same venue}. %For example (\textit{Max}, \textit{Ada}) is an edge in the corresponding augmented reduced graph because they both published at KDD and ICDM. If we consider meta path $\mathcal{P}(A,A)$=\textit{A--P--A}, the augmented reduced graph represents a co-authorship graph, where nodes are of type \textit{Author} and edges, such as (\textit{Max}, \textit{Tom}), represent \textit{co-authorship}.
 
 
-\amin{ bipartite graph }
+%\amin{modelling as bipartite graph}
 
 \subsection{Homogenized link prediction}
 
@@ -157,7 +157,7 @@ The last steps create a training dataset for sample pairs $(x,y)$ with feature s
 
 %\subsubsection{The predictive model.}
 \subsubsection{Combining latent and meta path-based features.}
-Our hypothesis is that combining latent with topological features can increase prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. One way to combine these features is to incorporate meta path measures in Equation (\ref{latentOrigEqu}) by changing the loss function and regularization term as
+Our hypothesis is that combining latent with topological features can increase prediction accuracy as we can learn latent features that fit the residual of meta path-based features. One way to combine these features is to incorporate meta path measures in Equation (\ref{latentOrigEqu}) by changing the loss function and regularization term as
 \begin{equation}\label{latentMetaEqu}
     \begin{array}{l}
 \argmin\limits_{\boldsymbol{\theta_i},Z_i}\sum\limits_{i=1}^{t}\left \| G^\mathcal{P}_i - (Z_{i}Z_{i}^T + \sum\limits_{i=1}^{n}\theta_{i_{i-1}} \mathcal{F}^{\mathcal{P}_i}_{i-1}) \right \|^2_F+
