@@ -7,38 +7,13 @@ To assess the efficacy of our proposed technique, we have conduct experiments to
 \subsection{Experiment Setup}
 
 %\subsubsection{Dataset.} We conduct our experiments on two real-world datasets, whose statistics are summarized in Table 2. These databases have different characteristics and evolution behaviour. We also consider different type of target relationship as discussed in subsection \ref{targetRelashipSection}.
-\subsubsection{Dataset.} We conduct our experiments on two real-world datasets that have different characteristics and evolution behaviour. 
+\subsubsection{Dataset.} We conduct our experiments on two real-world network datasets that have different characteristics and evolution behaviour. 
 
-\textit{Publications dataset:} The \textit{aminer} citation dataset\footnote{\url{https://aminer.org/citation}} V8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. 78,635 authors had no co-author (about 4\%). 
+\textit{Publications dataset:} The AMiner citation dataset\footnote{\url{https://aminer.org/citation}} V8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. Each paper is associated with abstract, authors, year, venue, and title. We confined our experiments on papers published since 1996, which includes 2,935,679 papers. From this dataset, we generate a second one by considering only authors with at least 5 papers\footnote{A similar dataset was used in \cite{sun2011ASONAM} considering authors with more than 5 publications.}.    
     
-    179,607 authors had no co-author in 1996-2016. 
-    78,635 authors had no co-author (about 4\%). 
-    ------------
-    100,972 (those who published in 1930-1996)?
-    
-    1,752,443 (total) - 100,972 = 1,651,471 (those who published in 1996-2016)?
-    
-    1,544,408 authors had no co-author in 1930-1996
-    78,635 authors had no co-author (about 4\%). 
-    ------------
-    1,465,773 (those who published in 1996-2016)?
-
-    1,752,443 (total) -1,465,773 = 300,000 (those who published in between)?
-    
-%    1,752,443 author_papervenuelist_map
-%    2,811,533 paper_authorslist_map
-%    10,163 venue_paperauthorslist_map
-    
-    Each paper is associated with abstract, authors, year, venue, and title. \amin{We consider only those papers published since 1996, which includes 2,935,679 papers and Y authors.} Authors in \cite{sun2011ASONAM} used a similar dataset but considered only authors with more than 5 publications. We generate two datasets: one that contains all publications, and one that considers authors with at least 5 papers. We consider $k=3, 5, and 10$ different time intervals for the dynamic analysis. In our evaluation, we execute the learned model on the last interval to measure the prediction accuracy.
-    
-\textit{Movies dataset:} The RecSys HetRec 2011 movie data set \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by GroupLeans research group \footnote{\url{http://www.grouplens.org}} that links the movies of MovieLens dataset with their corresponding web pages at Internet Movie Database (IMDB\footnote{\url{http://www.imdb.com}}) and Rotten Tomatoes\footnote{\url{http://www.rottentomatoes.com}} movie review systems. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie), and 13,222 tags (avg. 22.69 tas per user, avg. 8.12 tas per movie).
-
-
-Movies once release, users can rate them but a paper is published once and new co-authorship is made only at that time... In Publications dataset co-authorship connections are new in Movies dataset new connections to an existing movie. This is a common problem with all rating datasets.
-
-%Datasets of different sizes.
-We also conduct our experiments on two variations of the DBLP, one with min 5paper as in ... and one with all.
-
+\textit{Movies dataset:} The RecSys HetRec 2011 movie dataset \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by GroupLeans research group \footnote{\url{http://www.grouplens.org}} that links the movies of MovieLens dataset with their corresponding web pages at Internet Movie Database (IMDB%\footnote{\url{http://www.imdb.com}}
+) and Rotten Tomatoes %\footnote{\url{http://www.rottentomatoes.com}} 
+movie review systems. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, and 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie).%, and 13,222 tags (avg. 22.69 tags per user, avg. 8.12 tags per movie).
 
 %\begin{table}[]
 %\centering
@@ -55,7 +30,6 @@ We also conduct our experiments on two variations of the DBLP, one with min 5pap
 \subsubsection{Experiment Settings.} We describe meta paths and target relationships, baseline methods, and different parameter settings.
 
 \textit{Baseline methods.} (1) \textit{PathPredict} considering only 3 intervals, (2) \textit{BCGD}, (3) regression with \textit{BCGD}, (4) temporal \textit{PathPredict}, (5) hybrid temporal \textit{PathPredict} and \textit{BCGD} (ours).
-
 
 The state-of-the-art link prediction methods which we compare with our proposed algorithm in these experiments are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} is superior to traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}. Their results also indicates that using the path count measure is not considerably different than PathSim or , we consider comparing with path count due to efficiency in meta path-based feature calculation.
 
@@ -85,6 +59,9 @@ We consider different number of snapshots ($t$) to evaluate the effect of time-w
 %\end{itemize}
 
 \textit{Meta paths and target relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic fro papers or tag for movies.
+
+
+Movies once release, users can rate them but a paper is published once and new co-authorship is made only at that time... In Publications dataset co-authorship connections are new in Movies dataset new connections to an existing movie. This is a common problem with all rating datasets.
 
 We consider .... based on the work in ... we con
 
@@ -154,6 +131,7 @@ Unlike the \textit{A--P--A} target relation for the publication dataset for whic
 
 \textit{Parameters.} $t$, $k$, ...
 
+We consider $k$=3, 5, and 10 different time intervals for the dynamic analysis. In our evaluation, we execute the learned model on the last interval to measure the prediction accuracy.
 
 \subsubsection{Evaluation Metrics.} 
 
@@ -161,6 +139,27 @@ To asses the link prediction accuracy, we use Area Under Curves (both Receiver O
 
 
 \subsection{Results and Findings}
+
+%DBLP
+    179,607 authors had no co-author in 1996-2016. 
+    78,635 authors had no co-author (about 4\%). 
+    ------------
+    100,972 (those who published in 1930-1996)?
+    
+    1,752,443 (total) - 100,972 = 1,651,471 (those who published in 1996-2016)?
+    
+    1,544,408 authors had no co-author in 1930-1996
+    78,635 authors had no co-author (about 4\%). 
+    ------------
+    1,465,773 (those who published in 1996-2016)?
+
+    1,752,443 (total) -1,465,773 = 300,000 (those who published in between)?
+    
+%    1,752,443 author_papervenuelist_map
+%    2,811,533 paper_authorslist_map
+%    10,163 venue_paperauthorslist_map
+    
+78,635 authors had no co-author (about 4\%)
 
 Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
 
