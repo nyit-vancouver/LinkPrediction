@@ -163,12 +163,6 @@ Sun, Y., Han, J., Yan, X., Yu, P.S., Wu, T.: Pathsim: Meta path-based top-k
   similarity search in heterogeneous information networks. In: Proceedings of
   the VLDB Endowment 4 (11). pp. 992--1003. VLDB Endowment (2011)
 
-\bibitem{sun2013pathselclus}
-Sun, Y., Norick, B., Han, J., Yan, X., Yu, P.S., Yu, X.: Pathselclus:
-  Integrating meta-path selection with user-guided object clustering in
-  heterogeneous information networks. ACM Transactions on Knowledge Discovery
-  from Data (TKDD)  \textbf{7}(3), ~11 (2013)
-
 \bibitem{Tang:08KDD}
 Tang, J., Zhang, J., Yao, L., Li, J., Zhang, L., Su, Z.: Arnetminer: Extraction
   and mining of academic social networks. In: KDD'08. pp. 990--998 (2008),

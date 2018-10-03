@@ -35,14 +35,14 @@ Zhu et al. \cite{Zhu2016}%for temporal link prediction in homogeneous networks
 \text{subject to :} \forall x \in V^\mathcal{P},i,Z_{i}\geq 0, Z_{i}(x)Z_{i}(x)^T=1
     \end{array}
 \end{equation}
-where $Z_i(x)$ is a temporal latent vector for node $x$ at time $i$, $Z_i(x,j)$ indicates the position of $x$ in the $j$-th dimension, $\lambda$ is a regularization parameter, and $1-Z_{i}(x)Z_{i-1}(x)^T$ penalizes sudden latent position changes for $x$. This optimization problem can be solved using a gradient descent technique. The intuition behind the above formulation is that nodes with similar latent space representations are more likely to connect, and also nodes move smoothly in the latent space over time and it is less likely to have abrupt moves \cite{zhang2014inferring}. The matrix $G^\mathcal{P}_{t+1}$ can be then estimated by $\Phi(f(Z_1,...Z_t))$, where $\Phi$ and $f$ are link and temporal functions, or simply by $Z_tZ_t^T$.
+where $Z_i(x)$ is a temporal latent vector for node $x$ at time $i$, $Z_i(x,j)$ indicates the position of $x$ in the $j$-th dimension, $\lambda$ is a regularization parameter, and $1-Z_{i}(x)Z_{i-1}(x)^T$ penalizes sudden latent position changes for $x$. This optimization problem can be solved using a gradient descent technique. The intuition behind the above formulation is that nodes with similar latent space representations are more likely to connect, and also nodes move smoothly in the latent space over time and it is less likely to have abrupt moves \cite{zhang2014inferring}. The matrix $G^\mathcal{P}_{t+1}$ can be then estimated by $\Phi(f(Z_1,...Z_t))$, where $\Phi$ and $f$ are link and temporal functions, or simply by $Z_tZ_t^T$. Note that $Z_i$ depends on $Z_{i-1}$ as used in the temporal regularization term in Equation (\ref{latentOrigEqu}).
+
  
 %To predict adjacency matrix $G^\mathcal{P}_{t+1}$, they used $Z_tZ_t^T$, however, they mentioned that $G_{t+1}$ can be formulated as $\Phi(f(Z_1,...Z_t))$, where $\Phi$ and $f$ are link and temporal functions that one may apply techniques such as nonparametric approaches \cite{Sarkar:2012} to learn them.
 
 %can be solved for instance by using block-coordinate gradient descent \cite{Zhu2016}
 
-Algorithm \ref{alg1} takes as input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $\mathcal{P}(A,B)$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. It first decomposes $G$ into a sequence of $t$ graphs $G_1, .., G_t$ by considering the associated timestamps on edges (line 1). Next from each graph $G_i$, a corresponding augmented reduced graph $G^\mathcal{P}_i$ is generated (lines 2-7) for which nodes are of type $a$ and $b$ (beginning and end of target  meta path $\mathcal{P}$). For example given $\mathcal{P}(A,A)$=\textit{A--P--A}, each $G^\mathcal{P}_i$ represents the co-authorship graph at time $i$. Finally by optimizing the Equation (\ref{latentOrigEqu}) it infers latent spaces $Z_1, ...,Z_t$ (line 8) and estimate $G^\mathcal{P}_{t+1}$ by $Z_tZ_t^T$ (line 9). Note that $Z_i$ depends on $Z_{i-1}$ as used in the temporal regularization term in Equation (\ref{latentOrigEqu}).
-
+Algorithm \ref{alg1} takes as input a DHIN graph $G$, the number of graph snapshots $t$, a target relation meta path $\mathcal{P}(A,B)$, the latent space dimension $k$, and the link to predict $(a,b)$ at $t+1$. It first decomposes $G$ into a sequence of $t$ graphs $G_1, .., G_t$ by considering the associated timestamps on edges (line 1). Next from each graph $G_i$, a corresponding augmented reduced graph $G^\mathcal{P}_i$ is generated (lines 2-7) for which nodes are of type $a$ and $b$ (beginning and end of target  meta path $\mathcal{P}$). For example given $\mathcal{P}(A,A)$=\textit{A--P--A}, each $G^\mathcal{P}_i$ represents the co-authorship graph at time $i$. Finally by optimizing the Equation (\ref{latentOrigEqu}) it infers latent spaces $Z_1, ...,Z_t$ (line 8) and estimate $G^\mathcal{P}_{t+1}$ by $Z_tZ_t^T$ (line 9). 
 
 
 \begin{algorithm}[t]
@@ -192,23 +192,12 @@ We preferred to combine features in this learning framework since $G_i$ is very 
 
 
 
-\subsection{Implementation}
-
-We use the implementation of matrix factorization for inferring temporal latent spaces of a sequence of graph snapshots presented in %\footnote{\url{https://github.com/linhongseba/Temporal-Network-Embedding}}
-\cite{Zhu2016}.
-% Self note: The hetrec-2011 dataset (MovieLense-IMDB) have missing user and movie ids as they only consider users with both rating and tags, thus we assign new ids to be able to use the TKDE code.
- For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package %\footnote{\url{https://github.com/cjlin1/liblinear}} 
- and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
-
-
 
 % https://arxiv.org/pdf/1803.00744.pdf
 
 %We perform leave-one-patient-out testing, where all data belonging to a single patient are left out in a particular test fold. All hyper-parameters were chosen through a nested cross-validation performed on the training data alone. We used the area under the ROC curve (AUROC) metric to evaluate our classifiers. We use the method presented by DeLong et al. [27] to compute 95\% confidence intervals and to perform statistical significance tests to compare competing prediction methods (significance level was set at 5\%). All reported p values are based on a two-sided z-test.
 
 %[27] DeLong, E.R., DeLong, D.M., Clarke-Pearson, D.L.: Comparing the areas under two or more correlated receiver operating characteristic curves: a nonparametric approach. Biometrics (1988) 837?845
-
-
 
 
 

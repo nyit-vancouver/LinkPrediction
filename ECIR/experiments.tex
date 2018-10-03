@@ -1,6 +1,13 @@
 \section{Experiments}
 
-To assess the efficacy of our proposed technique, we have conduct experiments to address the following research question: \textit{Does combining latent and meta path-based topological features improve relationship prediction accuracy in DHINs?}
+
+\subsection{Implementation}
+
+We use the implementation of matrix factorization for inferring temporal latent spaces of a sequence of graph snapshots presented in \cite{Zhu2016}. For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
+
+
+
+%To assess the efficacy of our proposed technique, we have conduct experiments to address the following research question: \textit{Does combining latent and meta path-based topological features improve relationship prediction accuracy in DHINs?}
 
 %We will first introduce the experiment setting, then show the results and analysis on the two types of datasets respectively.
 
@@ -8,9 +15,9 @@ To assess the efficacy of our proposed technique, we have conduct experiments to
 
 \subsubsection{Dataset.} We conduct our experiments on two real-world network datasets that have different characteristics and evolution behaviour. 
 
-\textit{Publications dataset:} The AMiner citation dataset \cite{Tang:08KDD} version 8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. Each paper is associated with abstract, authors, year, venue, and title. We confined our experiments on papers published since 1996, which includes 2,935,679 papers. Similar to \cite{sun2011ASONAM}, we also generate another dataset by considering only authors with at least 5 papers.
+\textit{Publications dataset:} The AMiner citation dataset \cite{Tang:08KDD} version 8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. Each paper is associated with an abstract, authors, year, venue, and title. We confined our experiments on papers published since 1996, which includes 2,935,679 papers. Similar to \cite{sun2011ASONAM}, we also generate another dataset by considering only authors with at least 5 papers.
     
-\textit{Movies dataset:} The RecSys HetRec movie dataset \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by GroupLeans research group that links the movies of MovieLens dataset with their corresponding web pages at IMDB and Rotten Tomatoes movie review systems. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, and 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie).%, and 13,222 tags (avg. 22.69 tags per user, avg. 8.12 tags per movie).
+\textit{Movies dataset:} The RecSys HetRec movie dataset \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by GroupLens research group that links the movies of MovieLens dataset with their corresponding web pages at IMDB and Rotten Tomatoes movie review system. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, and 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie).%, and 13,222 tags (avg. 22.69 tags per user, avg. 8.12 tags per movie).
 
 %\begin{table}[]
 %\centering
@@ -26,7 +33,8 @@ To assess the efficacy of our proposed technique, we have conduct experiments to
 
 \subsubsection{Experiment Settings.} We describe meta paths and target relationships, comparable methods, and different parameter settings.
 
-\textit{Meta paths and target relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic for papers or tag for movies. Table \ref{tbl:mp} presents a number of meta paths that we consider in our experiments, where target meta path relations are \textit{co-authorship} and \textit{watching}. We also limit our meta path-based measures to only path count for calculations efficiency, as the results in \cite{sun2011ASONAM} suggest that except for the case of hybrid features, using the path count measure is not considerably different than the normalized path count or the random walk. %Note that the goal of our research is not to select the best features but to show the strength of combining meta paths with temporal latent features.
+\textit{Meta paths and target relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic for papers or tag for movies. Table \ref{tbl:mp} presents a number of meta paths that we consider in our experiments, where target meta path relations are \textit{co-authorship} and \textit{watching}. 
+%We also limit our meta path-based measures to only path count for calculations efficiency, as the results in \cite{sun2011ASONAM} suggest that except for the case of hybrid features, using the path count measure is not considerably different than the normalized path count or the random walk. %Note that the goal of our research is not to select the best features but to show the strength of combining meta paths with temporal latent features.
 
 
 \begin{figure}[t]
@@ -64,7 +72,7 @@ To assess the efficacy of our proposed technique, we have conduct experiments to
 \end{tabular}
 \end{table}
 
-For the publications network we consider meta paths \textit{A-P-V-P-A}, \textit{A-P-A-P-A}, and \textit{A-P-P-P-A}, as the study in \cite{sun2011ASONAM} shows that shared co-authors, shared venues, and co-cited papers for two authors significantly contribute to their future collaborations. There are two major differences between target relation types in our datasets. First, unlike a new co-authorship relation that happens at a particular time, users can watch/rate a movie once it is released. In other words each paper is published once and a new co-authorship is made at that time whereas users create new watching relations to an existing movie. Second, the target relation for the publications dataset, i.e., \textit{A-P-A}, has the same node type at both ends, while the target meta path for the movie dataset, i.e., \textit{U-M}, considers two different node types. Note that $G^\mathcal{P}_i$s in Equation 1 are square adjacency matrices. For the case of having target relations with two types of nodes at ends, we consider 0 value for the relationships of the same type in case no such relation actually exists in the network.
+%For the publications network we consider meta paths \textit{A-P-V-P-A}, \textit{A-P-A-P-A}, and \textit{A-P-P-P-A}, as the study in \cite{sun2011ASONAM} shows that shared co-authors, shared venues, and co-cited papers for two authors significantly contribute to their future collaborations. There are two major differences between target relation types in our datasets. First, unlike a new co-authorship relation that happens at a particular time, users can watch/rate a movie once it is released. In other words each paper is published once and a new co-authorship is made at that time whereas users create new watching relations to an existing movie. Second, the target relation for the publications dataset, i.e., \textit{A-P-A}, has the same node type at both ends, while the target meta path for the movie dataset, i.e., \textit{U-M}, considers two different node types. Note that $G^\mathcal{P}_i$s in Equation 1 are square adjacency matrices. For the case of having target relations with two types of nodes at ends, we consider 0 value for the relationships of the same type in case no such relation actually exists in the network.
 
 %to show the effectiveness of our proposed methods in predicting such relationships. 
 
@@ -76,9 +84,8 @@ For the publications network we consider meta paths \textit{A-P-V-P-A}, \textit{
 
 
 
-\textit{Comparable methods.} We compare the following 5 methods: (1) The original \textit{PathPredict} that considers only 3 intervals \cite{sun2011ASONAM}, (2) homogenized link prediction (Section \ref{def:HLP}), denotes by \textit{HLP}, (3) logistic regression on HLP latent features, denoted by \textit{LRHLP}, (4) PathPredict applied on different time intervals, denotes by \textit{PathPredict2}, and (5) our combined meta path and latent features, denoted by \textit{MetaDynaMix}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
-Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors or Katz$\beta$, and thus we do not compare our technique with them.
-
+\textit{Comparable methods.} We perform comparative analysis of our work, denoted as \textit{MetaDynaMix}, with four techniques: (1) The original \textit{PathPredict} that considers only 3 intervals \cite{sun2011ASONAM}, (2) PathPredict applied on different time intervals, denoted as \textit{PathPredict2}, (3) homogenized link prediction (Section \ref{def:HLP}), denoted as \textit{HLP}, and (4) logistic regression on HLP latent features, denoted as \textit{LRHLP}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
+Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors or Katz$\beta$, and thus we do not include these techniques in our experiments.
 
 
 %\begin{itemize}
@@ -88,11 +95,11 @@ Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms tra
 %\end{itemize}
 
 
-\textit{Parameters.} We set number of snapshots $t$=3, 5, and 7 to evaluate the effect of dynamic analysis of different time intervals. Note that $t$=3 refers to the default case for many link prediction algorithms that learns based on one interval and test based on another interval. More specifically T1 is used for feature calculation and T2 for labels (training) and T2 for feature calculation and T3 for labels (testing). We also set the number of latent features $k$ to 10, 15, and 20.
+\textit{Parameters.} We set the number of snapshots $t$=3, 5, and 7 to evaluate the effect of dynamic analysis of different time intervals. Note that $t$=3 refers to the default case for many link prediction algorithms that learn based on one interval and test based on another interval. More specifically in the training phase features are extracted based on T1 and labels are determined based on T2, and for the testing phase features are calculated based on T2 and labels are checked across T3. We also set the number of latent features $k$ to 10, 15, and 20.
 
 \subsubsection{Evaluation Metrics.} 
 
-To asses the link prediction accuracy, we use Area Under Curves (both Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves), termed as AUCROC and AUCPR \cite{davis2006relationship}. We also present the prediction accuracy for the 5-fold cross validation in training phase as well as the testing phase. Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} to assess the statistical significance of the difference between the classifiers accuracy of different techniques.
+To asses link prediction accuracy, we use Area Under Curves (both Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves), termed as AUCROC and AUCPR \cite{davis2006relationship}. We also present the prediction accuracy for 5-fold cross validation. Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} to assess the statistical significance of the difference between the classifiers accuracy of different techniques.
 
 \subsection{Results and Findings}
 
