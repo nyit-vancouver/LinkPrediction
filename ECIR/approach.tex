@@ -16,7 +16,7 @@ For example, an augmented reduced graph for the network in Figure \ref{sampleNet
 
 %\amin{modelling as bipartite graph}
 
-\subsection{Homogenized link prediction}
+\subsection{Homogenized link prediction}\label{def:HLP}
 
 Once the given DHIN graph $G=(V,E)$ is decomposed to $t$ HIN graphs $G_1, .., G_t$, one solution to the relationship prediction problem (Definition \ref{problemdef}) is to build an augmented reduced graph $G_i^\mathcal{P}$ for each $G_i$ with respect to the given target meta path $\mathcal{P}$ and then predict a link in $G_i^\mathcal{P}$ instead of a path in $G_i$. In other words, we generate a homogenized version of a graph snapshot and apply a link prediction method. The intuition behind considering different snapshots, i.e., a dynamic network, rather than a single snapshot for link prediction is that we can incorporate network evolution patterns to increase prediction accuracy. Our hypothesis is that the estimated graph $\hat{G}_{i+1}^\mathcal{P}$ dependents on $\hat{G}_i^\mathcal{P}$. Inspired by %the matrix factorization approach presented by 
 Zhu et al. \cite{Zhu2016}%for temporal link prediction in homogeneous networks
@@ -181,8 +181,7 @@ As an alternative solution, we build a predictive model that considers a linear 
 \argmin\limits_{\boldsymbol{\theta}}\sum_{i=1}^l -log Pr(label |a_i, b_i; \boldsymbol{\theta}) + \lambda \sum_{j=1}^{n+k} \theta_j^2
 \end{equation}
  
-We preferred to combine features in this learning framework since $G_i$ is very sparse and thus the number of newly formed links are much less compared to all possible links. Consequently calculating meta path-based features for the training dataset is scalable compared to the matrix factorization technique. Moreover, similar to \cite{sun2011ASONAM}, in order to avoid excessive computation of meta path-based measures between nodes that might not be related, we confine samples to pairs that are located in a nearby neighborhood. More specifically, for each source node $x$ in $G^\mathcal{P}_{i}$, we choose target nodes that are within 2-hop of $x$ but not in 1-hop, i.e, are not connected to $x$ in $G^\mathcal{P}_{i}$. We first find all target nodes that make a new relationship with $x$  in $G^\mathcal{P}_{i+1}$ and label respective samples as positive. Next we sample an equal number of negative pairs, i.e., those targets that do not make new connection, in order to balance our training set. Once the dataset is built, we perform logistic regression to learn the model and then apply the predictive model to the feature vector for the target link. The output probability can be later interpreted as a binary value based on a user defined cut-off threshold.\amin{in our experiments we evaluate the effectiveness of a training set considering different time intervals and merging of those samples/}
-
+We preferred to combine features in this learning framework since $G_i$ is very sparse and thus the number of newly formed links are much less compared to all possible links. Consequently calculating meta path-based features for the training dataset is scalable compared to the matrix factorization technique. Moreover, similar to \cite{sun2011ASONAM}, in order to avoid excessive computation of meta path-based measures between nodes that might not be related, we confine samples to pairs that are located in a nearby neighborhood. More specifically, for each source node $x$ in $G^\mathcal{P}_{i}$, we choose target nodes that are within 2-hop of $x$ but not in 1-hop, i.e, are not connected to $x$ in $G^\mathcal{P}_{i}$. We first find all target nodes that make a new relationship with $x$  in $G^\mathcal{P}_{i+1}$ and label respective samples as positive. Next we sample an equal number of negative pairs, i.e., those targets that do not make new connection, in order to balance our training set. Once the dataset is built, we perform logistic regression to learn the model and then apply the predictive model to the feature vector for the target link. The output probability can be later interpreted as a binary value based on a user defined cut-off threshold.
 %In the testing phase, we predict a data point $x$ as positive if $\theta^Tx > 0$, and negative otherwise.
 
 %We derive \textbf{$\hat{\theta}$} which which maximizes the likelihood of all the training pairs.
@@ -195,10 +194,10 @@ We preferred to combine features in this learning framework since $G_i$ is very 
 
 \subsection{Implementation}
 
-We use the implementation of temporal latent space inference for a sequence of dynamic graph snapshots %\footnote{\url{https://github.com/linhongseba/Temporal-Network-Embedding}}
+We use the implementation of matrix factorization for inferring temporal latent spaces of a sequence of graph snapshots presented in %\footnote{\url{https://github.com/linhongseba/Temporal-Network-Embedding}}
 \cite{Zhu2016}.
 % Self note: The hetrec-2011 dataset (MovieLense-IMDB) have missing user and movie ids as they only consider users with both rating and tags, thus we assign new ids to be able to use the TKDE code.
- For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package%\footnote{\url{https://github.com/cjlin1/liblinear}} 
+ For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package %\footnote{\url{https://github.com/cjlin1/liblinear}} 
  and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
 
 
