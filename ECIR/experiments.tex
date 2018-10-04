@@ -26,7 +26,7 @@
 
 \subsubsection{Experiment Settings.} We describe meta paths and target relationships, comparable methods, and different parameter settings.
 
-\textit{Meta paths and target relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic for papers or tag for movies. Table \ref{tbl:mp} presents a number of meta paths that we consider in our experiments, where target meta path relations are \textit{co-authorship} and \textit{watching}. 
+\textit{Meta Paths and Target Relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic for papers or tag for movies. Table \ref{tbl:mp} presents a number of meta paths that we consider in our experiments, where target meta path relations are \textit{co-authorship} and \textit{watching}. 
 %We also limit our meta path-based measures to only path count for calculations efficiency, as the results in \cite{sun2011ASONAM} suggest that except for the case of hybrid features, using the path count measure is not considerably different than the normalized path count or the random walk. %Note that the goal of our research is not to select the best features but to show the strength of combining meta paths with temporal latent features.
 
 
@@ -77,7 +77,7 @@
 
 
 
-\textit{Comparable methods.} We perform comparative analysis of our work, denoted as \textit{MetaDynaMix}, with four techniques: (1) The original \textit{PathPredict} that considers only 3 intervals \cite{sun2011ASONAM}, (2) PathPredict applied on different time intervals, denoted as \textit{PathPredict2}, (3) homogenized link prediction (Section \ref{def:HLP}), denoted as \textit{HLP}, and (4) logistic regression on HLP latent features, denoted as \textit{LRHLP}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
+\textit{Comparable Methods.} We perform comparative analysis of our work, denoted as \textit{MetaDynaMix}, with four techniques: (1) The original \textit{PathPredict} that considers only 3 intervals \cite{sun2011ASONAM}, (2) PathPredict applied on different time intervals, denoted as \textit{PathPredict2}, (3) homogenized link prediction (Section \ref{def:HLP}), denoted as \textit{HLP}, and (4) logistic regression on HLP latent features, denoted as \textit{LRHLP}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
 Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors or Katz$\beta$, and thus we do not include these techniques in our experiments.
 
 
@@ -99,6 +99,63 @@ Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms tra
 To asses link prediction accuracy, we use Area Under Curves (both Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves), termed as AUCROC and AUCPR \cite{davis2006relationship}. We also present the prediction accuracy for 5-fold cross validation. Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} to assess the statistical significance of the difference between the classifiers accuracy of different techniques.
 
 \subsection{Results and Findings}
+
+\textit{Link Prediction Accuracy}. In this part we set the number of time intervals $t$ to 7 for dynamic prediction methods whereas PathPredict uses 3 intervals. Figure \ref{fig:auc} shows AUC diagrams for different prediction method.
+
+
+\begin{figure}[t]
+\centering
+\subfigure{
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/publicationsSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/publicationsSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
+ \label{Fig:DBLP2}
+}
+\subfigure{
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
+ \label{Fig:IMDB}
+}
+\caption{The ROC and PR curves for different methods and datasets.} \label{fig:auc}
+\end{figure}
+
+
+\begin{table}[t]
+\centering
+\caption{The AUC values showing the performance of different prediction methods.}
+\label{table_publications}\scriptsize\label{tbl:auc}
+\begin{tabular}{|l|c|l|l|l|} \hline
+\textbf{Method} & \textbf{Metric} & \textbf{Publications1} & \textbf{Publications2} & \textbf{Movies}\\ \hline
+
+\multirow{2}{*}{PathPredict} & ROC &  & & \\ \cline{2-5}
+& PR &  & & \\ \hline
+
+\multirow{2}{*}{PathPredict2} & ROC &  & & \\ \cline{2-5}
+& PR &  & & \\ \hline
+
+\multirow{2}{*}{MLP} & ROC &  & & \\ \cline{2-5}
+& PR &  & & \\ \hline
+
+\multirow{2}{*}{LRMLP} & ROC &  & & \\ \cline{2-5}
+& PR &  & & \\ \hline
+
+\multirow{2}{*}{MetaDynaMix} & ROC &  & & \\ \cline{2-5}
+& PR &  & & \\ \hline
+
+\end{tabular}
+\end{table}
+
+Table \ref{tbl:auc}
+
+
+
+Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
+
+The null hypothesis of the McNemar's states that the same population proportion of links will be correctly classified by the two methods. However the test result gives a $p$-value $<$ 0.0001 and hence we reject the null hypothesis of equal classifier performance.
+
+\amin{One reason that \textit{A--P--V--P--A} is better with intervals is that one may publish in ECIR but there are so many publishing there....}
+
 
 
 %DBLP
@@ -122,8 +179,8 @@ To asses link prediction accuracy, we use Area Under Curves (both Receiver Opera
     
 78,635 authors had no co-author (about 4\%)
 
-Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
 
-The null hypothesis of the McNemar's states that the same population proportion of links will be correctly classified by the two methods. However the test result gives a $p$-value $<$ 0.0001 and hence we reject the null hypothesis of equal classifier performance.
+\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As depicted in Figure \ref{fig:temporal} the accuracy increases with number of snapshots. This is however comes at the price of increasing inference time as a more snap shots mean more frequent model updates per shorter time interval. Meanwhile, shorter time interval leads to less change of graphs, which indicates that it is more reliable to forecast links. Therefore, the prediction accuracy also improves with number of snapshots.
 
-\amin{One reason that \textit{A--P--V--P--A} is better with intervals is that one may publish in ECIR but there are so many publishing there....}
+\textit{The Effect of Dimensionality}.
+

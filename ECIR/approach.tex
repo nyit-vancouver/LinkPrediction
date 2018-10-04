@@ -16,7 +16,7 @@ For example, an augmented reduced graph for the network in Figure \ref{sampleNet
 
 %\amin{modelling as bipartite graph}
 
-\subsection{Homogenized link prediction}\label{def:HLP}
+\subsection{Homogenized Link Prediction}\label{def:HLP}
 
 Once the given DHIN graph $G=(V,E)$ is decomposed to $t$ HIN graphs $G_1, .., G_t$, one solution to the relationship prediction problem (Definition \ref{problemdef}) is to build an augmented reduced graph $G_i^\mathcal{P}$ for each $G_i$ with respect to the given target meta path $\mathcal{P}$ and then predict a link in $G_i^\mathcal{P}$ instead of a path in $G_i$. In other words, we generate a homogenized version of a graph snapshot and apply a link prediction method. The intuition behind considering different snapshots, i.e., a dynamic network, rather than a single snapshot for link prediction is that we can incorporate network evolution patterns to increase prediction accuracy. Our hypothesis is that the estimated graph $\hat{G}_{i+1}^\mathcal{P}$ dependents on $\hat{G}_i^\mathcal{P}$. Inspired by %the matrix factorization approach presented by 
 Zhu et al. \cite{Zhu2016}%for temporal link prediction in homogeneous networks
@@ -78,7 +78,7 @@ Algorithm \ref{alg1} takes as input a DHIN graph $G$, the number of graph snapsh
 
 
 %\subsection{Meta path-based relationship prediction}
-\subsection{Dynamic meta path-based relationship prediction}
+\subsection{Dynamic Meta Path-based Relationship Prediction}
 
 The above homogenized approach does not consider different semantics of meta paths between the source and destination nodes and assumes that the probability of a link between nodes depends only on their latent features. %On the other hand, Sun et al. \cite{sun2011ASONAM} proposed a supervised learning framework, called \textit{PathPredict}, that uses meta path-based features in a past time interval to predict the relationship building in a future time interval. It learns coefficients associated with features by maximizing the likelihood of new relationship formation. However, their model is learned based on one past interval and does not consider temporal changes as in \cite{Zhu2016}. 
 Our intuition is that leveraging meta path-based features along with latent space features can help to boost prediction accuracy. To this end, we combine latent space features with topological meta path-based features in our model.
@@ -156,7 +156,7 @@ The last steps create a training dataset for sample pairs $(x,y)$ with feature s
 
 
 %\subsubsection{The predictive model.}
-\subsubsection{Combining latent and meta path-based features.}
+\subsubsection{Combining Latent and Meta Path-based Features.}
 Our hypothesis is that combining latent with topological features can increase prediction accuracy as we can learn latent features that fit the residual of meta path-based features. One way to combine these features is to incorporate meta path measures in Equation (\ref{latentOrigEqu}) by changing the loss function and regularization term as
 \begin{equation}\label{latentMetaEqu}
     \begin{array}{l}
