@@ -2,27 +2,15 @@
 
 %To assess the efficacy of our proposed technique, we have conduct experiments to address the following research question: \textit{Does combining latent and meta path-based topological features improve relationship prediction accuracy in DHINs?}
 
-%We will first introduce the experiment setting, then show the results and analysis on the two types of datasets respectively.
 
 \subsection{Experiment Setup}
 
 \subsubsection{Dataset.} We conduct our experiments on two real-world network datasets that have different characteristics and evolution behaviour. 
 
-\textit{Publications dataset:} The AMiner citation dataset \cite{Tang:08KDD} version 8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. Each paper is associated with an abstract, authors, year, venue, and title. We confined our experiments on papers published since 1996, which includes 2,935,679 papers. Similar to \cite{sun2011ASONAM}, we also generate another dataset by considering only authors with at least 5 papers.
+\textit{Publications dataset:} The AMiner citation dataset \cite{Tang:08KDD} version 8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. Each paper is associated with an abstract, authors, year, venue, and title. We confined our experiments on papers published since 1996, which includes 2,935,679 papers. Similar to \cite{sun2011ASONAM}, we considered only authors with at least 5 papers.
     
 \textit{Movies dataset:} The RecSys HetRec movie dataset \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by GroupLens research group that links the movies of MovieLens dataset with their corresponding web pages at IMDB and Rotten Tomatoes movie review system. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, and 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie).%, and 13,222 tags (avg. 22.69 tags per user, avg. 8.12 tags per movie).
 
-%\begin{table}[]
-%\centering
-%\caption{Comparison of the two networks.}
-%\scriptsize
-%\begin{tabular}{lllll}
-%Network      & Size & Target MP & MP length & \#Training \\
-%Publications &      &           &           &            \\
-%Movies       &      &           &           &            \\
-%             &      &           &           &           
-%\end{tabular}
-%\end{table}
 
 \subsubsection{Experiment Settings.} We describe meta paths and target relationships, comparable methods, and different parameter settings.
 
@@ -47,7 +35,7 @@
 \begin{table}[t]
 \centering
 \caption{Meta paths for publications dataset with $V$=\{Author, Paper, Venue\} and movies dataset with $V$=\{User, Movie, Actor, Director, Genre\}.}
-\label{table_publications}\scriptsize\label{tbl:mp}
+\label{table_publications}\label{tbl:mp}
 \begin{tabular}{|l|c|l|} \hline
 \textbf{Network} & \textbf{Meta path} & \textbf{Meaning} \\ \hline
 
@@ -105,43 +93,51 @@ To asses link prediction accuracy, we use Area Under Curves (both Receiver Opera
 
 \begin{figure}[t]
 \centering
-\subfigure{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/publicationsSchema.pdf}
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/publicationsSchema.pdf}
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
+\subfigure[Publications Network]{
+\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.45\hsize]{figs/Rplot.pdf}
+\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.45\hsize]{figs/Rplot.pdf}
  \label{Fig:DBLP2}
 }
-\subfigure{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.31\hsize]{figs/moviesSchema.pdf}
+\subfigure[Movies Network]{
+\includegraphics[trim = 0mm 10mm 0mm 10mm,width=0.45\hsize]{figs/Rplot.pdf}
+\includegraphics[trim = 0mm 10mm 0mm 10mm,width=0.45\hsize]{figs/Rplot.pdf}
  \label{Fig:IMDB}
 }
 \caption{The ROC and PR curves for different methods and datasets.} \label{fig:auc}
 \end{figure}
 
 
+
+% 7  =>  7
+% 7_min5  =>  5
+% 3_min5  =>  3
+% accuracy 0.50
+
+
+
 \begin{table}[t]
 \centering
 \caption{The AUC values showing the performance of different prediction methods.}
-\label{table_publications}\scriptsize\label{tbl:auc}
-\begin{tabular}{|l|c|l|l|l|} \hline
-\textbf{Method} & \textbf{Metric} & \textbf{Publications1} & \textbf{Publications2} & \textbf{Movies}\\ \hline
+\label{table_publications}\label{tbl:auc}
+\begin{tabular}{ll|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+\cline{3-8}
+                        &   & \multicolumn{3}{l|}{Publications Network} & \multicolumn{3}{l|}{Movies Network} \\ \hline
+\multicolumn{1}{|l|}{\textbf{Method}} & \textbf{Metric} & $t$=3 & $t$=5  & $t$=7  & $t$=3  & $t$=5  & $t$=7     \\ \hline
 
-\multirow{2}{*}{PathPredict} & ROC &  & & \\ \cline{2-5}
-& PR &  & & \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict}}  & ROC  & 0.5 & -- & -- & 0.5 & -- & -- \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  & 0.5 & -- & -- & 0.5 & -- & -- \\ \hline
 
-\multirow{2}{*}{PathPredict2} & ROC &  & & \\ \cline{2-5}
-& PR &  & & \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict2}}  & ROC  &           &           &           &         &         &         \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &           &           &           &         &         &         \\ \hline
 
-\multirow{2}{*}{MLP} & ROC &  & & \\ \cline{2-5}
-& PR &  & & \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{MLP}}  & ROC  &   0.42  &   0.43   &   0.46     &         &         &         \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &    0.43  &   0.43   &   0.45    &         &         &         \\ \hline
 
-\multirow{2}{*}{LRMLP} & ROC &  & & \\ \cline{2-5}
-& PR &  & & \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{LRMLP}}  & ROC  &           &           &           &         &         &         \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &           &           &           &         &         &         \\ \hline
 
-\multirow{2}{*}{MetaDynaMix} & ROC &  & & \\ \cline{2-5}
-& PR &  & & \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{MetaDynaMix}}  & ROC  & \textbf{0.86} &  \textbf{0.87}  & \textbf{0.89}   &    &   &    \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &    &    &    &    &    &    \\ \hline
 
 \end{tabular}
 \end{table}
@@ -159,28 +155,28 @@ The null hypothesis of the McNemar's states that the same population proportion 
 
 
 %DBLP
-    179,607 authors had no co-author in 1996-2016. 
-    78,635 authors had no co-author (about 4\%). 
-    ------------
-    100,972 (those who published in 1930-1996)?
-    
-    1,752,443 (total) - 100,972 = 1,651,471 (those who published in 1996-2016)?
-    
-    1,544,408 authors had no co-author in 1930-1996
-    78,635 authors had no co-author (about 4\%). 
-    ------------
-    1,465,773 (those who published in 1996-2016)?
-
-    1,752,443 (total) -1,465,773 = 300,000 (those who published in between)?
+%    179,607 authors had no co-author in 1996-2016. 
+%    78,635 authors had no co-author (about 4\%). 
+%    ------------
+%    100,972 (those who published in 1930-1996)?
+%    
+%    1,752,443 (total) - 100,972 = 1,651,471 (those who published in 1996-2016)?
+%    
+%    1,544,408 authors had no co-author in 1930-1996
+%    78,635 authors had no co-author (about 4\%). 
+%    ------------
+%    1,465,773 (those who published in 1996-2016)?
+%
+%    1,752,443 (total) -1,465,773 = 300,000 (those who published in between)?
     
 %    1,752,443 author_papervenuelist_map
 %    2,811,533 paper_authorslist_map
 %    10,163 venue_paperauthorslist_map
     
-78,635 authors had no co-author (about 4\%)
+%78,635 authors had no co-author (about 4\%)
 
 
-\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As depicted in Figure \ref{fig:temporal} the accuracy increases with number of snapshots. This is however comes at the price of increasing inference time as a more snap shots mean more frequent model updates per shorter time interval. Meanwhile, shorter time interval leads to less change of graphs, which indicates that it is more reliable to forecast links. Therefore, the prediction accuracy also improves with number of snapshots.
+\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc} the accuracy increases with number of snapshots. This is however comes at the price of increasing inference time as a more snap shots mean more frequent model updates per shorter time interval. Meanwhile, shorter time interval leads to less change of graphs, which indicates that it is more reliable to forecast links. Therefore, the prediction accuracy also improves with number of snapshots.
 
 \textit{The Effect of Dimensionality}.
 
