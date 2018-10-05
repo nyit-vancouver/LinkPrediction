@@ -37,12 +37,12 @@
 \caption{Meta paths for publications dataset with $V$=\{Author, Paper, Venue\} and movies dataset with $V$=\{User, Movie, Actor, Director, Genre\}.}
 \label{table_publications}\label{tbl:mp}
 \begin{tabular}{|l|c|l|} \hline
-\textbf{Network} & \textbf{Meta path} & \textbf{Meaning} \\ \hline
+\textbf{Network} & \textbf{Meta path} & \textbf{Meaning} \\ \hline\hline
 
 \multirow{4}{*}{Publications} & \textit{A--P--A} & [\textit{The target relation}] Authors are coauthors \\ \cline{2-3}
 & \textit{A--P--V--P--A} & Authors publish in the same venue \\ \cline{2-3}
 & \textit{A--P--A--P--A} & Authors have the same co-author \\ \cline{2-3}
-& \textit{A--P--P--P--A} & Authors cite the same papers \\ \hline
+& \textit{A--P--P--P--A} & Authors cite the same papers \\ \hline\hline
 
 \multirow{5}{*}{Movies} & \textit{U--M} & [\textit{The target relation}] A user watches a movie \\ \cline{2-3}
 & \textit{U--M--A--M} & A user watches a movie with the same actor \\ \cline{2-3}
@@ -84,7 +84,7 @@ Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms tra
 
 \subsubsection{Evaluation Metrics.} 
 
-To asses link prediction accuracy, we use Area Under Curves (both Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves), termed as AUCROC and AUCPR \cite{davis2006relationship}. %We also present the prediction accuracy for 5-fold cross validation. 
+To asses link prediction performance, we use Area Under Curves (AUC) for Receiver Operating Characteristic (ROC) and Precision-Recall (PR) \cite{davis2006relationship}, and accuracy (ACC). %We also present the prediction accuracy for 5-fold cross validation. 
 Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} to assess the statistical significance of the difference between the classifiers accuracy of different techniques.
 
 \subsection{Results and Findings}
@@ -112,34 +112,37 @@ Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} 
 % 7  =>  7
 % 7_min5  =>  5
 % 3_min5  =>  3
-% accuracy 0.503 (DBLP) for HLP
-% accuracy 0.531 (IMDB) for HLP
 
 
 
 \begin{table}[t]
 \centering
-\caption{The AUC values showing the performance of different prediction methods.}
+\caption{AUC and prediction accuracy comparison.}
 \label{table_publications}\label{tbl:auc}
-\begin{tabular}{ll|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+\begin{tabular}{ll|p{1cm}|p{1cm}|p{1cm}||p{1cm}|p{1cm}|p{1cm}|}
 \cline{3-8}
-                        &   & \multicolumn{3}{l|}{Publications Network} & \multicolumn{3}{l|}{Movies Network} \\ \hline
-\multicolumn{1}{|l|}{\textbf{Method}} & \textbf{Metric} & $t$=3 & $t$=5  & $t$=7  & $t$=3  & $t$=5  & $t$=7     \\ \hline
+                        &   & \multicolumn{3}{l||}{Publications Network} & \multicolumn{3}{l|}{Movies Network} \\ \hline
+\multicolumn{1}{|l|}{\textbf{Method}} & \textbf{Metric} & $t$=3 & $t$=5  & $t$=7  & $t$=3  & $t$=5  & $t$=7     \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict}}  & ROC  & 0.77 & -- & -- & 0.5 & -- & -- \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  & 0.45 & -- & -- & 0.5 & -- & -- \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict}}  & ROC  & 0.77 & -- & -- & 0.56 & -- & -- \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  & 0.45 & -- & -- & 0.45 & -- & -- \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & 0.58 & -- & -- & 0.54  & -- & -- \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict2}}  & ROC  &  0.77  &           &           &         &         &         \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &   0.45  &           &           &         &         &         \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict2}}  & ROC  &  0.77  &           &           &   0.56   &         &         \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &   0.45  &           &           &   0.45  &         &         \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & 0.58  &    &  & 0.54  &    &    \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{HLP}}  & ROC  &   0.42  &   0.43   &   0.46     &     0.52    &    0.53     &    0.54     \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &    0.43  &   0.44   &   0.45    &   0.44   &  0.45   &  0.45  \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{HLP}}  & ROC  &   0.42  &   0.43   &   0.46     &     0.51    &    0.53     &    0.54     \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &    0.43  &   0.44   &   0.45    &   0.44   &  0.45   &  0.45  \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & 0.44  &  0.50  &  0.51 &  0.52  &  0.52  &  0.53  \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{LRHLP}}  & ROC  &   0.49   &   0.50   &   0.53    &         &         &         \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &  0.45    &   0.45   &   0.45   &         &         &         \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{LRHLP}}  & ROC  &   0.49   &   0.50   &   0.52    &    0.52     &         &         \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &  0.45    &   0.45   &   0.45   &  0.45   &         &         \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & 0.47 & 0.51   & 0.51   & 0.52  &    &    \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{MetaDynaMix}}  & ROC  & \textbf{0.86} &  \textbf{0.87}  & \textbf{0.89}   &    &   &    \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  & \textbf{0.47} &    &    &    &    &    \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{MetaDynaMix}}  & ROC  & \textbf{0.86} &  \textbf{0.87}  & \textbf{0.89}   &  0.57  &   &    \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  & \textbf{0.47} &    &    &  0.46 &    &    \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & \textbf{0.78} & \textbf{0.81} & \textbf{0.85}   & 0.55  &    &   0.62 \\ \hline
 
 \end{tabular}
 \end{table}
