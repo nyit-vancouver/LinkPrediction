@@ -2,12 +2,9 @@
 
 %Increasing accuracy.... We do not claim that the linear combination is the best ... After $p$-value analysis some latent features might be correlated with meta paths. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
-\subsubsection{Applications.} Our proposed technique can also be used in other applications. For example link recommendation and predicting missing edges in graphs.
-
-Vertex Recommendation similar to \cite{ou2016asymmetric} 
-
 
 \subsubsection{Combining topological and latent features.}
+
 
 Our hypothesis is that combining latent with topological features can increase prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. 
 
@@ -19,7 +16,6 @@ Experiments in \cite{menon2011link} shows combining the latent structure and sid
 
 
 In this work we modelled the predicted graph $ \hat{G}_t(i,j)$ as a combination of meta path features and latent features $\Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w))$. As explained in \cite{menon2011link}, one may also augment the model by incorporating some information regarding node affinities using implicit/explicit attributes and define node features $x_i$, which makes the model $\hat{G}_t(i,j) = \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w)$
-
 
 
 \subsubsection{Link privacy concern.}
@@ -45,3 +41,9 @@ To avoid revealing the sensitive information about relationships, link privacy p
 
 
 % visualize the network embeddings and features with t-SNE and use KL divergence to measure the performance
+
+
+\subsubsection{Applications.} Our proposed technique can also be used in other applications. For example link recommendation and predicting missing edges in graphs.
+
+Vertex Recommendation similar to \cite{ou2016asymmetric} 
+
