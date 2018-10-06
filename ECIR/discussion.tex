@@ -3,30 +3,31 @@
 %Increasing accuracy.... We do not claim that the linear combination is the best ... After $p$-value analysis some latent features might be correlated with meta paths. Removing may increase the accuracy or we can remove those with lower $p$-value. This needs careful analysis as it might be dependent to number of intervals or the size of latent feature.
 
 
-\subsubsection{Combining topological and latent features.}
+\subsubsection{Feature Engineering.}  Latent features are shown to be more predictive compared to unsupervised scoring techniques such as Katz, Adamic, and Preferential Attachment \cite{menon2011link,Zhu2016}. In our experiments we observed that combining latent with meta path-based features can increase prediction accuracy. However, if latent features learn similar structure as topological features do, then mixing them may not be beneficial. In such cases feature engineering techniques can be applied. 
+
+%As explained in \cite{menon2011link}, one may also augment the model by incorporating some information regarding node affinities using implicit/explicit attributes and define node features.
+
+%In this work, in this work we observed that meta path-based features significantly help in 
+
+%Experiments in \cite{menon2011link} shows combining the latent structure and side-information increases the prediction accuracy.
 
 
-Our hypothesis is that combining latent with topological features can increase prediction accuracy as we can learn latent features that fit the residual of meta path-based features. However, if the latent features learn similar structure to the topological features, then mixing them may not be beneficial. 
 
-Some latent features may be already covered by topological features .... this may affect the accuracy to some extent and that can be done by feature ebgineewring such as bakward... 
-
-As shown in \cite{menon2011link} and \cite{Zhu2016}, latent features are more predictive of linking behaviour compared to unsupervised scoring techniques such as Katz, Prefferentail Attachemnet, and Adamic.
-
-Experiments in \cite{menon2011link} shows combining the latent structure and side-information increases the prediction accuracy.
+%In this work we modelled the predicted graph $ \hat{G}_t(i,j)$ as a combination of meta path features and latent features $\Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w))$. 
+%As explained in \cite{menon2011link}, one may also augment the model by incorporating some information regarding node affinities using implicit/explicit attributes and define node features $x_i$, which makes the model $\hat{G}_t(i,j) = \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w)$
 
 
-In this work we modelled the predicted graph $ \hat{G}_t(i,j)$ as a combination of meta path features and latent features $\Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w))$. As explained in \cite{menon2011link}, one may also augment the model by incorporating some information regarding node affinities using implicit/explicit attributes and define node features $x_i$, which makes the model $\hat{G}_t(i,j) = \Phi(z_{i}^Tz_{j} + f_D(z_{i,j};w)$
-
+%\subsubsection{Applications.} Our proposed technique can also be used in other applications. For example link recommendation and predicting missing edges in graphs. Or Vertex Recommendation similar to \cite{ou2016asymmetric} 
 
 \subsubsection{Link privacy concern.}
 
-Connection to link privacy research such as \cite{amin:wwwj}
+%Connection to link privacy research such as \cite{amin:wwwj}
 
-While link prediction techniques has a number of useful applications, it may increase the risk of link disclosure. Even if the data owner removes sensitive links from the published network dataset, it may still be disclosed by link prediction and consequently lead to privacy breach. 
+While link prediction techniques have a number of useful applications, it may increase the risk of link disclosure and thus increasing privacy concern. Even if the data owner removes sensitive links from the published network dataset, it may still be disclosed by link prediction and consequently lead to privacy breach. 
 
-Michael et al. \cite{fire2013links} presented a link reconstruction attack, in which the attacker uses link prediction to infer a user's connections to others with high accuracy, but they did not mention how to defend the so-called link-reconstruction attack. Since link-reconstruction attack or link-prediction-based attack aims to find out some real but unobservable links, the defense of link-prediction-based attacks is also target-directed, which means that one has to preserve the targeted links from being predicted. Most existing approaches on link prediction are based on the similarity between nodes under the assumption that the more similar a pair of nodes are, the more likely a link exists between them.
+Michael et al. \cite{fire2013links} presented a link reconstruction attack, in which the attacker uses link prediction to infer a user's connections to others with high accuracy, but they did not mention how to defend the so-called link-reconstruction attack. Since link-reconstruction attack or Link prediction-based attack aims to find out some real but unobservable links, the defense of link-prediction-based attacks is also target-directed, which means that one has to preserve the targeted links from being predicted. Most existing approaches on link prediction are based on the similarity between nodes under the assumption that the more similar a pair of nodes are, the more likely a link exists between them.
 
-There is an increasing concern about privacy issues in online. Many algorithms have been developed for protecting the privacy of users, such as identity, relationship and attributes. In this paper, the focus is on preserving link privacy in social networks.
+Many algorithms have been developed for protecting the privacy of users, such as identity, relationship and attributes. In this paper, the focus is on preserving link privacy in social networks.
 
 %In retrospect, Zheleva et al. \cite{zheleva2008preserving} proposed the concept of link re-identification attack, which refers to inferring sensitive relationships from anonymized network data. If the sensitive links can be identified by the released data, then this means privacy breach. Link perturbation is a common technique to preserve sensitive links. Zheleva et al. \cite{zheleva2008preserving} assumed that the adversary has an accurate probabilistic model for link prediction, and they proposed several heuristic approaches to anonymizing network data. Ying et al. \cite{ying2008randomizing} investigated the relationship between the level of link randomization and the possibility to infer the presence of a link in a network. Further, Ying et al. \cite{ying2009link} investigated the effect of link randomization on protecting privacy of sensitive links, and they found that similarity indices can be utilized by adversaries to significantly improve the accuracy in predicting sensitive links.
 
@@ -43,7 +44,4 @@ To avoid revealing the sensitive information about relationships, link privacy p
 % visualize the network embeddings and features with t-SNE and use KL divergence to measure the performance
 
 
-\subsubsection{Applications.} Our proposed technique can also be used in other applications. For example link recommendation and predicting missing edges in graphs.
-
-Vertex Recommendation similar to \cite{ou2016asymmetric} 
 
