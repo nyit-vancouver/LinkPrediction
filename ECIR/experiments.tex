@@ -89,29 +89,33 @@ Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} 
 
 \subsection{Results and Findings}
 
-\textit{Link Prediction Accuracy}. In this part we set the number of time intervals $t$ to 7 for dynamic prediction methods whereas PathPredict uses 3 intervals. Results in Figure \ref{fig:auc} and Table \ref{tbl:auc} show the superiority of MetaDynaMix prediction method compared to the rest.
+\textit{Link Prediction Accuracy}. In this part we evaluate prediction capabilities of different methods. Results shown in Figure \ref{fig:auc} is based on setting the number of time intervals $t$ to 7 for dynamic methods and 3 intervals for PathPredict. Table \ref{tbl:auc} shows more details considering different intervals. These results indicated the superiority of MetaDynaMix prediction method compared to the rest. We also observe that PathPredict2 is better compared to LRHLP in predicting links for the publications network but not for the movies network. This to some extends indicate that the latent features for the movies network are more predictive compared to meta path-based ones.
 
+%Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
 
 \begin{figure}[t]
 \centering
 \subfigure[Publications Network]{
-\includegraphics[trim = 0mm 5mm -10mm 0mm,width=0.4\hsize]{figs/ROC.pdf}
-\includegraphics[trim = -10mm 5mm 0mm 0mm,width=0.4\hsize]{figs/ROC.pdf}
+\includegraphics[trim = 0mm 3mm 0mm 0mm,width=0.8\hsize]{figs/DBLP_AUC.pdf}
  \label{Fig:DBLP2}
 }
 \subfigure[Movies Network]{
-\includegraphics[trim = 0mm 5mm -10mm 10mm,width=0.4\hsize]{figs/ROC.pdf}
-\includegraphics[trim = -10mm 5mm 0mm 10mm,width=0.4\hsize]{figs/ROC.pdf}
+\includegraphics[trim = 0mm 3mm 0mm 10mm,width=0.8\hsize]{figs/IMDB_AUC.pdf}
  \label{Fig:IMDB}
 }
+%\subfigure[Publications Network]{
+%\includegraphics[trim = 0mm 5mm -10mm 0mm,width=0.4\hsize]{figs/ROC.pdf}
+%\includegraphics[trim = -10mm 5mm 0mm 0mm,width=0.4\hsize]{figs/ROC.pdf}
+% \label{Fig:DBLP2}
+%}
+%\subfigure[Movies Network]{
+%\includegraphics[trim = 0mm 5mm -10mm 10mm,width=0.4\hsize]{figs/ROC.pdf}
+%\includegraphics[trim = -10mm 5mm 0mm 10mm,width=0.4\hsize]{figs/ROC.pdf}
+% \label{Fig:IMDB}
+%}
 \caption{The ROC and PR curves for different methods and datasets.} \label{fig:auc}
 \end{figure}
 
-
-
-% 7  =>  7
-% 7_min5  =>  5
-% 3_min5  =>  3
 
 
 
@@ -124,40 +128,46 @@ Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} 
                         &   & \multicolumn{3}{l||}{Publications Network} & \multicolumn{3}{l|}{Movies Network} \\ \hline
 \multicolumn{1}{|l|}{\textbf{Method}} & \textbf{Metric} & $t$=3 & $t$=5  & $t$=7  & $t$=3  & $t$=5  & $t$=7     \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict}}  & ROC  & 0.77 & -- & -- & 0.56 & -- & -- \\ \cline{2-8}
+\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict}}  & ROC  & 0.78 & -- & -- & 0.56 & -- & -- \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & PR  & 0.45 & -- & -- & 0.45 & -- & -- \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & ACC  & 0.58 & -- & -- & 0.54  & -- & -- \\ \hline\hline
+\multicolumn{1}{|l|}{}  & ACC  & 0.55 & -- & -- & 0.54  & -- & -- \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict2}}  & ROC  &  0.77  &           &           &   0.56   &         &         \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &   0.45  &           &           &   0.45  &         &         \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & ACC  & 0.58  &    &  0.60 & 0.54  &    &    \\ \hline\hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict2}}  & ROC  &  0.78  &   0.80    &     0.83    &   0.56   &    0.57     &    0.57     \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &   0.45  &    0.45    &   0.45   &   0.45  &     0.45    &     0.46    \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & 0.55  & 0.58  &  0.60 & 0.54  &  0.54  & 0.55   \\ \hline\hline
 
 \multicolumn{1}{|l|}{\multirow{2}{*}{HLP}}  & ROC  &   0.42  &   0.43   &   0.46     &     0.51    &    0.53     &    0.54     \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & PR  &    0.43  &   0.44   &   0.45    &   0.44   &  0.45   &  0.45  \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.50  &  0.50  &  0.50 &  0.51  &  0.52  &  0.53  \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{LRHLP}}  & ROC  &   0.49   &   0.50   &   0.52    &    0.52     &         &         \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &  0.45    &   0.45   &   0.45   &  0.45   &         &         \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & ACC  & 0.47 & 0.51   & 0.51   & 0.52  &    &    \\ \hline\hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{LRHLP}}  & ROC  &   0.49   &   0.50   &   0.52    &    0.52     &   0.56   &   0.59      \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  &  0.45    &   0.45   &   0.45   &  0.45   &   0.45   &   0.45      \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & 0.47 & 0.50  & 0.51   & 0.52  & 0.56  &  0.58  \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{MetaDynaMix}}  & ROC  & \textbf{0.86} &  \textbf{0.87}  & \textbf{0.89}   &  0.57  &   &    \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  & \textbf{0.47} &    &    &  0.46 &    &    \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & ACC  & \textbf{0.78} & \textbf{0.81} & \textbf{0.85}   & 0.55  &    &   0.62 \\ \hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{MetaDynaMix}}  & ROC  & 0.85 &  0.87 & \textbf{0.87}   &  0.57  & 0.59 &  \textbf{0.63}  \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & PR  & 0.46 &  0.46  &  \textbf{0.46}  &  0.46 &  0.46  & \textbf{0.47}   \\ \cline{2-8}
+\multicolumn{1}{|l|}{}  & ACC  & 0.78 & 0.80 & \textbf{0.82}   & 0.56  &  0.60  &   \textbf{0.63} \\ \hline
 
 \end{tabular}
 \end{table}
 
 
-percentage
-91: our acc for min5 at t=7
-60: pathpred2 acc for min5 at t=7
-50: LRHLP
+%percentage
+%91: our acc for min5 at t=7
+%60: pathpred2 acc for min5 at t=7
+%50: LRHLP
 
 
-Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
+
+\textit{Significance of Performance Improvement}.
 
 
-\textit{Significance of Performance Improvement}. The null hypothesis of the McNemar's states that the same population proportion of links will be correctly classified by the two methods. However the test result gives a $p$-value $<$ 0.0001 and hence we reject the null hypothesis of equal classifier performance.
+McNemar's Test to compare the predictive accuracy of two models
+
+
+The null hypothesis indicates that none of the two models performs better than the other. Thus, the alternative hypothesis is that the performances of the two models are not equal.
+
+ The null hypothesis of the McNemar's states that the same proportion of links will be correctly classified by the two methods. However the test result gives a $p$-value $<$ 0.0001 and hence we reject the null hypothesis of equal classifier performance.
 
 
 
@@ -183,11 +193,11 @@ Adding more features to our Logistic Regression model will increase the training
 %78,635 authors had no co-author (about 4\%)
 
 
-\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc} the accuracy increases with number of snapshots. This is however comes at the price of increasing inference time as a more snap shots mean more frequent model updates per shorter time interval. Meanwhile, shorter time interval leads to less change of graphs, which indicates that it is more reliable to forecast links. Therefore, the prediction accuracy also improves with number of snapshots.
+\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc} accuracy increases with the number of snapshots. Similarly authors in \cite{Zhu2016} showed that shorter time interval results in less changes in graphs and thus more reliable prediction.
 
 Consider the meta path \textit{A--P--V--P--A}. When number of intervals is small, i.e., wider time intervals, many may publish in a venue such as ECIR in different years but with more intervals fewer will have such connections and thus better predicting next interval....
 
 
 
-\textit{The Effect of Dimensionality}.
+\textit{The Effect of Dimensionality}.\amin{TBA}
 
