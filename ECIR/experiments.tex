@@ -9,7 +9,7 @@
 
 \textit{Publications dataset:} The AMiner citation dataset \cite{Tang:08KDD} version 8 (2016-07-14) is extracted from DBLP, ACM, and other sources. It contains 3,272,991 papers and 8,466,859 citation relationships for 1,752,443 authors, who published in 10,436 venues, from 1936 to 2016. Each paper is associated with an abstract, authors, year, venue, and title. We confined our experiments on papers published since 1996, which includes 2,935,679 papers. Similar to \cite{sun2011ASONAM}, we considered only authors with at least 5 papers.
     
-\textit{Movies dataset:} The RecSys HetRec movie dataset \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by GroupLens research group that links the movies of MovieLens dataset with their corresponding web pages at IMDB and Rotten Tomatoes movie review system. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, and 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie).%, and 13,222 tags (avg. 22.69 tags per user, avg. 8.12 tags per movie).
+\textit{Movies dataset:} The RecSys HetRec movie dataset \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by the GroupLens research group that links the movies of MovieLens dataset with their corresponding web pages on IMDB and Rotten Tomatoes. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, and 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie).%, and 13,222 tags (avg. 22.69 tags per user, avg. 8.12 tags per movie).
 
 
 \subsubsection{Experiment Settings.} We describe meta paths and target relationships, comparable methods, and different parameter settings.
@@ -21,11 +21,11 @@
 \begin{figure}[t]
 \centering
 \subfigure[Publications Network]{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.45\hsize]{figs/publicationsSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.44\hsize]{figs/publicationsSchema.pdf}
  \label{Fig:DBLP}
 }
 \subfigure[Movies Network]{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.45\hsize]{figs/moviesSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.44\hsize]{figs/moviesSchema.pdf}
  \label{Fig:IMDB}
 }
 \caption{The simplified network schema used for our experiments.} \label{Fig:expSchema}
@@ -84,7 +84,8 @@ Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms tra
 
 \subsubsection{Evaluation Metrics.} 
 
-To asses link prediction performance, we use Area Under Curves (AUC) for Receiver Operating Characteristic (ROC) and Precision-Recall (PR) \cite{davis2006relationship}, and accuracy (ACC). %We also present the prediction accuracy for 5-fold cross validation. 
+To asses link prediction performance, we use Area Under Curves (AUC) for Receiver Operating Characteristic (ROC) \cite{davis2006relationship} %and Precision-Recall (PR) \cite{davis2006relationship}, 
+and accuracy (ACC). %We also present the prediction accuracy for 5-fold cross validation. 
 Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} to assess the statistical significance of the difference between the classifiers accuracy of different techniques.
 
 \subsection{Results and Findings}
@@ -93,35 +94,31 @@ Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} 
 
 %Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
 
+
 \begin{figure}[t]
 \centering
-\subfigure[Publications Network]{
-\includegraphics[trim = 0mm 3mm 0mm 0mm,width=0.8\hsize]{figs/DBLP_AUC.pdf}
- \label{Fig:DBLP2}
-}
-\subfigure[Movies Network]{
-\includegraphics[trim = 0mm 3mm 0mm 10mm,width=0.8\hsize]{figs/IMDB_AUC.pdf}
- \label{Fig:IMDB}
-}
-%\subfigure[Publications Network]{
-%\includegraphics[trim = 0mm 5mm -10mm 0mm,width=0.4\hsize]{figs/ROC.pdf}
-%\includegraphics[trim = -10mm 5mm 0mm 0mm,width=0.4\hsize]{figs/ROC.pdf}
-% \label{Fig:DBLP2}
-%}
-%\subfigure[Movies Network]{
-%\includegraphics[trim = 0mm 5mm -10mm 10mm,width=0.4\hsize]{figs/ROC.pdf}
-%\includegraphics[trim = -10mm 5mm 0mm 10mm,width=0.4\hsize]{figs/ROC.pdf}
-% \label{Fig:IMDB}
-%}
-\caption{The ROC and PR curves for different methods and datasets.} \label{fig:auc}
+\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.84\textwidth]{figs/ROC.pdf}
+\caption{The ROC curves for different methods and datasets.} \label{fig:auc}
 \end{figure}
 
 
+%\begin{figure}[t]
+%\centering
+%\subfigure[Publications Network]{
+%\includegraphics[trim = 0mm 3mm 0mm 0mm,width=0.8\hsize]{figs/DBLP_AUC.pdf}
+% \label{Fig:DBLP2}
+%}
+%\subfigure[Movies Network]{
+%\includegraphics[trim = 0mm 3mm 0mm 10mm,width=0.8\hsize]{figs/IMDB_AUC.pdf}
+% \label{Fig:IMDB}
+%}
+%\caption{The ROC curves for different methods and datasets.} \label{fig:auc}
+%\end{figure}
 
 
 \begin{table}[t]
 \centering
-\caption{AUC and prediction accuracy comparison.}
+\caption{Relationship prediction accuracy comparison.}
 \label{table_publications}\label{tbl:auc}
 \begin{tabular}{ll|p{1cm}|p{1cm}|p{1cm}||p{1cm}|p{1cm}|p{1cm}|}
 \cline{3-8}
@@ -129,23 +126,23 @@ Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} 
 \multicolumn{1}{|l|}{\textbf{Method}} & \textbf{Metric} & $t$=3 & $t$=5  & $t$=7  & $t$=3  & $t$=5  & $t$=7     \\ \hline\hline
 
 \multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict}}  & ROC  & 0.78 & -- & -- & 0.56 & -- & -- \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  & 0.45 & -- & -- & 0.45 & -- & -- \\ \cline{2-8}
+%\multicolumn{1}{|l|}{}  & PR  & 0.45 & -- & -- & 0.45 & -- & -- \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.55 & -- & -- & 0.54  & -- & -- \\ \hline\hline
 
 \multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict2}}  & ROC  &  0.78  &   0.80    &     0.83    &   0.56   &    0.57     &    0.57     \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &   0.45  &    0.45    &   0.45   &   0.45  &     0.45    &     0.46    \\ \cline{2-8}
+%\multicolumn{1}{|l|}{}  & PR  &   0.45  &    0.45    &   0.45   &   0.45  &     0.45    &     0.46    \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.55  & 0.58  &  0.60 & 0.54  &  0.54  & 0.55   \\ \hline\hline
 
 \multicolumn{1}{|l|}{\multirow{2}{*}{HLP}}  & ROC  &   0.42  &   0.43   &   0.46     &     0.51    &    0.53     &    0.54     \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &    0.43  &   0.44   &   0.45    &   0.44   &  0.45   &  0.45  \\ \cline{2-8}
+%\multicolumn{1}{|l|}{}  & PR  &    0.43  &   0.44   &   0.45    &   0.44   &  0.45   &  0.45  \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.50  &  0.50  &  0.50 &  0.51  &  0.52  &  0.53  \\ \hline\hline
 
 \multicolumn{1}{|l|}{\multirow{2}{*}{LRHLP}}  & ROC  &   0.49   &   0.50   &   0.52    &    0.52     &   0.56   &   0.59      \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  &  0.45    &   0.45   &   0.45   &  0.45   &   0.45   &   0.45      \\ \cline{2-8}
+%\multicolumn{1}{|l|}{}  & PR  &  0.45    &   0.45   &   0.45   &  0.45   &   0.45   &   0.45      \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.47 & 0.50  & 0.51   & 0.52  & 0.56  &  0.58  \\ \hline\hline
 
 \multicolumn{1}{|l|}{\multirow{2}{*}{MetaDynaMix}}  & ROC  & 0.85 &  0.87 & \textbf{0.87}   &  0.57  & 0.59 &  \textbf{0.63}  \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & PR  & 0.46 &  0.46  &  \textbf{0.46}  &  0.46 &  0.46  & \textbf{0.47}   \\ \cline{2-8}
+%\multicolumn{1}{|l|}{}  & PR  & 0.46 &  0.46  &  \textbf{0.46}  &  0.46 &  0.46  & \textbf{0.47}   \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.78 & 0.80 & \textbf{0.82}   & 0.56  &  0.60  &   \textbf{0.63} \\ \hline
 
 \end{tabular}
