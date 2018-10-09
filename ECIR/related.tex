@@ -1,24 +1,24 @@
 \section{Related Work}
 
+Previous link prediction techniques for homogeneous networks \cite{liben2007link,wang2007local,lichtenwalter2010new,leroy2010cold,al2006link} cannot be directly applied to heterogeneous ones. A few works such as \cite{sun2011ASONAM, Sun:2012:HRP:2124295.2124373} investigated the problem of link prediction in HINs. Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}. Different from link prediction problem, Sun et al. \cite{Sun:2012:HRP:2124295.2124373} proposed the problem of predicting relationship building time in HINs. These works, however, do not consider the dynamism of networks and overlook the potential benefits of analyzing a heterogeneous graph as a sequence of network snapshots.
+
+
+Matrix factorization technique have been used for link prediction \cite{menon2011link}... the effectiveness of the structural link prediction problem, inspired by their success in collaborative filtering... as learning latent features from the data, and why it can be expected to be more predictive than popular unsupervised scores. 
+
+Latent features are shown to be more predictive compared to unsupervised scoring techniques such as Katz, Adamic, and Preferential Attachment \cite{menon2011link,Zhu2016}. In our experiments we observed that combining latent with meta path-based features can increase prediction accuracy. However, if latent features learn similar structure as topological features do, then mixing them may not be beneficial. In such cases feature engineering techniques can be applied. 
+
+
 %\cite{huang2016meta}
 %\cite{wang2016relsim} 
 %\cite{sun2013pathselclus} 
 \cite{Yang2012} 
-
-Previous techniques for homogeneous networks \cite{liben2007link,wang2007local,lichtenwalter2010new,leroy2010cold,al2006link} cannot be directly applied on heterogeneous ones. A few works such as \cite{sun2011pathsim,sun2011ASONAM} investigated the problem of link/relationship prediction in HINs, however, they do not consider the dynamism of networks and overlook the potential benefits of analyzing a heterogeneous graph as a sequence of network snapshots.
-
-Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}
-
-Different from link prediction problem, Sun et al. \cite{Sun:2012:HRP:2124295.2124373} proposed the problem of predicting relationship building time in HINs.
-
-Matrix factorization technique \cite{menon2011link} has been used for link prediction... the effectiveness of the structural link prediction problem, inspired by their success in collaborative filtering... as learning latent features from the data, and why it can be expected to be more predictive than popular unsupervised scores. 
 
 %Such methods are homogeneous and non-temporal. The number of common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}, are amongst frequently used topological features defined in homogeneous networks.
 
 
 %Sun et al. proposed PathSelClus \cite{sun2013pathselclus} that uses limited guidance from users in the form of seeds in some of the clusters and automatically learn the best weights for each meta-path in the clustering process.
 
-The concept of temporal smoothness has been used in evolutionary clustering [36] and link prediction in a dynamic network \cite{Zhu2016}.
+%The concept of temporal smoothness has been used in evolutionary clustering [36] and link prediction in a dynamic network \cite{Zhu2016}.
 
 While many graph embedding methods exist for static networks, few considered dynamic networks. Zhu et al. \cite{Zhu2016} attempt dynamic link prediction by adding a temporal-smoothing regularization term to a non-negative matrix factorization objective. They use a block-coordinate gradient descent algorithm to perform non-negative factorization. Their formulation is almost identical to the algorithm of Chi et al. \cite{Chi:2007}, who perform evolutionary spectral clustering that captures temporal smoothness. Because matrix factorization provides embedding vectors of the nodes for each time-stamp, the factorization by-product from this work can be considered as dynamic network embeddings.
 

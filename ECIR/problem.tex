@@ -17,7 +17,7 @@ Figure \ref{schema} shows the network schema for the DBLP bibliographic network 
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.43\textwidth]{figs/schema.pdf}
+\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.44\textwidth]{figs/schema.pdf}
 \caption{Network schema for DBLP network.}\label{schema}
 \end{figure}
 
@@ -31,7 +31,7 @@ The \textit{length} of a meta path is the number of relations in it. Note that g
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.41\textwidth]{figs/exampleSocialNetwork.pdf}
+\includegraphics[width=0.42\textwidth]{figs/exampleSocialNetwork.pdf}
 \caption{An example of \textit{A--P--V--P--A} meta paths between two authors Max and Ada.}
 \label{sampleNetwork}
 \end{figure}
@@ -40,9 +40,19 @@ The \textit{length} of a meta path is the number of relations in it. Note that g
 \textbf{Meta Path-based Similarity Measures.} Given a meta path $\mathcal{P} = (A_i,A_j)$ and a pair of nodes $a$ and $b$ such that $\phi(a)=A_i$ and $\phi(b)=A_{j}$, several \textit{similarity measures} can be defined between $a$ and $b$ based on the path instances of $\mathcal{P}$. Examples of such similarity or proximity measures in a HIN are \textit{path count} \cite{sun2011pathsim,sun2011ASONAM}, \textit{PathSim} \cite{sun2011pathsim} or \textit{normalized path count} \cite{sun2011ASONAM}, \textit{random walk} \cite{sun2011ASONAM}, \textit{HeteSim} \cite{shi2014hetesim}, and \textit{KnowSim} \cite{wang2016text}. 
 %Given a meta path $\mathcal{P}$ a source node $a$ and a target node $b$, path count measures the number of path instances between $a$ and $b$ following $\mathcal{P}$, and can be calculated by multiplying adjacency matrices of relations in $\mathcal{P}$ \cite{sun2011ASONAM}, and random walk is the probability of the random walk that starts from $a$ and ends with $b$ following $\mathcal{P}$. 
 %More discussion about these similarity measures can be found in \cite{shi2014hetesim,sun2011ASONAM,sun2011pathsim,wang2016text}. 
-Without loss of generality, in this work we use Path Count (PC) as the default similarity measure. For example given the meta path \textit{A--P--V--P--A} and the HIN in Figure \ref{sampleNetwork}, $PC(Max,Ada)$=3 and $PC(Max,Tom)$=3. We now formally define the problem that we target in this work as follows:
+Without loss of generality, in this work we use Path Count (PC) as the default similarity measure. For example given the meta path \textit{A--P--V--P--A} and the HIN in Figure \ref{sampleNetwork}, $PC(Max,Ada)$=3 and $PC(Tom,Ada)$=4. We now formally define the problem that we target in this work as follows:
 
 \begin{definition}[\textbf{Relationship prediction problem}]\label{problemdef}Given a DHIN graph $G$ at time $t$, and a target relation meta path $\mathcal{P}(A_i,A_j)$ between nodes of type $A_i$ and $A_j$, we aim to predict the existence of a path instance of $\mathcal{P}$ between two given nodes of types $A_i$ and $A_j$ at time $t+1$. $\Box$ \end{definition}
+
+
+%Tom-P3-ECIR-P3-Ada
+%Tom-P1-ECIR-P3-Ada
+%Tom-P2-SIGIR-P4-Ada
+%Tom-P2-SIGIR-P5-Ada
+%
+%Max-P1-ECIR-P3-Ada
+%Max-P2-SIGIR-P4-Ada
+%Max-P2-SIGIR-P5-Ada
 
 
 % Removed for ECIR version

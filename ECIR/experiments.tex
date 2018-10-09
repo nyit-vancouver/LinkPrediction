@@ -12,7 +12,7 @@
 \textit{Movies dataset:} The RecSys HetRec movie dataset \cite{Cantador:RecSys2011} is an extension of MovieLens10M dataset, published by the GroupLens research group that links the movies of MovieLens dataset with their corresponding web pages on IMDB and Rotten Tomatoes. It contains information of 2,113 users, 10,197 movies, 20 movie genres (avg. 2.04 genres per movie), 4,060 directors, 95,321 actors (avg. 22.78 actors per movie), 72 countries, and 855,598 ratings (avg. 404.92 ratings per user, and avg. 84.64 ratings per movie).%, and 13,222 tags (avg. 22.69 tags per user, avg. 8.12 tags per movie).
 
 
-\subsubsection{Experiment Settings.} We describe meta paths and target relationships, comparable methods, and different parameter settings.
+\subsubsection{Experiment Settings.} We describe meta paths and target relationships, baseline methods, and different parameter settings.
 
 \textit{Meta Paths and Target Relationships}. Figure \ref{Fig:expSchema} depicts network schemas for the two datasets. Note that we consider a simplified version and ignore nodes such as topic for papers or tag for movies. Table \ref{tbl:mp} presents a number of meta paths that we consider in our experiments, where target meta path relations are \textit{co-authorship} and \textit{watching}. 
 %We also limit our meta path-based measures to only path count for calculations efficiency, as the results in \cite{sun2011ASONAM} suggest that except for the case of hybrid features, using the path count measure is not considerably different than the normalized path count or the random walk. %Note that the goal of our research is not to select the best features but to show the strength of combining meta paths with temporal latent features.
@@ -65,8 +65,8 @@
 
 
 
-\textit{Comparable Methods.} We perform comparative analysis of our work, denoted as \textit{MetaDynaMix}, with four techniques: (1) The original \textit{PathPredict} that considers only 3 intervals \cite{sun2011ASONAM}, (2) PathPredict applied on different time intervals, denoted as \textit{PathPredict2}, (3) homogenized link prediction (Section \ref{def:HLP}), denoted as \textit{HLP}, and (4) logistic regression on HLP latent features, denoted as \textit{LRHLP}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
-Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors or Katz$\beta$, and thus we do not include these techniques in our experiments.
+\textit{Baseline Methods.} We perform comparative analysis of our work, denoted as {MetaDynaMix}, with four techniques: (1) The original {PathPredict} that considers only 3 intervals \cite{sun2011ASONAM}, (2) PathPredict applied on different time intervals, denoted as {PathPredict+}, (3) homogenized link prediction (Section \ref{def:HLP}), denoted as {HLP}, and (4) logistic regression on HLP latent features, denoted as {LRHLP}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
+Sun et al. \cite{sun2011ASONAM} showed that {PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors or Katz$\beta$, and thus we do not include these techniques in our experiments.
 
 
 %\begin{itemize}
@@ -76,8 +76,7 @@ Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms tra
 %\end{itemize}
 
 
-\textit{Parameters.} We set the number of snapshots $t$=3, 5, and 7 to evaluate the effect of dynamic analysis of different time intervals. Note that $t$=3 refers to the default case for many link prediction algorithms that learn based on one interval and test based on another. More specifically in the training phase features are extracted based on T1 and labels are determined based on T2, and for the testing phase features are calculated based on T2 and labels are derived from T3. We also set the number of latent features $k$ to 10, 15, and 20.
-
+\textit{Parameters.} We set the number of snapshots $t$=3, 5, and 7 to evaluate the effect of dynamic analysis of different time intervals. Note that $t$=3 refers to the default case for many link prediction algorithms that learn based on one interval and test based on another. More specifically in the training phase features are extracted based on T1 and labels are determined based on T2, and for the testing phase features are calculated based on T2 and labels are derived from T3. We also evaluate the effect of latent space dimensionality by setting the number of latent features $k$ to 5, 10, and 20.
 
 \subsubsection{Implementation.} We use the implementation of matrix factorization for inferring temporal latent spaces of a sequence of graph snapshots presented in \cite{Zhu2016}. For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
 
@@ -86,11 +85,14 @@ Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms tra
 
 To asses link prediction performance, we use Area Under Curves (AUC) for Receiver Operating Characteristic (ROC) \cite{davis2006relationship} %and Precision-Recall (PR) \cite{davis2006relationship}, 
 and accuracy (ACC). %We also present the prediction accuracy for 5-fold cross validation. 
-Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} to assess the statistical significance of the difference between the classifiers accuracy of different techniques.
+We also perform the McNemar's test \cite{mcnemar1947note} to assess the statistical significance of the difference between classification techniques.
 
 \subsection{Results and Findings}
 
-\textit{Link Prediction Accuracy}. In this part we evaluate prediction capabilities of different methods. Results shown in Figure \ref{fig:auc} is based on setting the number of time intervals $t$ to 7 for dynamic methods and 3 intervals for PathPredict. Table \ref{tbl:auc} shows more details considering different intervals. These results indicated the superiority of MetaDynaMix prediction method compared to the rest. We also observe that PathPredict2 is better compared to LRHLP in predicting links for the publications network but not for the movies network. This to some extends indicate that the latent features for the movies network are more predictive compared to meta path-based ones.
+\textit{Link Prediction Accuracy}. In this part we evaluate prediction capabilities of different methods. Results shown in Figure \ref{fig:auc} is based on setting the number of time intervals $t$ to 7 for dynamic methods and 3 intervals for PathPredict. Table \ref{tbl:auc} shows more details considering different intervals. These results indicate the superiority of MetaDynaMix prediction method compared to the rest. Authors in \cite{menon2011link,Zhu2016} showed that latent features are more predictive compared to unsupervised scoring techniques such as Katz, or Adamic. In our experiments we observed that combining latent with meta path-based features (MetaDynaMix) can increase prediction accuracy. However, if latent features learn similar structure as topological features do, then mixing them may not be beneficial. In such cases feature engineering techniques could be applied. 
+
+We also observe that PathPredict+ performs better than LRHLP in predicting links for the publications network but not for the movies network, meaning that for the movies network, meta path-based features are not as predictive as latent features are. This is another justification that combining the two set of features is recommended.
+
 
 %Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
 
@@ -129,7 +131,7 @@ Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} 
 %\multicolumn{1}{|l|}{}  & PR  & 0.45 & -- & -- & 0.45 & -- & -- \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.55 & -- & -- & 0.54  & -- & -- \\ \hline\hline
 
-\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict2}}  & ROC  &  0.78  &   0.80    &     0.83    &   0.56   &    0.57     &    0.57     \\ \cline{2-8}
+\multicolumn{1}{|l|}{\multirow{2}{*}{PathPredict+}}  & ROC  &  0.78  &   0.80    &     0.83    &   0.56   &    0.57     &    0.57     \\ \cline{2-8}
 %\multicolumn{1}{|l|}{}  & PR  &   0.45  &    0.45    &   0.45   &   0.45  &     0.45    &     0.46    \\ \cline{2-8}
 \multicolumn{1}{|l|}{}  & ACC  & 0.55  & 0.58  &  0.60 & 0.54  &  0.54  & 0.55   \\ \hline\hline
 
@@ -156,17 +158,7 @@ Furthermore we perform the non-parametric McNemar's test \cite{mcnemar1947note} 
 
 
 
-\textit{Significance of Performance Improvement}.
-
-
-McNemar's Test to compare the predictive accuracy of two models
-
-
-The null hypothesis indicates that none of the two models performs better than the other. Thus, the alternative hypothesis is that the performances of the two models are not equal.
-
- The null hypothesis of the McNemar's states that the same proportion of links will be correctly classified by the two methods. However the test result gives a $p$-value $<$ 0.0001 and hence we reject the null hypothesis of equal classifier performance.
-
-
+\textit{Significance of Performance Improvement}. McNemar's test, also called within-subjects $\chi^2$ test, is used to compare the accuracy of two predictive models based on the contingency table of their predictions. The null hypothesis indicates that the performances of the two models are equal. We compare MetaDynaMix with the other four baselines and the test results show a $p$-value $<$ 0.0001 for all cases and hence we reject the null hypothesis.
 
 %DBLP
 %    179,607 authors had no co-author in 1996-2016. 
@@ -190,11 +182,8 @@ The null hypothesis indicates that none of the two models performs better than t
 %78,635 authors had no co-author (about 4\%)
 
 
-\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc} accuracy increases with the number of snapshots. Similarly authors in \cite{Zhu2016} showed that shorter time interval results in less changes in graphs and thus more reliable prediction.
-
-Consider the meta path \textit{A--P--V--P--A}. When number of intervals is small, i.e., wider time intervals, many may publish in a venue such as ECIR in different years but with more intervals fewer will have such connections and thus better predicting next interval....
+\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc}, accuracy increases with the number of snapshots. The intuition is that shorter time interval results in less changes in graphs and thus more reliable prediction. For example considering a meta path \textit{A--P--V--P--A}, with smaller number of intervals, i.e., longer time intervals, we have more distinct authors who have published in a venue in different years and thus more similar path count values. However by considering more intervals fewer authors will have such relations and more diverse path counts can contribute to more accurate prediction for the next time interval.
 
 
-
-\textit{The Effect of Dimensionality}.\amin{TBA}
-
+\textit{The Effect of Dimensionality}. For this experiment we only compare prediction performance of MetaDynaMix with $t$=7 on the Publications dataset with respect to different values of $k$. Our results show that for $k$=5, 10, and 20, we get AUCROC values %0.84, 0.86, and 0.87, and ACC values 0.8, 0.82, and 0.82, respectively.
+ A, B, and 0.87, and ACC values C, D, and 0.82, respectively.

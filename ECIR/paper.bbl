@@ -40,10 +40,6 @@ Fan, R.E., Chang, K.W., Hsieh, C.J., Wang, X.R., Lin, C.J.: Liblinear: A
    \textbf{9}(Aug),  1871--1874 (2008),
   \url{https://github.com/cjlin1/liblinear}
 
-\bibitem{fire2013links}
-Fire, M., Katz, G., Rokach, L., Elovici, Y.: Links reconstruction attack. In:
-  Security and Privacy in Social Networks, pp. 181--196. Springer (2013)
-
 \bibitem{gallagher2008using}
 Gallagher, B., Tong, H., Eliassi-Rad, T., Faloutsos, C.: Using ghost edges for
   classification in sparsely labeled networks. In: Proceedings of the 14th ACM
@@ -58,16 +54,6 @@ Guimer{\`a}, R., Sales-Pardo, M.: Missing and spurious interactions and the
 \bibitem{guy2015social}
 Guy, I.: Social recommender systems. In: Recommender Systems Handbook, pp.
   511--543. Springer (2015)
-
-\bibitem{hay2008resisting}
-Hay, M., Miklau, G., Jensen, D., Towsley, D., Weis, P.: Resisting structural
-  re-identification in anonymized social networks. Proceedings of the VLDB
-  Endowment  \textbf{1}(1),  102--114 (2008)
-
-\bibitem{huang2016meta}
-Huang, Z., Zheng, Y., Cheng, R., Sun, Y., Mamoulis, N., Li, X.: Meta structure:
-  Computing relevance in large heterogeneous information networks. In: KDD'16
-  (2016)
 
 \bibitem{katz1953new}
 Katz, L.: A new status index derived from sociometric analysis. Psychometrika
@@ -111,24 +97,9 @@ Menon, A.K., Elkan, C.: Link prediction via matrix factorization. In: Joint
   european conference on machine learning and knowledge discovery in databases.
   pp. 437--452. Springer (2011)
 
-\bibitem{amin:wwwj}
-Milani~Fard, A., Wang, K.: Neighborhood randomization for link privacy in
-  social network analysis. World Wide Web  \textbf{18}(1),  9--32 (2015)
-
-\bibitem{mittalNDSS13}
-Mittal, P., Papamanthou, C., Song, D.X.: Preserving link privacy in social
-  network based systems. In: 20th Annual Network and Distributed System
-  Security Symposium, {NDSS} (2013)
-
 \bibitem{newman2001clustering}
 Newman, M.E.: Clustering and preferential attachment in growing networks.
   Physical review E  \textbf{64}(2),  025102 (2001)
-
-\bibitem{ou2016asymmetric}
-Ou, M., Cui, P., Pei, J., Zhang, Z., Zhu, W.: Asymmetric transitivity
-  preserving graph embedding. In: Proceedings of the 22nd ACM SIGKDD
-  international conference on Knowledge discovery and data mining. pp.
-  1105--1114. ACM (2016)
 
 \bibitem{shi2014hetesim}
 Shi, C., Kong, X., Huang, Y., Philip, S.Y., Wu, B.: Hetesim: A general
@@ -182,35 +153,15 @@ Wang, C., Song, Y., El-Kishky, A., Roth, D., Zhang, M., Han, J.: Incorporating
 Wang, C., Song, Y., Li, H., Zhang, M., Han, J.: Text classification with
   heterogeneous information network kernels. In: AAAI. pp. 2130--2136 (2016)
 
-\bibitem{wang2016relsim}
-Wang, C., Sun, Y., Song, Y., Han, J., Song, Y., Wang, L., Zhang, M.: Relsim:
-  Relation similarity search in schema-rich heterogeneous information networks
-  (2016)
-
 \bibitem{Yang2012}
 Yang, Y., Chawla, N., Sun, Y., Hani, J.: Predicting links in multi-relational
   and heterogeneous networks. In: 2012 IEEE 12th International Conference on
   Data Mining. pp. 755--764 (Dec 2012)
 
-\bibitem{ying2008randomizing}
-Ying, X., Wu, X.: Randomizing social networks: a spectrum preserving approach.
-  In: proceedings of the 2008 SIAM International Conference on Data Mining. pp.
-  739--750. SIAM (2008)
-
-\bibitem{ying2009link}
-Ying, X., Wu, X.: On link privacy in randomizing social networks. In:
-  Pacific-Asia Conference on Knowledge Discovery and Data Mining. pp. 28--39.
-  Springer (2009)
-
 \bibitem{zhang2014inferring}
 Zhang, J., Wang, C., Wang, J., Yu, J.X.: Inferring continuous dynamic social
   influence and personal preference for temporal behavior prediction.
   Proceedings of the VLDB Endowment  \textbf{8}(3),  269--280 (2014)
-
-\bibitem{zheleva2008preserving}
-Zheleva, E., Getoor, L.: Preserving the privacy of sensitive relationships in
-  graph data. In: Privacy, security, and trust in KDD, pp. 153--171. Springer
-  (2008)
 
 \bibitem{Zhu2016}
 Zhu, L., Guo, D., Yin, J., Steeg, G.V., Galstyan, A.: Scalable temporal latent
