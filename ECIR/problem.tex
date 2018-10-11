@@ -7,7 +7,7 @@ Our work is focused on heterogeneous information networks (graphs) that can chan
 
 \begin{definition}[\textbf{Dynamic heterogeneous information network}] A dynamic heterogeneous information network (DHIN) is a directed graph $G$ = ($V$, $E$) with a node type mapping function $\phi: V \rightarrow \mathcal{A}$ and a link type mapping function $\psi: E \rightarrow \mathcal{R}$, where $V$, $E$, $\mathcal{A}$, and $\mathcal{R}$ denote sets of nodes, links, node types, and relation types. Each node $v \in V$ belongs to a node type $\phi(v) \in \mathcal{A}$, each link $e \in E$ belongs to a relation $\psi(e) \in \mathcal{R}$, and $|\mathcal{A}| > 1$ and $|\mathcal{R}| > 1$. Also each edge $e = (u, v, t)$ is a temporal edge from a vertex $u$ to a vertex $v$ at time $t$. $\Box$ \end{definition}
 
-The DBLP bibliographic network%\footnote{\url{http://dblp.uni-trier.de/db/}} 
+The DBLP bibliographic network %\footnote{\url{http://dblp.uni-trier.de/db/}} 
 is an example of a DHIN, containing different types of nodes such as papers, authors, topics, and publication venues, with publication links associated with a date. %Another example is the Twitter social network with nodes types such as tweets, users, topics, and hashtags, and a timestamp associated with these tweets. 
 In the context of a heterogenous network, a \textit{relation} can be in the form of a \textit{direct link} or an \textit{indirect link}, where an indirect link is a sequence of direct links in the network. Thus, two nodes might not be directly connected, however they might be considered to be indirectly connected through a set of intermediary links. In this work, we use the terms \textit{relationship prediction} and \textit{link prediction} interchangeably referring to predicting whether two nodes will be connected in the future via a \textit{sequence of relations} in the graph, where the \textit{length} of a sequence is greater than or equal to one. For instance in a bibliographic network, a direct link exists between an author and a paper she wrote, and an indirect link exists between her and her co-authors through the paper, which they wrote together. In order to better understand different types of nodes and their relation in a network, the concept of \textit{network schema} \cite{sun2011pathsim} is used. A network schema is a meta graph structure that summarizes a HIN and is formally defined as follows:
 
@@ -25,15 +25,23 @@ Figure \ref{schema} shows the network schema for the DBLP bibliographic network 
 
 Similar to the notion of network schema that provides a meta structure for the network, a \textit{meta path} \cite{sun2011pathsim} provides a meta structure for paths between different node types in the network. 
 
-\begin{definition}[\textbf{Meta path}]A meta path $\mathcal{P}$ is a path in a network schema graph $S_G = (\mathcal{A,R})$, denoted by $\mathcal{P}(A_1,A_{n+1}) = A_1 \xrightarrow{R_1} A_2... \xrightarrow{R_n} A_{n+1}$, as a sequence of links between node types defining a composite relationship between a node of type $A_1$ and one of type $A_{n+1}$, where $A_i \subseteq \mathcal{A}$ and $R_i \subseteq \mathcal{R}$. $\Box$\end{definition}
+\begin{definition}[\textbf{Meta path}]A meta path $\mathcal{P}$ is a path in a network schema graph $S_G = (\mathcal{A,R})$, denoted by $\mathcal{P}(A_1,A_{n+1}) = A_1 \xrightarrow{R_1} A_2... \xrightarrow{R_n} A_{n+1}$, as a sequence of links between node types defining a composite relationship between a node of type $A_1$ and one of type $A_{n+1}$, where $A_i \in \mathcal{A}$ and $R_i \in \mathcal{R}$. $\Box$\end{definition}
 
 The \textit{length} of a meta path is the number of relations in it. Note that given two node types $A_i$ and $A_j$, there may exist multiple meta paths of different lengths between them. We call a path $p = (a_1a_2...a_{n+1})$ a \textit{path instance} of a meta path $\mathcal{P} = A_1-A_2... -A_{n+1}$ if $p$ follows $\mathcal{P}$ in the corresponding HIN, i.e., for each node $a_i$ in $p$, we have $\phi(a_i)=A_i$. The co-author relationship in DBLP can be described with the meta path $A\xrightarrow{write}P\xrightarrow{write^{-1}}A$ or in short \textit{A--P--A}. Paths in thick solid lines in Figure \ref{sampleNetwork} correspond to \textit{A--P--V--P--A} meta paths between \textit{Max} and \textit{Ada}, indicating they published in the same venue, such as \textit{Max--P1--ECIR--P3--Ada}. Each meta path carries different semantics and defines a unique topology representing a special relation. %The relationship between two authors are different in meaning when they are co-authors (\textit{A--P--A}) versus one citing another's paper (\textit{A--P--P--A}).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.42\textwidth]{figs/exampleSocialNetwork.pdf}
-\caption{An example of \textit{A--P--V--P--A} meta paths between two authors Max and Ada.}
-\label{sampleNetwork}
+%\includegraphics[width=0.42\textwidth]{figs/exampleSocialNetwork.pdf}
+\subfigure[An example of \textit{A--P--V--P--A} meta paths between two authors Max and Ada.]{
+\includegraphics[trim = 0mm -5mm 0mm 0mm,width=0.52\hsize]{figs/exampleSocialNetwork.pdf}
+ \label{sampleNetwork}
+}\hspace{0.6cm}
+\subfigure[The augmented reduced graph based on $\mathcal{P}(A,A)$=\textit{A--P--V--P--A}]{
+\includegraphics[trim = 0mm -20mm 0mm 0mm,width=0.38\hsize]{figs/exampleARG.pdf}
+ \label{arg}
+}
+\caption{An example of a publications network.}
+%\label{sampleNetwork}
 \end{figure}
 
 

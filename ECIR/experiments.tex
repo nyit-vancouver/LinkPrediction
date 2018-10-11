@@ -89,10 +89,12 @@ We also perform the McNemar's test \cite{mcnemar1947note} to assess the statisti
 
 \subsection{Results and Findings}
 
-\textit{Link Prediction Accuracy}. In this part we evaluate prediction capabilities of different methods. Results shown in Figure \ref{fig:auc} is based on setting the number of time intervals $t$ to 7 for dynamic methods and 3 intervals for PathPredict. Table \ref{tbl:auc} shows more details considering different intervals. These results indicate the superiority of MetaDynaMix prediction method compared to the rest. Authors in \cite{menon2011link,Zhu2016} showed that latent features are more predictive compared to unsupervised scoring techniques such as Katz, or Adamic. In our experiments we observed that combining latent with meta path-based features (MetaDynaMix) can increase prediction accuracy. However, if latent features learn similar structure as topological features do, then mixing them may not be beneficial. In such cases feature engineering techniques could be applied. 
+\textit{Link Prediction Accuracy}. In this part we compare the prediction accuracy of different methods. The  results shown in Figure \ref{fig:auc} are based on setting the number of time intervals $t$ to 7 for dynamic methods and 3 intervals for PathPredict. Table \ref{tbl:auc} shows more details considering different intervals. These results indicate the statistically significant improvement provided by the proposed MetaDynaMix prediction method compared to the baselines. The authors in \cite{menon2011link,Zhu2016} showed that latent features are more predictive compared to unsupervised scoring techniques such as Katz, or Adamic. In our experiments we observed that combining latent with meta path-based features (MetaDynaMix) can increase prediction accuracy. However, if latent features learn similar structure as topological features do, then mixing them may not be beneficial. In such cases feature engineering techniques could be applied. 
 
 We also observe that PathPredict+ performs better than LRHLP in predicting links for the publications network but not for the movies network, meaning that for the movies network, meta path-based features are not as predictive as latent features are. This is another justification that combining the two set of features is recommended.
 
+\ebrahim{If you are raising this point, then you have to also say why pp+ does not work well on movie dataset?
+Also, I could not see how the justification to combine features was reached. You may want to discuss more.}
 
 %Adding more features to our Logistic Regression model will increase the training accuracy because model has to consider more data to fit the logistic regression. But testing accuracy increases if feature is found to be significant
 
@@ -100,7 +102,7 @@ We also observe that PathPredict+ performs better than LRHLP in predicting links
 \begin{figure}[t]
 \centering
 \includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.84\textwidth]{figs/ROC.pdf}
-\caption{The ROC curves for different methods and datasets.} \label{fig:auc}
+\caption{The ROC curves for different methods and datasets.\ebrahim{please change the style of the lines so that it would be visible even if printed in BW.}} \label{fig:auc}
 \end{figure}
 
 
@@ -120,7 +122,7 @@ We also observe that PathPredict+ performs better than LRHLP in predicting links
 
 \begin{table}[t]
 \centering
-\caption{Relationship prediction accuracy comparison.}
+\caption{Relationship prediction accuracy comparison. Bold values are determined to be statistically significant compared to the baselines based on McNemar's test.}
 \label{table_publications}\label{tbl:auc}
 \begin{tabular}{ll|p{1cm}|p{1cm}|p{1cm}||p{1cm}|p{1cm}|p{1cm}|}
 \cline{3-8}
@@ -158,7 +160,7 @@ We also observe that PathPredict+ performs better than LRHLP in predicting links
 
 
 
-\textit{Significance of Performance Improvement}. McNemar's test, also called within-subjects $\chi^2$ test, is used to compare the accuracy of two predictive models based on the contingency table of their predictions. The null hypothesis indicates that the performances of the two models are equal. We compare MetaDynaMix with the other four baselines and the test results show a $p$-value $<$ 0.0001 for all cases and hence we reject the null hypothesis.
+\textit{Significance of Performance Improvement}. McNemar's test, also called within-subjects $\chi^2$ test, is used to compare statistically significant difference between the accuracy of two predictive models based on the contingency table of their predictions. The null hypothesis indicates that the performances of the two models are equal. We compare MetaDynaMix with the other four baselines and the test results show a $p$-value $<$ 0.0001 for all cases and hence we reject the null hypothesis.
 
 %DBLP
 %    179,607 authors had no co-author in 1996-2016. 
@@ -182,8 +184,11 @@ We also observe that PathPredict+ performs better than LRHLP in predicting links
 %78,635 authors had no co-author (about 4\%)
 
 
-\textit{The Effect of Time Intervals}. We set the number of time interval to $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc}, accuracy increases with the number of snapshots. The intuition is that shorter time interval results in less changes in graphs and thus more reliable prediction. For example considering a meta path \textit{A--P--V--P--A}, with smaller number of intervals, i.e., longer time intervals, we have more distinct authors who have published in a venue in different years and thus more similar path count values. However by considering more intervals fewer authors will have such relations and more diverse path counts can contribute to more accurate prediction for the next time interval.
+\textit{The Effect of Time Intervals}. We set the number of time intervals $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc}, accuracy increases with the number of snapshots. The intuition is that shorter time interval results in less changes in the graph and thus leads to more reliable predictions. For example considering a meta path \textit{A--P--V--P--A}, with smaller number of intervals, i.e., longer time intervals, we have more distinct authors who have published in a venue in different years and thus more similar path count values. However by considering more intervals fewer authors will have such relations and more diverse path counts can contribute to more accurate prediction for the next time interval.
 
 
 \textit{The Effect of Dimensionality}. For this experiment we only compare prediction performance of MetaDynaMix with $t$=7 on the Publications dataset with respect to different values of $k$. Our results show that for $k$=5, 10, and 20, we get AUCROC values %0.84, 0.86, and 0.87, and ACC values 0.8, 0.82, and 0.82, respectively.
- A, B, and 0.87, and ACC values C, D, and 0.82, respectively.
+ A, B, and 0.87, and ACC values C, D, and 0.82, respectively.\amin{todo: update A,B,C, and D.}
+ 
+ \ebrahim{two things: 1. The values are missing. 2. You need to write a bit of explanation about the finding when you have the actual numbers.}
+ 
