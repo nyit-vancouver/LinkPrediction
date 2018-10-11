@@ -18,7 +18,16 @@ For example, an augmented reduced graph for the network in Figure \ref{sampleNet
 
 \subsection{Homogenized Link Prediction}\label{def:HLP}
 
-Once the given DHIN graph $G=(V,E)$ is decomposed to $t$ HIN graphs $G_1, .., G_t$, one solution to the relationship prediction problem (Definition \ref{problemdef}) is to build an augmented reduced graph $G_i^\mathcal{P}$ for each $G_i$ with respect to the given target meta path $\mathcal{P}$ and then predict a link in $G_i^\mathcal{P}$ instead of a path in $G_i$. In other words, we generate a homogenized version of a graph snapshot and apply a link prediction method. The intuition behind considering different snapshots, i.e., a dynamic network, rather than a single snapshot for link prediction is that we can incorporate network evolution patterns to increase prediction accuracy. Our hypothesis is that the estimated graph $\hat{G}_{i+1}^\mathcal{P}$ dependents on $\hat{G}_i^\mathcal{P}$. Inspired by %the matrix factorization approach presented by 
+Once the given DHIN graph $G=(V,E)$ is decomposed to $t$ HIN graphs $G_1, .., G_t$, one solution to the relationship prediction problem (Definition \ref{problemdef}) is to build an augmented reduced graph $G_i^\mathcal{P}$ for each $G_i$ with respect to the given target meta path $\mathcal{P}$ and then predict a link in $G_i^\mathcal{P}$ instead of a path in $G_i$. In other words, we generate a homogenized version of a graph snapshot and apply a link prediction method. Figure \ref{targetARG} shows examples of such graphs at different time intervals.
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim = 0mm 5mm 0mm 0mm,width=0.85\textwidth]{figs/exampletargetARG.pdf}
+\caption{Augmented reduced graphs for the network in Figure \ref{sampleNetwork} with respect to the target meta path \textit{A--P--A} (co-authorship) in 2016 and 2017.}\label{targetARG}
+\end{figure}
+
+
+The intuition behind considering different snapshots, i.e., a dynamic network, rather than a single snapshot for link prediction is that we can incorporate network evolution patterns to increase prediction accuracy. Our hypothesis is that the estimated graph $\hat{G}_{i+1}^\mathcal{P}$ dependents on $\hat{G}_i^\mathcal{P}$. Inspired by %the matrix factorization approach presented by 
 Zhu et al. \cite{Zhu2016}%for temporal link prediction in homogeneous networks
 , we formulate our problem as follows: Given a sequence of augmented reduced graphs $G^\mathcal{P}_1, .., G^\mathcal{P}_t,$ we aim to infer a low rank $k$-dimensional latent space matrix $Z_i$ for each adjacency matrix $G^\mathcal{P}_i$ at time $i$ by minimizing 
 %\begin{equation}\label{latentOrigEqu}
