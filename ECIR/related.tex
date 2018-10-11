@@ -1,32 +1,29 @@
 \section{Related Work}
 
-Previous link prediction techniques for homogeneous networks \cite{liben2007link,wang2007local,lichtenwalter2010new,leroy2010cold,al2006link} cannot be directly applied to heterogeneous ones. A few works such as \cite{sun2011ASONAM, Sun:2012:HRP:2124295.2124373} investigated the problem of link prediction in HINs. Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}. Different from link prediction problem, Sun et al. \cite{Sun:2012:HRP:2124295.2124373} proposed the problem of predicting relationship building time in HINs. These works, however, do not consider the dynamism of networks and overlook the potential benefits of analyzing a heterogeneous graph as a sequence of network snapshots.
+%Predicting Links in Multi-Relational and Heterogeneous Networks \cite{Yang2012} 
+
+The problem of link prediction in static and homogeneous networks has been extensively studied in the past
+\cite{liben2007link,wang2007local,lichtenwalter2010new,leroy2010cold,al2006link,al2011survey}, for which the probability of forming a link between two nodes is generally considered as a function of their topological similarity. However, such techniques cannot be directly applied to heterogeneous networks. A few works such as \cite{sun2011ASONAM,Sun:2012:HRP:2124295.2124373} investigated the problem of link prediction in HINs. Sun et al. \cite{sun2011ASONAM} showed that \textit{PathPredict} outperforms traditional link prediction approaches that use topological features defined on homogeneous networks such as common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}. Different from the original link prediction problem, Sun et al. \cite{Sun:2012:HRP:2124295.2124373} studied the problem of predicting the time of relationship building in HINs. These works, however, do not consider the dynamism of networks and overlook the potential benefits of analyzing a heterogeneous graph as a sequence of network snapshots.
+
+Various techniques, such as \cite{sarkar2005dynamic,menon2011link,yin2013scalable,qi2013link,ye2013predicting}, have studied static latent space inference of networks, where the latent positions of the nodes are fixed. A few graph embedding methods \cite{fu2009dynamic,dunlavy2011temporal,Zhu2016} considered dynamic networks. Dunlavy et al. \cite{dunlavy2011temporal} developed a tensor-based latent space modeling to predict temporal links. Zhu et al. \cite{Zhu2016} attempt dynamic link prediction by adding a temporal-smoothing regularization term to a non-negative matrix factorization objective. They use a block-coordinate gradient descent algorithm to perform non-negative factorization. Their model penalizes sudden and large changes in the latent positions. These works, however, do not consider heterogeneity of network structure.
+
+ %Their formulation is almost identical to the algorithm of Chi et al. \cite{Chi:2007}, who perform evolutionary spectral clustering that captures temporal smoothness. Because matrix factorization provides embedding vectors of the nodes for each time-stamp, the factorization by-product from this work can be considered as dynamic network embeddings.
+
+%Matrix factorization technique for link prediction, such as \cite{menon2011link},... Latent features are shown to be more predictive compared to unsupervised scoring techniques such as Katz, Adamic, and Preferential Attachment \cite{menon2011link,Zhu2016}. In our experiments we observed that combining latent with meta path-based features can increase prediction accuracy. However, if latent features learn similar structure as topological features do, then mixing them may not be beneficial. In such cases feature engineering techniques can be applied. 
 
 
-Matrix factorization technique have been used for link prediction \cite{menon2011link}... the effectiveness of the structural link prediction problem, inspired by their success in collaborative filtering... as learning latent features from the data, and why it can be expected to be more predictive than popular unsupervised scores. 
 
-Latent features are shown to be more predictive compared to unsupervised scoring techniques such as Katz, Adamic, and Preferential Attachment \cite{menon2011link,Zhu2016}. In our experiments we observed that combining latent with meta path-based features can increase prediction accuracy. However, if latent features learn similar structure as topological features do, then mixing them may not be beneficial. In such cases feature engineering techniques can be applied. 
+%[12] D. Erdos, R. Gemulla, and E. Terzi, ?Reconstructing graphs from neighborhood data,? ACM Trans. Knowl. Discovery Data, vol. 8, no. 4, pp. 23:1?23:22, Oct. 2014.
 
-
-%\cite{huang2016meta}
-%\cite{wang2016relsim} 
-%\cite{sun2013pathselclus} 
-\cite{Yang2012} 
 
 %Such methods are homogeneous and non-temporal. The number of common neighbors \cite{newman2001clustering}, preferential attachment \cite{newman2001clustering}, Jaccard's coefficient \cite{liben2007link}, and Katz$\beta$ \cite{katz1953new}, are amongst frequently used topological features defined in homogeneous networks.
-
 
 %Sun et al. proposed PathSelClus \cite{sun2013pathselclus} that uses limited guidance from users in the form of seeds in some of the clusters and automatically learn the best weights for each meta-path in the clustering process.
 
 %The concept of temporal smoothness has been used in evolutionary clustering [36] and link prediction in a dynamic network \cite{Zhu2016}.
 
-While many graph embedding methods exist for static networks, few considered dynamic networks. Zhu et al. \cite{Zhu2016} attempt dynamic link prediction by adding a temporal-smoothing regularization term to a non-negative matrix factorization objective. They use a block-coordinate gradient descent algorithm to perform non-negative factorization. Their formulation is almost identical to the algorithm of Chi et al. \cite{Chi:2007}, who perform evolutionary spectral clustering that captures temporal smoothness. Because matrix factorization provides embedding vectors of the nodes for each time-stamp, the factorization by-product from this work can be considered as dynamic network embeddings.
-
-
-
-% Link prediction is pervasive in biological network analysis, where verifying the existence of links between nodes requires costly experimental tests. Limiting the experiments to links ordered by presence likelihood has been shown to be very cost effective. In social networks, link prediction is used to predict probable friendships, which can be used for recommendation and lead to a more satisfactory user experience. Liben-Nowell et al. \cite{liben2007link}, Lu et al. [52] and Hasan et al. [53] survey the recent progress in this field and categorize the algorithms into (a) similarity based (local and global) [13], [14], [54], (b) maximum likelihood based [15], [16] and (c) probabilistic methods [17], [18], [55]. 
+% In social networks, link prediction is used to predict probable friendships, which can be used for recommendation and lead to a more satisfactory user experience. Liben-Nowell et al. \cite{liben2007link}, Lu et al. [52] and Hasan et al. [53] survey the recent progress in this field and categorize the algorithms into (a) similarity based (local and global) [13], [14], [54], (b) maximum likelihood based [15], [16] and (c) probabilistic methods [17], [18], [55]. 
 %Embeddings capture inherent dynamics of the network either explicitly or implicitly thus enabling application to link prediction. Wang et al. [23] and Ou et al. [24] predict links from the learned node representations on publicly available collaboration and social networks. In addition, Grover et al. [29] apply it to biology networks. They show that on these data sets links predicted using embeddings are more accurate than traditional similarity based link prediction methods described above.
-
 
 % [13] P. Jaccard, Etude comparative de la distribution florale dans une portion des Alpes et du Jura. Impr. Corbaz, 1901.
 % [14] L. A. Adamic and E. Adar, “Friends and neighbors on the web,” Social networks, vol. 25, no. 3, pp. 211–230, 2003.

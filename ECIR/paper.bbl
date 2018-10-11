@@ -8,6 +8,10 @@ Al~Hasan, M., Chaoji, V., Salem, S., Zaki, M.: Link prediction using supervised
   learning. In: SDM06: workshop on link analysis, counter-terrorism and
   security (2006)
 
+\bibitem{al2011survey}
+Al~Hasan, M., Zaki, M.J.: A survey of link prediction in social networks. In:
+  Social network data analytics, pp. 243--275. Springer (2011)
+
 \bibitem{Cantador:RecSys2011}
 Cantador, I., Brusilovsky, P., Kuflik, T.: 2nd workshop on information
   heterogeneity and fusion in recommender systems (hetrec 2011). In:
@@ -19,12 +23,6 @@ Chen, H., Li, X., Huang, Z.: Link prediction approach to collaborative
   filtering. In: Digital Libraries, 2005. JCDL'05. Proceedings of the 5th
   ACM/IEEE-CS Joint Conference on. pp. 141--142. IEEE (2005)
 
-\bibitem{Chi:2007}
-Chi, Y., Song, X., Zhou, D., Hino, K., Tseng, B.L.: Evolutionary spectral
-  clustering by incorporating temporal smoothness. In: Proceedings of the 13th
-  ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
-  pp. 153--162. KDD '07, ACM, New York, NY, USA (2007)
-
 \bibitem{davis2006relationship}
 Davis, J., Goadrich, M.: The relationship between precision-recall and roc
   curves. In: Proceedings of the 23rd international conference on Machine
@@ -34,11 +32,21 @@ Davis, J., Goadrich, M.: The relationship between precision-recall and roc
 Denny, J.C.: Mining electronic health records in the genomics era. PLoS
   computational biology  \textbf{8}(12),  e1002823 (2012)
 
+\bibitem{dunlavy2011temporal}
+Dunlavy, D.M., Kolda, T.G., Acar, E.: Temporal link prediction using matrix and
+  tensor factorizations. ACM Transactions on Knowledge Discovery from Data
+  (TKDD)  \textbf{5}(2), ~10 (2011)
+
 \bibitem{fan2008liblinear}
 Fan, R.E., Chang, K.W., Hsieh, C.J., Wang, X.R., Lin, C.J.: Liblinear: A
   library for large linear classification. Journal of machine learning research
    \textbf{9}(Aug),  1871--1874 (2008),
   \url{https://github.com/cjlin1/liblinear}
+
+\bibitem{fu2009dynamic}
+Fu, W., Song, L., Xing, E.P.: Dynamic mixed membership blockmodel for evolving
+  networks. In: Proceedings of the 26th annual international conference on
+  machine learning. pp. 329--336. ACM (2009)
 
 \bibitem{gallagher2008using}
 Gallagher, B., Tong, H., Eliassi-Rad, T., Faloutsos, C.: Using ghost edges for
@@ -101,6 +109,15 @@ Menon, A.K., Elkan, C.: Link prediction via matrix factorization. In: Joint
 Newman, M.E.: Clustering and preferential attachment in growing networks.
   Physical review E  \textbf{64}(2),  025102 (2001)
 
+\bibitem{qi2013link}
+Qi, G.J., Aggarwal, C.C., Huang, T.: Link prediction across networks by biased
+  cross-network sampling. In: Data Engineering (ICDE), 2013 IEEE 29th
+  International Conference on. pp. 793--804. IEEE (2013)
+
+\bibitem{sarkar2005dynamic}
+Sarkar, P., Moore, A.W.: Dynamic social network analysis using latent space
+  models. ACM SIGKDD Explorations Newsletter  \textbf{7}(2),  31--40 (2005)
+
 \bibitem{shi2014hetesim}
 Shi, C., Kong, X., Huang, Y., Philip, S.Y., Wu, B.: Hetesim: A general
   framework for relevance measure in heterogeneous networks. IEEE Trans. Knowl.
@@ -153,10 +170,15 @@ Wang, C., Song, Y., El-Kishky, A., Roth, D., Zhang, M., Han, J.: Incorporating
 Wang, C., Song, Y., Li, H., Zhang, M., Han, J.: Text classification with
   heterogeneous information network kernels. In: AAAI. pp. 2130--2136 (2016)
 
-\bibitem{Yang2012}
-Yang, Y., Chawla, N., Sun, Y., Hani, J.: Predicting links in multi-relational
-  and heterogeneous networks. In: 2012 IEEE 12th International Conference on
-  Data Mining. pp. 755--764 (Dec 2012)
+\bibitem{ye2013predicting}
+Ye, J., Cheng, H., Zhu, Z., Chen, M.: Predicting positive and negative links in
+  signed social networks by transfer learning. In: Proceedings of the 22nd
+  international conference on World Wide Web. pp. 1477--1488. ACM (2013)
+
+\bibitem{yin2013scalable}
+Yin, J., Ho, Q., Xing, E.P.: A scalable approach to probabilistic latent space
+  inference of large-scale networks. In: Advances in neural information
+  processing systems. pp. 422--430 (2013)
 
 \bibitem{zhang2014inferring}
 Zhang, J., Wang, C., Wang, J., Yu, J.X.: Inferring continuous dynamic social

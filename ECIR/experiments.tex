@@ -76,9 +76,9 @@ Sun et al. \cite{sun2011ASONAM} showed that {PathPredict} outperforms traditiona
 %\end{itemize}
 
 
-\textit{Parameters.} We set the number of snapshots $t$=3, 5, and 7 to evaluate the effect of dynamic analysis of different time intervals. Note that $t$=3 refers to the default case for many link prediction algorithms that learn based on one interval and test based on another. More specifically in the training phase features are extracted based on T1 and labels are determined based on T2, and for the testing phase features are calculated based on T2 and labels are derived from T3. We also evaluate the effect of latent space dimensionality by setting the number of latent features $k$ to 5, 10, and 20.
+\textit{Parameters.} We set the number of snapshots $t$=3, 5, and 7 to evaluate the effect of dynamic analysis of different time intervals. Note that $t$=3 refers to the default case for many link prediction algorithms that learn based on one interval and test based on another. More specifically in the training phase features are extracted based on T1 and labels are determined based on T2, and for the testing phase features are calculated based on T2 and labels are derived from T3. In our experiments we did not observe a considerable change in prediction performance by setting the number of latent features $k$ to 5, 10, and 20, and thus all presented results are based on setting $k$ to 20. %We also evaluate the effect of latent space dimensionality by setting the number of latent features $k$ to 5, 10, and 20.
 
-\subsubsection{Implementation.} We use the implementation of matrix factorization for inferring temporal latent spaces of a sequence of graph snapshots presented in \cite{Zhu2016}. For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
+\subsubsection{Implementation.} We use the implementation of matrix factorization for inferring temporal latent spaces of a sequence of graph snapshots presented in \cite{Zhu2016}. We use all the default settings such as the number of latent features $k$ to be 20, and the optimization algorithm to be the local block-coordinate gradient descent. For the classification part, we use the efficient LIBLINEAR \cite{fan2008liblinear} package and set the type of solver to L2-regularized logistic regression (primal). %that solves $min_w w^Tw/2 + C \sum log(1 + exp(-y_i w^Tx_i))$, where $w$ is the generated weight vector as the model for a given set of instance-label pairs $(x_i, y_i)$, $i$ = 1, . . . , l, $x_i \in R^n$, $y_i \in \{-1, +1\}$,  $w^Tw/2$ is the regularization term, and $C > 0$ is a penalty parameter. In the testing phase, we predict a data point $x$ as positive if $w^Tx > 0$, and negative otherwise.
 
 
 \subsubsection{Evaluation Metrics.} 
@@ -101,8 +101,8 @@ Also, I could not see how the justification to combine features was reached. You
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.84\textwidth]{figs/ROC.pdf}
-\caption{The ROC curves for different methods and datasets.\ebrahim{please change the style of the lines so that it would be visible even if printed in BW.}} \label{fig:auc}
+\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.86\textwidth]{figs/ROC.pdf}
+\caption{The ROC curves for different methods and datasets.} \label{fig:auc}
 \end{figure}
 
 
@@ -147,7 +147,7 @@ Also, I could not see how the justification to combine features was reached. You
 
 \multicolumn{1}{|l|}{\multirow{2}{*}{MetaDynaMix}}  & ROC  & 0.85 &  0.87 & \textbf{0.87}   &  0.57  & 0.59 &  \textbf{0.63}  \\ \cline{2-8}
 %\multicolumn{1}{|l|}{}  & PR  & 0.46 &  0.46  &  \textbf{0.46}  &  0.46 &  0.46  & \textbf{0.47}   \\ \cline{2-8}
-\multicolumn{1}{|l|}{}  & ACC  & 0.78 & 0.80 & \textbf{0.82}   & 0.56  &  0.60  &   \textbf{0.63} \\ \hline
+\multicolumn{1}{|l|}{}  & ACC  & 0.78 & 0.80 & \textbf{0.82}   & 0.56  &  0.60  &   \textbf{0.62} \\ \hline
 
 \end{tabular}
 \end{table}
@@ -187,8 +187,4 @@ Also, I could not see how the justification to combine features was reached. You
 \textit{The Effect of Time Intervals}. We set the number of time intervals $t$ to 3, 5, and 7 and assess its impact on prediction performance. As presented in Table \ref{tbl:auc}, accuracy increases with the number of snapshots. The intuition is that shorter time interval results in less changes in the graph and thus leads to more reliable predictions. For example considering a meta path \textit{A--P--V--P--A}, with smaller number of intervals, i.e., longer time intervals, we have more distinct authors who have published in a venue in different years and thus more similar path count values. However by considering more intervals fewer authors will have such relations and more diverse path counts can contribute to more accurate prediction for the next time interval.
 
 
-\textit{The Effect of Dimensionality}. For this experiment we only compare prediction performance of MetaDynaMix with $t$=7 on the Publications dataset with respect to different values of $k$. Our results show that for $k$=5, 10, and 20, we get AUCROC values %0.84, 0.86, and 0.87, and ACC values 0.8, 0.82, and 0.82, respectively.
- A, B, and 0.87, and ACC values C, D, and 0.82, respectively.\amin{todo: update A,B,C, and D.}
- 
- \ebrahim{two things: 1. The values are missing. 2. You need to write a bit of explanation about the finding when you have the actual numbers.}
- 
+%\textit{The Effect of Dimensionality}. For this experiment we only compare prediction performance of MetaDynaMix with $t$=7 on the Publications dataset with respect to different values of $k$. Our results show that for $k$=5, 10, and 20, we get AUCROC values A, B, and 0.87, and ACC values C, D, and 0.82, respectively.\amin{todo: update A,B,C, and D.}
