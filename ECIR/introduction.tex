@@ -11,8 +11,11 @@ can be applied in different contexts such as recommendation systems
 In a HIN, relations between different entities carry different semantics. For instance, the relationship between two authors is different in meaning when they are co-authors compared to the case when one cites another's paper. Thus techniques for homogeneous networks \cite{liben2007link,wang2007local,lichtenwalter2010new,leroy2010cold,al2006link} cannot be directly applied on heterogeneous ones. A few works such as \cite{sun2011ASONAM,Sun:2012:HRP:2124295.2124373} investigated the problem of link prediction in HINs, however, they do not consider the dynamism of networks and overlook the potential benefits of analyzing a heterogeneous graph as a sequence of network snapshots. %To this end, existing work has already shown that in homogenous networks incorporating temporal changes improves link prediction accuracy \cite{Zhu2016}. 
 Previous work on temporal link prediction scarcely studied HINs and to the best of our knowledge, the problem of predicting relationships in dynamic heterogeneous information networks (DHINs) has not been studied before. %A dynamic heterogeneous information network (DHIN) is a HIN, whose links have associated timestamps.
 
-In this work we study the problem of relationship prediction in a DHIN, which can be stated as: \textit{Given a DHIN graph $G$ at $t$ consecutive time intervals, the objective is to predict the existence of a particular relationship between two given nodes at time $t+1$.} The major challenge in relationship prediction in DHINs is how to effectively combine HIN topology features and inferred latent features that incorporate temporal changes in order to exhibit the best performance. %Also, the prediction technique should be computationally efficient for large-scale networks. 
-To this end, the main contributions of our work can be enumerated as follows:
+In this work we study the problem of relationship prediction in a DHIN, which can be stated as: \textit{Given a DHIN graph $G$ at $t$ consecutive time intervals, the objective is to predict the existence of a particular relationship between two given nodes at time $t+1$.} 
+%The major challenge in relationship prediction in DHINs is how to effectively combine HIN topology features and inferred latent features that incorporate temporal changes in order to exhibit the best performance.
+%Also, the prediction technique should be computationally efficient for large-scale networks. 
+%To this end, the main contributions of our work can be enumerated as follows:
+In the context of this problem, the main contributions of our work can be enumerated as follows:
 
 
 %\textit{Given a DHIN graph $G$ at time $t$, how can we predict the existence of a particular relationship/path between two given nodes at time $t+1$?"}
@@ -34,7 +37,7 @@ To this end, the main contributions of our work can be enumerated as follows:
 
 \begin{itemize}
 
-\item We propose the problem of relationship prediction in a DHIN, and draw contrast between this problem and existing link prediction techniques that have been proposed for dynamic and heterogeneous networks;
+\item We propose the problem of relationship prediction in a DHIN, and draw contrast between this problem and existing link prediction techniques that have been proposed for dynamic and/or heterogeneous networks;
 
 \item We present a simple yet effective technique, called \textit{MetaDynaMix}, that leverages topological meta path-based and latent features to predict a target relationship between two nodes in a DHIN;
 
@@ -42,7 +45,7 @@ To this end, the main contributions of our work can be enumerated as follows:
 
 %\item We implement our approach in a tool called ..., which is freely available
 
-\item We empirically evaluate the accuracy of our proposed work on two real-world datasets, and the results show 10-40\% increase in AUCROC, and 25-30\% increase in prediction accuracy compared to the state of the art baselines.
+\item We empirically evaluate the performance of our work on two real-world datasets, and the results show 10-40\% increase in AUCROC, and 25-30\% increase in prediction accuracy compared to the state of the art baselines.
 
 \end{itemize}
 
