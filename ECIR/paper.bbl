@@ -43,6 +43,10 @@ Fan, R.E., Chang, K.W., Hsieh, C.J., Wang, X.R., Lin, C.J.: Liblinear: A
    \textbf{9}(Aug),  1871--1874 (2008),
   \url{https://github.com/cjlin1/liblinear}
 
+\bibitem{fire2013links}
+Fire, M., Katz, G., Rokach, L., Elovici, Y.: Links reconstruction attack. In:
+  Security and Privacy in Social Networks, pp. 181--196. Springer (2013)
+
 \bibitem{fu2009dynamic}
 Fu, W., Song, L., Xing, E.P.: Dynamic mixed membership blockmodel for evolving
   networks. In: Proceedings of the 26th annual international conference on
@@ -63,9 +67,10 @@ Guimer{\`a}, R., Sales-Pardo, M.: Missing and spurious interactions and the
 Guy, I.: Social recommender systems. In: Recommender Systems Handbook, pp.
   511--543. Springer (2015)
 
-\bibitem{katz1953new}
-Katz, L.: A new status index derived from sociometric analysis. Psychometrika
-  \textbf{18}(1),  39--43 (1953)
+\bibitem{hay2008resisting}
+Hay, M., Miklau, G., Jensen, D., Towsley, D., Weis, P.: Resisting structural
+  re-identification in anonymized social networks. Proceedings of the VLDB
+  Endowment  \textbf{1}(1),  102--114 (2008)
 
 \bibitem{lei2012novel}
 Lei, C., Ruan, J.: A novel link prediction algorithm for reconstructing
@@ -105,9 +110,15 @@ Menon, A.K., Elkan, C.: Link prediction via matrix factorization. In: Joint
   european conference on machine learning and knowledge discovery in databases.
   pp. 437--452. Springer (2011)
 
-\bibitem{newman2001clustering}
-Newman, M.E.: Clustering and preferential attachment in growing networks.
-  Physical review E  \textbf{64}(2),  025102 (2001)
+\bibitem{amin:wwwj}
+Milani~Fard, A., Wang, K.: Neighborhood randomization for link privacy in
+  social network analysis. World Wide Web  \textbf{18}(1),  9--32 (2015)
+
+\bibitem{amin:edbt12}
+Milani~Fard, A., Wang, K., Yu, P.S.: Limiting link disclosure in social network
+  analysis through subgraph-wise perturbation. In: Proceedings of the
+  International Conference on Extending Database Technology (EDBT). pp.
+  109--119. ACM (2012)
 
 \bibitem{qi2013link}
 Qi, G.J., Aggarwal, C.C., Huang, T.: Link prediction across networks by biased
@@ -184,6 +195,11 @@ Yin, J., Ho, Q., Xing, E.P.: A scalable approach to probabilistic latent space
 Zhang, J., Wang, C., Wang, J., Yu, J.X.: Inferring continuous dynamic social
   influence and personal preference for temporal behavior prediction.
   Proceedings of the VLDB Endowment  \textbf{8}(3),  269--280 (2014)
+
+\bibitem{zheleva2008preserving}
+Zheleva, E., Getoor, L.: Preserving the privacy of sensitive relationships in
+  graph data. In: Privacy, security, and trust in KDD, pp. 153--171. Springer
+  (2008)
 
 \bibitem{Zhu2016}
 Zhu, L., Guo, D., Yin, J., Steeg, G.V., Galstyan, A.: Scalable temporal latent

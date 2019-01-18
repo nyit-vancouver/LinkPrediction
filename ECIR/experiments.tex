@@ -22,18 +22,18 @@
 \begin{figure}[t]
 \centering
 \subfigure[Publications Network]{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.44\hsize]{figs/publicationsSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 5mm,width=0.41\hsize]{figs/publicationsSchema.pdf}
  \label{Fig:DBLP}
 }
 \subfigure[Movies Network]{
-\includegraphics[trim = 0mm 0mm 0mm 0mm,width=0.44\hsize]{figs/moviesSchema.pdf}
+\includegraphics[trim = 0mm 0mm 0mm 5mm,width=0.41\hsize]{figs/moviesSchema.pdf}
  \label{Fig:IMDB}
 }
 \caption{The simplified network schema used for our experiments.} \label{Fig:expSchema}
 \end{figure}
 
 
-\begin{table}[t]
+\begin{table}[t]\scriptsize
 \centering
 \caption{Meta paths for publications dataset with $V$=\{Author, Paper, Venue\} and movies dataset with $V$=\{User, Movie, Actor, Director, Genre\}.}
 \label{table_publications}\label{tbl:mp}
@@ -65,8 +65,8 @@
 
 
 
-\textit{Baseline Methods.} Sun et al. \cite{sun2011ASONAM} proposed a supervised learning framework for link prediction in HINs, called {PathPredict}, that learns coefficients associated with meta path-based features by maximizing the likelihood of new relationship formation. Their model is learned based on one past interval and does not consider temporal changes in different intervals. We perform comparative analysis of our work, denoted as {MetaDynaMix}, with four techniques: (1) The original {PathPredict} \cite{sun2011ASONAM} that considers only 3 intervals, (2) PathPredict applied on different time intervals, denoted as {PathPredict+}, (3) homogenized link prediction (Section \ref{def:HLP}) by applying \cite{Zhu2016}, denoted as {HLP}, and (4) logistic regression on HLP latent features, denoted as {LRHLP}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
-The authors in \cite{sun2011ASONAM} showed that {PathPredict} outperforms traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors or Katz$\beta$, and thus we do not include these techniques in our experiments.
+\textit{Baseline Methods.} Sun et al. \cite{sun2011ASONAM} proposed a supervised learning framework for link prediction in HINs, called {PathPredict}, that learns coefficients associated with meta path-based features by maximizing the likelihood of new relationship formation. Their model is learned based on one past interval and does not consider temporal changes in different intervals. Since to our knowledge there is no baseline for relationship prediction in DHINs, we perform comparative analysis of our work, denoted as {MetaDynaMix}, with four techniques: (1) The original {PathPredict} \cite{sun2011ASONAM} that considers only 3 intervals, (2) PathPredict applied on different time intervals, denoted as {PathPredict+}, (3) homogenized link prediction (Section \ref{def:HLP}) by applying \cite{Zhu2016}, denoted as {HLP}, and (4) logistic regression on HLP latent features, denoted as {LRHLP}. %The state-of-the-art methods which we compare against are \textit{PathPredict} \cite{sun2011ASONAM}, and matrix factorization for temporal prediction \cite{Zhu2016} (denoted as \textit{BCGD}). 
+Note that {PathPredict} \cite{sun2011ASONAM} was shown to outperform traditional link prediction approaches that use topological features defined in homogeneous networks such as common neighbors or Katz$\beta$, and thus we do not include these techniques in our experiments.
 
 
 %\begin{itemize}
@@ -103,7 +103,7 @@ We also observe that PathPredict+ performs better than LRHLP in predicting links
 \begin{figure}[t]
 \centering
 %\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.84\textwidth]{figs/ROC.pdf}
-\includegraphics[trim = 0mm 10mm 0mm 0mm,width=0.84\textwidth]{figs/ROC.png}
+\includegraphics[trim = 0mm 35mm 0mm 35mm,width=0.84\textwidth]{figs/ROC.png}
 \caption{The ROC curves for different methods and datasets.} \label{fig:auc}
 \end{figure}
 
@@ -122,7 +122,7 @@ We also observe that PathPredict+ performs better than LRHLP in predicting links
 %\end{figure}
 
 
-\begin{table}[t]
+\begin{table}[t]\scriptsize
 \centering
 \caption{Relationship prediction accuracy comparison. Bold values are determined to be statistically significant compared to the baselines based on McNemar's test.}
 \label{table_publications}\label{tbl:auc}
