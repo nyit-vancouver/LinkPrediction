@@ -36,14 +36,14 @@ public class DBLPDataSetGenerator {
 
 
 		try{
-			BufferedReader apvpa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APVPA_1996_2002.txt"));
-			BufferedReader apapa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APAPA_1996_2002.txt"));
-			BufferedReader apppa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APPPA_1996_2002.txt"));
-			BufferedReader predfile = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/temporalPredictionFor_2003_2009.txt"));
-			BufferedReader lfile = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/labels_1996_2002_newLinkIn_2003_2009.txt"));
-			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training1_1996_2002.txt")));
-			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training2_1996_2002.txt")));
-			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/PC_training3_1996_2002.txt")));
+			BufferedReader apvpa = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/PC_APVPA_2011_2013_min5paper.txt"));
+			BufferedReader apapa = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/PC_APAPA_2011_2013_min5paper.txt"));
+			BufferedReader apppa = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/PC_APPPA_2011_2013_min5paper.txt"));
+			BufferedReader predfile = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction-5dim/k5temporalPredictionFor_2014_2016_min5paper.txt"));
+			BufferedReader lfile = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/labels_2011_2013_newLinkIn_2014_2016_min5paper.txt"));
+			BufferedWriter dataset1 = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/k5PC_training1_2011_2013_min5paper.txt")));
+			BufferedWriter dataset2 = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/k5PC_training2_2011_2013_min5paper.txt")));
+			BufferedWriter dataset3 = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/k5PC_training3_2011_2013_min5paper.txt")));
 
 			/*BufferedReader apvpa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APVPA_1996_1998.txt"));
 			BufferedReader apapa = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/PC_APAPA_1996_1998.txt"));

@@ -92,7 +92,7 @@ public class IMDBMetaPathUMAM {
 
 	public static void main(String[] args) throws ClassNotFoundException 
 	{	
-		String currentInterval = args[0]; // e.g. is interval=2
+		String currentInterval = args[0]; // e.g. is interval=1
 		String intervals = args[1]; // e.g. is intervals=7
 		String usre_movie_file_name = "IMDB/" + intervals + "intervals/user_movie_relation_" + currentInterval + "of" + intervals + ".txt"; // user-movie and movie-user infor for current time
 		String labels_file_name = "IMDB/" + intervals + "intervals/labels_for_" + currentInterval + "of" + intervals + "_newMovies_in_" + Integer.toString((Integer.parseInt(currentInterval)+1)) + "of" + intervals + ".txt";				  // labels for current time based on next time

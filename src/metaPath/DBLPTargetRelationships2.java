@@ -42,7 +42,7 @@ public class DBLPTargetRelationships2 {
 		String currentLineString;
 		int paperIndex, authorIndex;
 		int year;
-		int fromYear = 1996, toYear = 1998;
+		int fromYear = 1930, toYear = 1996;
 
 		try{
 			BufferedReader br = new BufferedReader(new FileReader("paper_newindex_author.txt"));

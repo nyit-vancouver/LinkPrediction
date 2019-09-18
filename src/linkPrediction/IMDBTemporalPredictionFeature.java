@@ -39,9 +39,14 @@ public class IMDBTemporalPredictionFeature {
 		int latentPosIndex=0, nodeIndex = 0, neighborIndex = 0;
 		double weight=0.0;
 
-		String ZmatrixFileName = "IMDB/Zmatrix/Zmatrix7.txt";
-		String labelFileName = "IMDB/7intervals/labels_for_6of7_newMovies_in_7of7.txt";
-		String temporalPredictionFileName = "IMDB/7intervals/IMDBnewtemporalPredictionFor_7of7.txt";
+		String ZmatrixFileName = "IMDB/Zmatrix/Zmatrix_2of3.txt";
+		String labelFileName = "IMDB/3intervals/labels_for_1of3_newMovies_in_2of3.txt";
+		String temporalPredictionFileName = "IMDB/3intervals/temporalPredictionFor_2of3.txt";
+		
+		//String ZmatrixFileName = "IMDB/UMUMZmatrix/Zmatrix_2of3.txt";
+		//String labelFileName = "IMDB/3intervals/labels_for_2of3_newMovies_in_3of3.txt";
+		//String temporalPredictionFileName = "IMDB/3intervals/UMUMtemporalPredictionin_at_2of3.txt";
+
 		
 		
 		try{
@@ -96,8 +101,6 @@ public class IMDBTemporalPredictionFeature {
 		} 
 
 
-		// reading original coauthorship file
-
 		int from = 0, to = 0, sourceNode = 0, destNode = 0,label;
 		try{
 			BufferedReader labels = new BufferedReader(new FileReader(labelFileName));
@@ -112,15 +115,10 @@ public class IMDBTemporalPredictionFeature {
 				from = 0;
 				to = currentLineString.indexOf(",", from);
 				sourceNode = Integer.parseInt(currentLineString.substring(from,to));
-				//if (sourceNode>20)
-				//	break;
 				from = to+1;
 				to = currentLineString.indexOf(":", from);
 				destNode = Integer.parseInt(currentLineString.substring(from,to));
 				label=Integer.parseInt(currentLineString.substring(currentLineString.indexOf(":")+1));
-
-				if (counter%1000000==0)
-					System.out.println(counter);
 
 				Double predictionProbability = 0.0;
 
@@ -130,6 +128,11 @@ public class IMDBTemporalPredictionFeature {
 				//bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
 				bw.write( String.format("%.6f",predictionProbability) +"\n");
 
+				//bw.write(String.format("%.6f",z[sourceNode][0]*z[destNode][0]) +" ");
+				//for (int k=1; k<numOfDimensions; k++){
+				//	bw.write(" " + (k+5) + ":" + String.format("%.6f",z[sourceNode][k]*z[destNode][k]));
+				//}
+				//bw.write("\n");
 
 			}
 

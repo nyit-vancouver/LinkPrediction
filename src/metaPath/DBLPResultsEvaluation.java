@@ -66,7 +66,7 @@ public class DBLPResultsEvaluation {
 			// TKDE predicted lables (0.5 cut-off) this file contain both true labels (t+1) and TKDE predicts (t+1) 
 			BufferedReader pred4file = new BufferedReader(new FileReader("DBLP/3IntervalsPrediction/newtraining3_2003_2009_min5paper.txt"));
 			//BufferedReader pred4file = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/training3_1999_2001_min5paper.txt"));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/dblpPredict_3.txt")));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("DBLP/3IntervalsPrediction/dblpPredict_3.txt")));
 
 
 			double temporalPredict;

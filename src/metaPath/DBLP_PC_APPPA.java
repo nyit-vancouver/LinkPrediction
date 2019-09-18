@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
-public class DBLPMetaPath_APPPA {
+public class DBLP_PC_APPPA {
 
 	private static String currentLineString, paperIndex = null, authorIndex=null, citedByPaperIndex=null;
 
@@ -120,15 +120,16 @@ public class DBLPMetaPath_APPPA {
 	{	 
 		// -Xms1024m -Xmx6000m
 
-		fromYear = 1996;
-		toYear = 2002;
-		String APPPA_file_name = "DBLP/PC_APPPA_1996_2002.txt";
-		String labels_file_name = "DBLP/labels_1996_2002_newLinkIn_2003_2009.txt";
+		fromYear = 2011;
+		toYear = 2013;
+		String APPPA_file_name = "DBLP/7IntervalsPrediction/PC_APPPA_2011_2013_min5paper.txt";
+		String labels_file_name = "DBLP/7IntervalsPrediction/labels_2011_2013_newLinkIn_2014_2016_min5paper.txt";
 
-		fromYear = Integer.parseInt(args[0]);
-		toYear = Integer.parseInt(args[1]);
-		APPPA_file_name = args[2];
-		labels_file_name = args[3];
+		
+		//fromYear = Integer.parseInt(args[0]);
+		//toYear = Integer.parseInt(args[1]);
+		//APPPA_file_name = args[2];
+		//labels_file_name = args[3];
 		
 		
 

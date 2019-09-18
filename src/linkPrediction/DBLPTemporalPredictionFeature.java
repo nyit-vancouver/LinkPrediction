@@ -29,7 +29,7 @@ public class DBLPTemporalPredictionFeature {
 	public static void main(String[] args) 
 	{	
 		// inputs
-		int numberOfNodes = 1752443, numOfDimensions = 20;
+		int numberOfNodes = 1752443, numOfDimensions = 10;
 
 		double[][] z = new double[numberOfNodes][numOfDimensions];
 		ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
@@ -40,7 +40,8 @@ public class DBLPTemporalPredictionFeature {
 		double weight=0.0;
 
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("DBLP/Zmatrix/Zmatrix_7of7.txt"));
+			//BufferedReader br = new BufferedReader(new FileReader("DBLP/Zmatrix/Zmatrix_7of7.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("DBLP/Zmatrix/k=10/Zmatrix5.txt"));
 			// file format example (3 nodes and k=5 dimensions) node that others dimension values are zero
 			//3
 			//0,1:2,1.00000000
@@ -96,7 +97,7 @@ public class DBLPTemporalPredictionFeature {
 		int from = 0, to = 0, sourceNode = 0, destNode = 0, label;
 		try{
 			BufferedReader labels = new BufferedReader(new FileReader("DBLP/7IntervalsPrediction/labels_2011_2013_newLinkIn_2014_2016_min5paper.txt"));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction/temporalPredictionFor_2014_2016_min5paper.txt")));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("DBLP/7IntervalsPrediction-10dim/k10temporalPredictionFor_2014_2016_min5paper.txt")));
 			// file format example
 			//0,1:1
 			//...
@@ -122,7 +123,8 @@ public class DBLPTemporalPredictionFeature {
 				for (int k=0; k<numOfDimensions; k++)
 					predictionProbability += z[sourceNode][k]*z[destNode][k];
 
-				bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
+				//bw.write( String.format("%.6f",predictionProbability) + "," + label +"\n");
+				bw.write( String.format("%.6f",predictionProbability) + "\n");
 
 			}
 
